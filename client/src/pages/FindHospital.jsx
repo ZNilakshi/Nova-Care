@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import navigation hook
 
 const hospitals = [
   { city: "Ahmedabad", name: "Apollo Hospital", image: "/hospital1.jpg", address: "Ahmedabad, India" },
@@ -9,7 +8,7 @@ const hospitals = [
 
 const HospitalList = () => {
     
-  const navigate = useNavigate();
+
   const [selectedCity, setSelectedCity] = useState("All"); // Default to show all hospitals
 
   // Filter hospitals based on selected city
