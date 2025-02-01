@@ -25,7 +25,7 @@ const ClinicalExcellence = () => {
           Explore our Centres of Clinical Excellence
         </h2>
         <p style={{ color: "#555", marginTop: "10px" }}>
-          Apollo Hospitals has dedicated Centres of Excellence for several key specialties and super specialties. 
+          NOVA CARE Hospitals has dedicated Centres of Excellence for several key specialties and super specialties. 
           They are unique and state-of-the-art facilities spread across several of the Apollo hospital locations.
         </p>
 

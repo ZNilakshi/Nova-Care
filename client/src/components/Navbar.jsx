@@ -54,7 +54,7 @@ export default function Navbar() {
         <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
           <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: "12px", marginTop: "2px", color: "black" }}>Emergency</p>
-            <button style={{ background: "white", border: "2px solid  #019CE0", borderRadius: "8px", padding: "5px 10px", color: "#002147", cursor: "pointer" }}>
+            <button style={{ background: "white", border: "1px solid  #019CE0", borderRadius: "8px", padding: "5px 10px", color: "#002147", cursor: "pointer" }}>
               📞 1066
             </button>
             
@@ -62,7 +62,7 @@ export default function Navbar() {
 
           <div style={{ textAlign: "center" }}>
           <p style={{ fontSize: "12px", marginTop: "2px", color: "black" }}>Apollo Lifeline</p>
-            <button style={{ background: "white", border: " 2px solid #019CE0", borderRadius: "8px", padding: "5px 10px", color: "#002147", cursor: "pointer" }}>
+            <button style={{ background: "white", border: " 1px solid #019CE0", borderRadius: "8px", padding: "5px 10px", color: "#002147", cursor: "pointer" }}>
               📞 1860-500-1066
             </button>
               </div>

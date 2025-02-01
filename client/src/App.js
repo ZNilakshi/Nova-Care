@@ -9,6 +9,7 @@ import FindHospital from "./pages/FindHospital";
 import HealthCheckup from "./pages/HealthCheckUp";
 import ConsultOnline from "./pages/ConsultOnline";
 import BuyMedicine from "./pages/BuyMedicine";
+import Book from "./components/Book";
 
 
 
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<ServicesSection />} />
         <Route path="/book-appointment" element={<BookAppointment />} />
+        <Route path="/book/:id" element={<Book />} />
         <Route path="/find-doctor" element={<FindDoctor />} />
         <Route path="/find-hospital" element={<FindHospital />} />
         <Route path="/health-checkup" element={<HealthCheckup />} />
