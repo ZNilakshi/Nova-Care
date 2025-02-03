@@ -10,9 +10,8 @@ import HealthCheckup from "./pages/HealthCheckUp";
 import ConsultOnline from "./pages/ConsultOnline";
 import BuyMedicine from "./pages/BuyMedicine";
 import Book from "./components/Book";
-import AppointmentForm from "./components/AppointmentForm"; // Import the new form component
-
-
+import AppointmentForm from "./components/AppointmentForm";
+import DoctorCard from "./pages/DoctorCard"; // Ensure this is correctly placed
 
 const App = () => {
   return (
@@ -27,7 +26,8 @@ const App = () => {
         <Route path="/find-hospital" element={<FindHospital />} />
         <Route path="/health-checkup" element={<HealthCheckup />} />
         <Route path="/consult-online" element={<ConsultOnline />} />
-        <Route path="/appointment-form" element={<AppointmentForm />} /> 
+        <Route path="/appointment-form" element={<AppointmentForm />} />
+        <Route path="/doctorcard" element={<DoctorCard />} /> {/* Fixed the route */}
         <Route path="/buy-medicine" element={<BuyMedicine />} />
       </Routes>
     </Router>

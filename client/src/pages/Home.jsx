@@ -28,7 +28,7 @@ const HomePage = () => {
           >
             <div style={{ maxWidth: "500px" }}>
               <h2>
-                Apollo’s Expertise, <br />
+                NOVA care’s Expertise, <br />
                 <span style={{ color: "yellow", fontWeight: "bold" }}>
                   Delivered at your Home
                 </span>

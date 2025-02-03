@@ -1,20 +1,35 @@
 import React from "react";
+import { 
+  FaHeartbeat, 
+  FaBrain, 
+  FaStethoscope, 
+  FaBone, 
+  FaRibbon, 
+  FaVenus, 
+  FaHandHoldingMedical, 
+  FaEye, 
+  FaBaby, 
+  FaTint, 
+  FaToilet, 
+  FaProcedures, 
+  FaLungs 
+} from "react-icons/fa";
 
 const specialties = [
-  { name: "Cardiology", icon: "❤️" },
-  { name: "Neurology", icon: "🧠" },
-  { name: "Gastroenterology", icon: "🍽️" },
-  { name: "Orthopedic", icon: "🦴" },
-  { name: "Oncology", icon: "🎗️" },
-  { name: "Gynecology", icon: "♀️" },
-  { name: "Dermatology", icon: "🧴" },
-  { name: "Ophthalmology", icon: "👁️" },
-  { name: "Pediatrics", icon: "🍼" },
-  { name: "Endocrinology", icon: "🩸" },
-  { name: "Urology", icon: "🚽" },
-  { name: "Nephrology", icon: "🩺" },
-  { name: "Pulmonology", icon: "🌬️" },
-  { name: "Rheumatology", icon: "🦵" },
+  { name: "Cardiology", icon: <FaHeartbeat /> },
+  { name: "Neurology", icon: <FaBrain /> },
+  { name: "Gastroenterology", icon: <FaStethoscope /> },
+  { name: "Orthopedic", icon: <FaBone /> },
+  { name: "Oncology", icon: <FaRibbon /> },
+  { name: "Gynecology", icon: <FaVenus /> },
+  { name: "Dermatology", icon: <FaHandHoldingMedical /> },
+  { name: "Ophthalmology", icon: <FaEye /> },
+  { name: "Pediatrics", icon: <FaBaby /> },
+  { name: "Endocrinology", icon: <FaTint /> },
+  { name: "Urology", icon: <FaToilet /> },
+  { name: "Nephrology", icon: <FaProcedures /> },
+  { name: "Pulmonology", icon: <FaLungs /> },
+  { name: "Rheumatology", icon: <FaHandHoldingMedical /> },
 ];
 
 const ClinicalExcellence = () => {
@@ -70,7 +85,7 @@ const ClinicalExcellence = () => {
                   onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
                   onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
-                  <span style={{ fontSize: "30px", display: "block" }}>{specialty.icon}</span>
+                  <div style={{ fontSize: "30px", display: "block" }}>{specialty.icon}</div>
                   <p style={{ fontSize: "16px", fontWeight: "600", marginTop: "8px" }}>{specialty.name}</p>
                 </div>
               ))}
