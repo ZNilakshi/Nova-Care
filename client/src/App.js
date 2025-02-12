@@ -9,9 +9,13 @@ import FindHospital from "./pages/FindHospital";
 import HealthCheckup from "./pages/HealthCheckUp";
 import ConsultOnline from "./pages/ConsultOnline";
 import BuyMedicine from "./pages/BuyMedicine";
-import Book from "./components/Book";
+import Book from "./pages/Book";
 import AppointmentForm from "./components/AppointmentForm";
 import DoctorCard from "./pages/DoctorCard"; // Ensure this is correctly placed
+import Payment from "./components/payment";
+import PharmacyList from "./pages/PharmacyList";
+import CartPage from "./pages/CartPage";
+
 
 const App = () => {
   return (
@@ -27,7 +31,10 @@ const App = () => {
         <Route path="/health-checkup" element={<HealthCheckup />} />
         <Route path="/consult-online" element={<ConsultOnline />} />
         <Route path="/appointment-form" element={<AppointmentForm />} />
-        <Route path="/doctorcard" element={<DoctorCard />} /> {/* Fixed the route */}
+        <Route path="/payment" element={<Payment />} />
+         <Route path="/doctorcard" element={<DoctorCard />} /> {/* Fixed the route */}
+        <Route path="/pharmacy-list" element={<PharmacyList />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route path="/buy-medicine" element={<BuyMedicine />} />
       </Routes>
     </Router>

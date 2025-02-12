@@ -1,11 +1,11 @@
 export default function WhyChooseUs() {
     const stats = [
-      { number: "73+", text: "Largest private healthcare network of Hospitals", icon: "🏥" },
-      { number: "700+", text: "Largest private network of clinics across India", icon: "🏡" },
-      { number: "2,300+", text: "Diagnostic centres across India", icon: "🩺" },
-      { number: "6,000+", text: "Pharmacies", icon: "💊" },
-      { number: "11,000+", text: "Doctors", icon: "👨‍⚕️" },
-      { number: "10,000+", text: "Beds", icon: "🛏️" },
+      { number: "13+", text: "Largest private healthcare network of Hospitals", icon: "🏥" },
+      { number: "70+", text: "Largest private network of clinics across India", icon: "🏡" },
+      { number: "2,30+", text: "Diagnostic centres across Sri Lanka", icon: "🩺" },
+      { number: "6,0+", text: "Pharmacies", icon: "💊" },
+      { number: "11,0+", text: "Doctors", icon: "👨‍⚕️" },
+      { number: "10,00+", text: "Beds", icon: "🛏️" },
     ];
   
     return (

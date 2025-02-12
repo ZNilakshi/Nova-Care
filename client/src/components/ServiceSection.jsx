@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { FaCalendarCheck, FaUserMd, FaHospital, FaNotesMedical, FaLaptopMedical, FaPills } from "react-icons/fa";
+import { FaCalendarCheck, FaHospital,   FaPills } from "react-icons/fa";
 
 const ServicesSection = () => {
   const navigate = useNavigate();
@@ -13,16 +13,16 @@ const ServicesSection = () => {
         justifyContent: "center",
         gap: "20px",
         padding: "30px 0",
-        background: "#F8FAFC",
+        background: "#e3f2fd",
       }}
     >
       {services.map((service, index) => (
         <div
           key={index}
           style={{
-            width: "150px",
-            height: "150px",
-            background: service.active ? "#0096C7" : "#fff",
+            width: "250px",
+            height: "200px",
+            background: service.active ? "#fff" : "#0096C7",
             borderRadius: "15px",
             display: "flex",
             flexDirection: "column",
@@ -30,19 +30,19 @@ const ServicesSection = () => {
             justifyContent: "center",
             boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
             cursor: "pointer",
-            transition: "background 0.3s, color 0.3s",
+            transition: "background 0.5s, color 0.3s",
           }}
           onClick={() => navigate(service.route)}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#0096C7";
-            e.currentTarget.style.color = "#fff";
+            e.currentTarget.style.background = "#FFD700";
+            e.currentTarget.style.color = "#000";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = service.active ? "#0096C7" : "#fff";
-            e.currentTarget.style.color = service.active ? "#fff" : "#000";
+            e.currentTarget.style.background = service.active ? "#fff " : "#0096C7";
+            e.currentTarget.style.color = service.active ? "#000" : "#000";
           }}
         >
-          <service.icon size={40} color={service.active ? "#fff" : "#000"} />
+          <service.icon size={40} color={service.active ? "#000" : "#000"} />
           <p style={{ marginTop: "10px", fontWeight: "bold", textAlign: "center" }}>{service.name}</p>
         </div>
       ))}
@@ -52,11 +52,8 @@ const ServicesSection = () => {
 
 const services = [
   { name: "Book Appointment", icon: FaCalendarCheck, route: "/book-appointment", active: false },
-  { name: "Find Doctor", icon: FaUserMd, route: "/find-doctor", active: false },
   { name: "Find Hospital", icon: FaHospital, route: "/find-hospital", active: false },
-  { name: "Health Check-Up", icon: FaNotesMedical, route: "/health-checkup", active: false },
-  { name: "Consult Online", icon: FaLaptopMedical, route: "/consult-online", active: false },
-  { name: "Buy Medicine", icon: FaPills, route: "/buy-medicine", active: false },
+   { name: "Buy Medicine", icon: FaPills, route: "/buy-medicine", active: false },
 ];
 
 export default ServicesSection;

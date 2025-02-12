@@ -8,69 +8,85 @@ import Hospitals from "../components/Hospitals";
 import Foot from "../components/Foot";
 import Footer from "../components/Footer";
 
-
 const HomePage = () => {
   return (
     <div style={{ position: "relative", textAlign: "left" }}>
-      {/* Carousel Section */}
+      {/* Hero Section - Carousel */}
       <Carousel>
         <Carousel.Item>
           <div
             style={{
-              background: "linear-gradient(to right, #5bbcff, #7dcfff)",
+              background: "linear-gradient(to right, #004d7a, #008793, #00bf72)",
               color: "white",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               height: "400px",
               padding: "50px",
+              textAlign: "center",
             }}
           >
-            <div style={{ maxWidth: "500px" }}>
-              <h2>
-                NOVA care’s Expertise, <br />
-                <span style={{ color: "yellow", fontWeight: "bold" }}>
-                  Delivered at your Home
-                </span>
+            <div style={{ maxWidth: "600px" }}>
+              <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>
+                NOVA Care’s Expertise, <br />
+                <span style={{ color: "#FFD700" }}>Delivered at Your Home</span>
               </h2>
-              <p>
-                Services at home: Step down ICU | Physiotherapy | Attendant |
-                Adult Vaccination | Medical Equipment & More
+              <p style={{ fontSize: "1.1rem", marginTop: "10px" }}>
+                Step-down ICU | Physiotherapy | Attendant | Vaccination | Medical Equipment & More
               </p>
-              <Button variant="primary">BOOK NOW</Button>
+              <Button
+                variant="warning"
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                  marginTop: "10px",
+                }}
+              >
+                BOOK NOW
+              </Button>
             </div>
           </div>
         </Carousel.Item>
+
         <Carousel.Item>
           <div
             style={{
-              background: "linear-gradient(to right, #5bbcff, #7dcfff)",
+              background: "linear-gradient(to right, #004d7a, #008793, #00bf72)",
               color: "white",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               height: "400px",
               padding: "50px",
+              textAlign: "center",
             }}
           >
-            <div style={{ maxWidth: "500px" }}>
-              <h2>
-                , <br />
-                <span style={{ color: "yellow", fontWeight: "bold" }}>
-                  Delivered at your Home
-                </span>
+            <div style={{ maxWidth: "600px" }}>
+              <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>
+                Trusted Healthcare, <br />
+                <span style={{ color: "#FFD700" }}>Right at Your Doorstep</span>
               </h2>
-              <p>
-                Services at home: Step down ICU | Physiotherapy | Attendant |
-                Adult Vaccination | Medical Equipment & More
+              <p style={{ fontSize: "1.1rem", marginTop: "10px" }}>
+                Quality home healthcare services tailored to your needs.
               </p>
-              <Button variant="primary">BOOK NOW</Button>
+              <Button
+                variant="warning"
+                style={{
+                  fontSize: "1rem",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                  marginTop: "10px",
+                }}
+              >
+                LEARN MORE
+              </Button>
             </div>
           </div>
         </Carousel.Item>
       </Carousel>
- 
-      {/* Floating Buttons */}
+
+      {/* Floating Action Buttons */}
       <div
         style={{
           position: "fixed",
@@ -79,6 +95,7 @@ const HomePage = () => {
           display: "flex",
           flexDirection: "column",
           gap: "10px",
+          zIndex: 1000,
         }}
       >
         <Button
@@ -86,23 +103,27 @@ const HomePage = () => {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: "5px",
+            gap: "8px",
+            fontWeight: "bold",
           }}
         >
           <FaPhoneAlt /> +91 8069991061
         </Button>
-        <Button variant="info">Book Health Check-Up</Button>
-        <Button variant="warning">Book Appointment</Button>
+           <Button variant="warning" style={{ fontWeight: "bold" }}>Book Appointment</Button>
       </div>
-      <div><ServicesSection /></div>
-      <div><ClinicalExcellence/></div>
-      <div><Whychooseus/></div>
-      <div><Hospitals/></div>
-      <div><Foot/></div>
-      <div><Footer/></div>
+
+      {/* Sections */}
+      <div style={{ marginTop: "50px" }}>
+        <ServicesSection />
+        <ClinicalExcellence />
+        <Whychooseus />
+        <Hospitals />
+      </div>
+
+      {/* Footer */}
+      <Foot />
+      <Footer />
     </div>
-    
-    
   );
 };
 

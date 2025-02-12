@@ -3,14 +3,14 @@ import { FiPhoneCall, FiSearch, FiMenu, FiX } from "react-icons/fi";
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-
+    handleResize(); // Initialize on mount
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -19,124 +19,90 @@ export default function Navbar() {
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
-  return (
-    <nav style={{ background: "white", padding: "10px 20px", color: "black", boxShadow: "0px 2px 5px rgba(0,0,0,0.1)" }}>
-      {/* First Row */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        {/* Logo */}
-        <img src="/NOVA CARE.png" alt="Apollo Hospitals" style={{ height: "70px" }} />
+  const buttonStyle = {
+    background: "white",
+    border: "1px solid #0096C7",
+    borderRadius: "8px",
+    padding: "4px 8px",
+    color: "#002147",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: "4px",
+    transition: "background 0.3s, color 0.3s",
+  };
 
-        {/* Search Bar (Hidden on Mobile) */}
+  const hoverStyle = {
+    background: "#0096C7",
+    color: "white",
+  };
+
+  return (
+    <nav style={{ background: "#0096C7", padding: "8px 16px", color: "white", boxShadow: "0px 2px 5px rgba(0,0,0,0.1)" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <img src="/NOVA CARE.png" alt="Apollo Hospitals" style={{ height: "80px" }} /> {/* Increased logo size */}
+
         {!isMobile && (
-          <div style={{
-            display: "flex",
-            background: "white",
-            borderRadius: "25px",
-            padding: "5px 15px",
-            alignItems: "center",
-            boxShadow: "0px 2px 5px rgba(0,0,0,0.2)"
-          }}>
+          <div style={{ display: "flex", background: "white", borderRadius: "20px", padding: "4px 12px", alignItems: "center", boxShadow: "0px 2px 5px rgba(0,0,0,0.2)" }}>
             <input
               type="text"
               placeholder="Search Doctor or Hospital"
-              style={{
-                border: "none",
-                outline: "none",
-                fontSize: "14px",
-                flex: 1,
-                padding: "8px",
-                borderRadius: "20px"
-              }}
+              style={{ border: "none", outline: "none", fontSize: "12px", flex: 1, padding: "6px", borderRadius: "8px", width: "350px" }}
             />
-            <button style={{
-              border: "none",
-              background: "#019CE0",
-              color: "white",
-              padding: "8px 12px",
-              borderRadius: "50%",
-              cursor: "pointer"
-            }}>
-              <FiSearch size={18} />
+            <button style={{ border: "none", background: "#0096C7", color: "white", padding: "6px 10px", borderRadius: "30%", cursor: "pointer" }}>
+              <FiSearch size={16} />
             </button>
           </div>
         )}
 
-        {/* Emergency & Apollo Lifeline (Hidden on Mobile) */}
         {!isMobile && (
-          <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-            <div style={{ textAlign: "center" }}>
-              <p style={{ fontSize: "12px", marginTop: "2px", color: "black" }}>Emergency</p>
-              <button style={{ background: "white", border: "1px solid #019CE0", borderRadius: "8px", padding: "5px 10px", color: "#002147", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px" }}>
-                <FiPhoneCall size={16} /> 1066
-              </button>
-            </div>
-
-            <div style={{ textAlign: "center" }}>
-              <p style={{ fontSize: "12px", marginTop: "2px", color: "black" }}>Apollo Lifeline</p>
-              <button style={{ background: "white", border: "1px solid #019CE0", borderRadius: "8px", padding: "5px 10px", color: "#002147", cursor: "pointer", display: "flex", alignItems: "center", gap: "5px" }}>
-                <FiPhoneCall size={16} /> 1860-500-1066
-              </button>
-            </div>
+          <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
+            {[
+              { label: "Emergency", number: "1066" },
+              { label: "NOVACARE Lifeline", number: "1860-500-1066" },
+            ].map(({ label, number }) => (
+              <div key={label} style={{ textAlign: "center" }}>
+                <p style={{ fontSize: "10px", marginTop: "2px", color: "white" }}>{label}</p>
+                <button
+                  style={buttonStyle}
+                  onMouseEnter={(e) => Object.assign(e.target.style, hoverStyle)}
+                  onMouseLeave={(e) => Object.assign(e.target.style, buttonStyle)}
+                >
+                  <FiPhoneCall size={14} /> {number}
+                </button>
+              </div>
+            ))}
           </div>
         )}
 
-        {/* Mobile Menu Button (Visible only on Mobile) */}
         {isMobile && (
-          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{
-            background: "none",
-            border: "none",
-            fontSize: "24px",
-            cursor: "pointer"
-          }}>
-            {isMobileMenuOpen ? <FiX size={28} /> : <FiMenu size={28} />}
+          <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} style={{ background: "none", border: "none", fontSize: "20px", cursor: "pointer", color: "white" }}>
+            {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
           </button>
         )}
       </div>
 
-      {/* Second Row - Navigation (Hidden on Mobile unless toggled) */}
-      <div style={{
-        display: !isMobile || isMobileMenuOpen ? "flex" : "none",
-        flexDirection: isMobile ? "column" : "row",
-        justifyContent: "center",
-        marginTop: "10px",
-        padding: isMobile ? "10px" : "0",
-        background: isMobile ? "white" : "none",
-        boxShadow: isMobile ? "0px 2px 5px rgba(0,0,0,0.2)" : "none"
-      }}>
-        {[
-          { name: "Patient Care", sub: ["Doctors", "Appointments", "Emergency"] },
-          { name: "Centres of Excellence", sub: ["Cardiology", "Neurology", "Orthopedics"] },
-          { name: "Health Information", sub: ["Blogs", "Symptoms Checker", "Videos"] },
-          { name: "Corporate", sub: ["About Us", "Careers", "Investors"] },
-          { name: "International Patients", sub: ["Medical Visa", "Travel Assistance", "Consult Online"] },
-          { name: "Academics & Research", sub: ["Education", "Research Programs", "Clinical Trials"] },
-          { name: "Hospitals", sub: ["Find a Hospital", "Facilities", "Departments"] },
-          { name: "Contact Us", sub: ["Support", "Feedback", "Locations"] }
-        ].map((item) => (
-          <div key={item.name} style={{ position: "relative", margin: "10px", textAlign: isMobile ? "center" : "left" }}>
-            <button onClick={() => toggleDropdown(item.name)} style={{
-              background: "none",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "14px",
-              fontWeight: "500",
-              color: "black",
-              width: "100%"
-            }}>
-              {item.name} ▼
+      <div
+        style={{
+          display: !isMobile || isMobileMenuOpen ? "flex" : "none",
+          flexDirection: isMobile ? "column" : "row",
+          justifyContent: "center",
+          marginTop: "8px",
+          padding: isMobile ? "8px" : "0",
+          background: isMobile ? "white" : "none",
+          boxShadow: isMobile ? "0px 2px 5px rgba(0,0,0,0.2)" : "none",
+          zIndex: 1000,
+        }}
+      >
+        {[].map((name) => (
+          <div key={name} style={{ position: "relative", margin: "8px", textAlign: isMobile ? "center" : "left" }}>
+            <button onClick={() => toggleDropdown(name)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "12px", fontWeight: "500", color: "black", width: "100%" }}>
+              {name} ▼
             </button>
-            {openDropdown === item.name && (
-              <div style={{
-                position: isMobile ? "static" : "absolute",
-                left: 0,
-                background: "white",
-                padding: "10px",
-                borderRadius: "5px",
-                boxShadow: "0px 2px 5px rgba(0,0,0,0.2)",
-                textAlign: "left"
-              }}>
-                {item.sub.map((subItem) => (
-                  <p key={subItem} style={{ margin: "5px 0", cursor: "pointer" }}>{subItem}</p>
+            {openDropdown === name && (
+              <div style={{ position: isMobile ? "static" : "absolute", left: 0, background: "white", padding: "8px", borderRadius: "5px", boxShadow: "0px 2px 5px rgba(0,0,0,0.2)", textAlign: "left", zIndex: 999 }}>
+                {["Option 1", "Option 2", "Option 3"].map((sub) => (
+                  <p key={sub} style={{ margin: "4px 0", cursor: "pointer" }}>{sub}</p>
                 ))}
               </div>
             )}

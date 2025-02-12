@@ -1,32 +1,89 @@
 import React, { useState } from "react";
 
 const hospitals = [
-  { city: "Ahmedabad", name: "Apollo Hospital", image: "/hospital1.jpg", address: "Ahmedabad, India" },
-  { city: "Bangalore", name: "Fortis Hospital", image: "/hospital2.jpg", address: "Bangalore, India" },
-  { city: "Delhi", name: "AIIMS Hospital", image: "/hospital3.jpg", address: "Delhi, India" },
+  {
+    city: "Colombo",
+    name: "Colombo General Hospital",
+    image: "/colombo.jpg",
+    address: "Plot No.1A, Colombo",
+    contact: "+8401801066",
+    website: "https://www.colombohospital.com",
+    history: "Established in 1864, Colombo General Hospital is one of the oldest and most renowned hospitals in Sri Lanka.",
+    specialties: ["Cardiology", "Neurology", "Orthopedics", "Oncology"],
+    hours: "Open 24/7",
+    services: ["Emergency", "Surgery", "Maternity", "Pharmacy", "Diagnostics"],
+    facilities: ["MRI, CT Scan, ICU, NICU, Advanced Operation Theaters"],
+    departments: ["Cardiology", "Neurology", "General Surgery", "Pediatrics"],
+    emergency: "24/7 Emergency Unit, Ambulance Service: 1990",
+    doctors: ["Dr. Sunil Perera (Cardiologist)", "Dr. Kavindi Silva (Neurologist)"],
+    reviews: "Rated 4.7/5 - Excellent patient care and modern facilities.",
+  },
+  {
+    city: "Gampaha",
+    name: "Gampaha City Hospital",
+    image: "/gampaha.jpg",
+    address: "Plot No.1A, Gampaha",
+    contact: "+9100000000",
+    website: "https://www.gampahacityhospital.com",
+    history: "Founded in 1952, Gampaha City Hospital has been a key healthcare provider in the region.",
+    specialties: ["Pediatrics", "Gynecology", "Urology"],
+    hours: "8 AM - 10 PM",
+    services: ["Outpatient", "Maternity", "Diagnostics", "Rehabilitation"],
+    facilities: ["Digital X-ray, ICU, Physiotherapy"],
+    departments: ["Gynecology", "Pediatrics", "Urology"],
+    emergency: "Emergency unit available (8 AM - 10 PM). No 24/7 ambulance service.",
+    doctors: ["Dr. Ruwan De Silva (Pediatrician)", "Dr. Anusha Fernando (Gynecologist)"],
+    reviews: "Rated 4.5/5 - Friendly staff and well-maintained facilities.",
+  },
+  {
+    city: "Negombo",
+    name: "Negombo Regional Hospital",
+    image: "/negombo.jpg",
+    address: "Plot No.1A, Negombo",
+    contact: "+9100000000",
+    website: "https://www.negombohospital.com",
+    history: "A state-of-the-art hospital established in 1980, specializing in dermatology and ENT services.",
+    specialties: ["Dermatology", "ENT", "Pulmonology"],
+    hours: "9 AM - 8 PM",
+    services: ["Outpatient", "Skin Care", "Pharmacy", "ENT Surgeries"],
+    facilities: ["Dermatology Lab, Allergy Testing, Hearing Aids"],
+    departments: ["ENT", "Pulmonology", "Dermatology"],
+    emergency: "Basic emergency services available from 9 AM - 8 PM.",
+    doctors: ["Dr. Sameera Rajapaksha (Dermatologist)", "Dr. Nadeesha Weerasinghe (ENT Specialist)"],
+    reviews: "Rated 4.3/5 - Excellent dermatology services, but limited emergency care.",
+  },
+  {
+    city: "Galle",
+    name: "Galle National Hospital",
+    image: "/galle.jpg",
+    address: "Plot No.1A, Galle",
+    contact: "+9100000000",
+    website: "https://www.gallenationalhospital.com",
+    history: "A leading hospital in southern Sri Lanka, known for cancer treatment and mental health services.",
+    specialties: ["Oncology", "Psychiatry", "Neurosurgery"],
+    hours: "Open 24/7",
+    services: ["Cancer Treatment", "Mental Health", "Emergency", "ICU"],
+    facilities: ["Radiotherapy, Chemotherapy Units, Counseling Centers"],
+    departments: ["Oncology", "Psychiatry", "General Medicine"],
+    emergency: "24/7 Emergency Department, Specialized Trauma Center",
+    doctors: ["Dr. Ashan Jayasuriya (Oncologist)", "Dr. Priyanthi Perera (Psychiatrist)"],
+    reviews: "Rated 4.6/5 - Top hospital for cancer and mental health care.",
+  },
 ];
 
 const HospitalList = () => {
-    
-
-  const [selectedCity, setSelectedCity] = useState("All"); // Default to show all hospitals
+  const [selectedCity, setSelectedCity] = useState("All");
 
   // Filter hospitals based on selected city
-  const filteredHospitals = selectedCity === "All"
-    ? hospitals
-    : hospitals.filter(hospital => hospital.city === selectedCity);
-    
+  const filteredHospitals =
+    selectedCity === "All"
+      ? hospitals
+      : hospitals.filter((hospital) => hospital.city === selectedCity);
+
   return (
-    
     <div style={{ display: "flex", minHeight: "100vh", padding: "20px" }}>
-       
-      
       {/* Left Sidebar */}
       <div style={{ width: "250px", borderRight: "1px solid #ddd", paddingRight: "15px" }}>
-        <h3 style={{ fontSize: "16px", fontWeight: "bold", paddingBottom: "10px" }}>
-        
-         HOSPITALS IN INDIA
-        </h3>
         <ul style={{ listStyle: "none", padding: "0", margin: "0" }}>
           <li
             onClick={() => setSelectedCity("All")}
@@ -61,43 +118,33 @@ const HospitalList = () => {
       </div>
 
       {/* Right Content Section */}
+      <div style={{ width: "900px", borderRight: "1px solid #ddd", paddingRight: "15px" }}>
+     
       <div style={{ flex: 1, paddingLeft: "20px" }}>
         <h2 style={{ fontSize: "22px", color: "#007bff", marginBottom: "15px" }}>
-          {selectedCity === "All" ? "Hospitals In India" : `Hospitals in ${selectedCity}`}
+          {selectedCity === "All" ? "Hospitals In Sri Lanka" : `Hospitals in ${selectedCity}`}
         </h2>
         <hr style={{ width: "50px", border: "2px solid #007bff", marginBottom: "20px" }} />
 
         {/* Hospital Cards */}
         <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
-          {filteredHospitals.length > 0 ? (
-            filteredHospitals.map((hospital, index) => (
-              <div
-                key={index}
-                style={{
-                  width: "320px",
-                  borderRadius: "8px",
-                  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                  overflow: "hidden",
-                  background: "#fff",
-                  paddingBottom: "10px",
-                  textAlign: "center",
-                }}
-              >
-                <img
-                  src={hospital.image}
-                  alt={hospital.name}
-                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
-                />
-                <h3 style={{ fontSize: "18px", marginTop: "10px", color: "#333" }}>
-                  {hospital.name}
-                </h3>
-                <p style={{ fontSize: "14px", color: "#777" }}>{hospital.address}</p>
-              </div>
-            ))
-          ) : (
-            <p style={{ fontSize: "16px", color: "#777" }}>No hospitals found.</p>
-          )}
+          {filteredHospitals.map((hospital, index) => (
+            <div key={index} style={{ width: "350px", padding: "15px", boxShadow: "0 4px 10px rgba(0,0,0,0.1)", borderRadius: "8px", background: "#fff" }}>
+              <img src={hospital.image} alt={hospital.name} style={{ width: "500", height: "350px", objectFit: "cover" }} />
+              <h3>{hospital.name}</h3>
+              <p><strong>Address:</strong> {hospital.address}</p>
+              <p><strong>Contact:</strong> {hospital.contact}</p>
+              <p><strong>History:</strong> {hospital.history}</p>
+              <p><strong>Specialties:</strong> {hospital.specialties.join(", ")}</p>
+              <p><strong>Facilities:</strong> {hospital.facilities.join(", ")}</p>
+              <p><strong>Emergency:</strong> {hospital.emergency}</p>
+              <p><strong>Doctors:</strong> {hospital.doctors.join(", ")}</p>
+              <p><strong>Reviews:</strong> {hospital.reviews}</p>
+              <a href={hospital.website} target="_blank" rel="noopener noreferrer" style={{ color: "#007bff" }}>Visit Website</a>
+            </div>
+          ))}
         </div>
+      </div>
       </div>
     </div>
   );

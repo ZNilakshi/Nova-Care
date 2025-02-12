@@ -1,38 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   FaHeartbeat, 
   FaBrain, 
-  FaStethoscope, 
-  FaBone, 
   FaRibbon, 
   FaVenus, 
   FaHandHoldingMedical, 
   FaEye, 
-  FaBaby, 
   FaTint, 
-  FaToilet, 
-  FaProcedures, 
-  FaLungs 
+  FaProcedures 
 } from "react-icons/fa";
 
 const specialties = [
-  { name: "Cardiology", icon: <FaHeartbeat /> },
-  { name: "Neurology", icon: <FaBrain /> },
-  { name: "Gastroenterology", icon: <FaStethoscope /> },
-  { name: "Orthopedic", icon: <FaBone /> },
-  { name: "Oncology", icon: <FaRibbon /> },
-  { name: "Gynecology", icon: <FaVenus /> },
-  { name: "Dermatology", icon: <FaHandHoldingMedical /> },
-  { name: "Ophthalmology", icon: <FaEye /> },
-  { name: "Pediatrics", icon: <FaBaby /> },
-  { name: "Endocrinology", icon: <FaTint /> },
-  { name: "Urology", icon: <FaToilet /> },
-  { name: "Nephrology", icon: <FaProcedures /> },
-  { name: "Pulmonology", icon: <FaLungs /> },
-  { name: "Rheumatology", icon: <FaHandHoldingMedical /> },
+  { name: "Cardiology", icon: <FaHeartbeat />, details: "Cardiology focuses on heart-related conditions and treatments.", image: "/card.jpg" },
+  { name: "Neurology", icon: <FaBrain />, details: "Neurology deals with disorders of the nervous system.", image: "/neuro.jpg" },
+  { name: "Oncology", icon: <FaRibbon />, details: "Oncology is the study and treatment of cancer.", image: "/onco.jpg" },
+  { name: "Gynecology", icon: <FaVenus />, details: "Gynecology focuses on women's reproductive health.", image: "/gyneco.jpg" },
+  { name: "Dermatology", icon: <FaHandHoldingMedical />, details: "Dermatology involves the treatment of skin conditions.", image: "/dermo.jpg" },
+  { name: "Ophthalmology", icon: <FaEye />, details: "Ophthalmology deals with eye-related issues.", image: "/ophthal.png" },
+  { name: "Endocrinology", icon: <FaTint />, details: "Endocrinology focuses on hormone-related conditions.", image: "/endo.png" },
+  { name: "Nephrology", icon: <FaProcedures />, details: "Nephrology deals with kidney health and diseases.", image: "/nephr.jpg" },
 ];
 
 const ClinicalExcellence = () => {
+  const [selectedSpecialty, setSelectedSpecialty] = useState({
+    image: "/clinical.png",
+    details: "Welcome to our Centres of Clinical Excellence. Select a specialty to learn more.",
+    showButton: false,
+    name: "",
+  });
+
+  const navigate = useNavigate(); // Initialize useNavigate
+
   return (
     <section style={{ background: "linear-gradient(to bottom, #e3f2fd, #ffffff)", padding: "50px 20px" }}>
       <div style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
@@ -40,28 +40,67 @@ const ClinicalExcellence = () => {
           Explore our Centres of Clinical Excellence
         </h2>
         <p style={{ color: "#555", marginTop: "10px" }}>
-          NOVA CARE Hospitals has dedicated Centres of Excellence for several key specialties and super specialties. 
-          They are unique and state-of-the-art facilities spread across several of the Apollo hospital locations.
+          NOVA CARE Hospitals has dedicated Centres of Excellence for several key specialties and super specialties.
         </p>
 
-        {/* Two-column layout */}
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginTop: "30px" }}>
-          {/* Left Side - Image */}
-          <div style={{ flex: "2", minWidth: "300px", textAlign: "center", paddingRight: "20px" }}>
-            <img
-              src="/clinical.png" // Replace with actual image path
-              alt="Doctor Consultation"
-              style={{
-                width: "100%",
-                maxWidth: "600px",
-                borderRadius: "10px",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-              }}
-            />
+          {/* Left Side - Image and Details */}
+          <div style={{ flex: "2", minWidth: "300px", textAlign: "center", paddingRight: "20px", position: "relative" }}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={selectedSpecialty.image}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{ position: "relative" }}
+              >
+                <img
+                  src={selectedSpecialty.image}
+                  alt="Specialty Details"
+                  style={{
+                    width: "100%",
+                    maxWidth: "600px",
+                    borderRadius: "10px",
+                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+                    filter: "blur(2px)",
+                  }}
+                />
+                <div style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  color: "black",
+                  padding: "20px",
+                  borderRadius: "10px",
+                  textAlign: "center",
+                  width: "100%",
+                }}>
+                  <p style={{ fontSize: "18px", fontWeight: "500" }}>{selectedSpecialty.details}</p>
+                  {selectedSpecialty.showButton && (
+                    <button
+                      style={{
+                        padding: "10px 20px",
+                        backgroundColor: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        marginTop: "10px"
+                      }}
+                      onClick={() => navigate("/book-appointment", { state: { specialty: selectedSpecialty.name } })}
+                    >
+                      Find Doctors
+                    </button>
+                  )}
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
 
           {/* Right Side - Specialties List */}
-          <div style={{ flex: "2", minWidth: "300px" }}>
+          <div style={{ flex: "2", minWidth: "350px" }}>
             <div
               style={{
                 display: "grid",
@@ -75,13 +114,20 @@ const ClinicalExcellence = () => {
                   key={index}
                   style={{
                     background: "white",
-                    padding: "24px",
+                    padding: "30px",
                     borderRadius: "8px",
                     boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                     textAlign: "center",
-                    transition: "transform 0.3s",
+                    transition: "transform 0.3s, border 0.3s",
                     cursor: "pointer",
+                    border: selectedSpecialty.name === specialty.name ? "3px solid #FFD700" : "3px solid transparent",
                   }}
+                  onClick={() => setSelectedSpecialty({ 
+                    image: specialty.image, 
+                    details: specialty.details, 
+                    showButton: true, 
+                    name: specialty.name 
+                  })}
                   onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
                   onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >

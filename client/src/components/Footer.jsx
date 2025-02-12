@@ -15,7 +15,7 @@ const FooterBottom = () => {
       
       {/* Copyright Text */}
       <p style={{ fontSize: "14px", margin: 0 }}>
-        © Copyright 2025, Apollo Hospitals Group. All Rights Reserved.
+        © Copyright 2025, NOVA CARE Hospitals Group. All Rights Reserved.
       </p>
 
       {/* Social Media Icons */}

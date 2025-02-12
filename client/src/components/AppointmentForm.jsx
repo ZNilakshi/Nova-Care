@@ -7,96 +7,196 @@ const AppointmentForm = () => {
   const location = useLocation();
   const { doctorName, date, time, specialization, doctorPhoto } = location.state || {};
 
-  // Find the selected doctor's details including the fee
+  // ✅ Doctor Fee Calculation
   const selectedDoctor = doctors.find((doctor) => doctor.name === doctorName);
-  const doctorFee = selectedDoctor ? selectedDoctor.fee : "N/A";
+  const doctorFee = selectedDoctor ? parseInt(selectedDoctor.fee.replace(/\D/g, "")) : 0;
+  const echannellingFee = 399;
+  const totalFee = doctorFee + echannellingFee;
 
   const [formData, setFormData] = useState({
     title: "Mr",
     name: "",
     phone: "",
     nic: "",
-    email: "",
+    age: "",
     area: "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    setErrors({ ...errors, [e.target.name]: "" }); // Remove error on change
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.phone || !formData.nic) {
-      alert("Please fill all required fields.");
+    let newErrors = {};
+
+    // Required fields validation
+    ["name", "phone", "nic", "age", "area"].forEach((field) => {
+      if (!formData[field]) {
+        newErrors[field] = "This field is required";
+      }
+    });
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      alert("Please fill in all required fields.");
       return;
     }
-    alert(`Appointment Confirmed for ${formData.name}!`);
-    navigate("/");
+
+    navigate("/payment", {
+      state: {
+        totalFee: `Rs ${totalFee}.00`,
+      },
+    });
   };
 
   return (
-    <div style={{ display: "flex", gap: "20px", padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      {/* Left Sidebar */}
-      <div style={{ width: "20%", background: "#f8f9fa", padding: "15px", borderRadius: "8px" }}>
-        <img src={doctorPhoto || "https://via.placeholder.com/100"} alt={doctorName || "Doctor"} style={{ width: "100%", borderRadius: "8px" }} />
-        <h3>{doctorName || "Dr. Not Specified"}</h3>
+    <div style={styles.container}>
+      {/* Left Sidebar - Doctor Info */}
+      <div style={styles.sidebar}>
+        <img src={doctorPhoto || "https://via.placeholder.com/100"} alt={doctorName || "Doctor"} style={styles.image} />
+        <h3 style={styles.doctorName}>{doctorName || "Dr. Not Specified"}</h3>
         <p><strong>Specialization:</strong> {specialization || "General"}</p>
         <p><strong>Session Date:</strong> {date || "TBD"}</p>
         <p><strong>Session Time:</strong> {time || "TBD"}</p>
       </div>
 
       {/* Center Form */}
-      <form onSubmit={handleSubmit} style={{ flex: "1", background: "#fff", padding: "20px", border: "1px solid #ddd", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" }}>
-        <h2 style={{ color: "#007bff", textAlign: "center" }}>Place Appointment</h2>
+      <form onSubmit={handleSubmit} style={styles.form}>
+        <h2 style={styles.formTitle}>📅 Book Your Appointment</h2>
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <select name="title" value={formData.title} onChange={handleChange} style={{ flex: "1", padding: "10px" }}>
+        {/* Title & Name */}
+        <div style={styles.flexRow}>
+          <select name="title" value={formData.title} onChange={handleChange} style={styles.input}>
             <option value="Mr">Mr</option>
             <option value="Ms">Ms</option>
             <option value="Dr">Dr</option>
           </select>
-          <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} required style={{ flex: "2", padding: "10px" }} />
+          <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} style={inputStyle(errors.name)} />
         </div>
+        {errors.name && <p style={styles.error}>{errors.name}</p>}
 
-        <input type="email" name="email" placeholder="Receipt will be sent to this email" value={formData.email} onChange={handleChange} style={{ padding: "10px", margin: "10px 0" }} />
+        {/* Phone */}
+        <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} style={inputStyle(errors.phone)} />
+        {errors.phone && <p style={styles.error}>{errors.phone}</p>}
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required style={{ flex: "1", padding: "10px" }} />
-          <input type="text" name="area" placeholder="Enter your city" value={formData.area} onChange={handleChange} style={{ flex: "1", padding: "10px" }} />
-        </div>
+        {/* NIC */}
+        <input type="text" name="nic" placeholder="National ID (NIC)" value={formData.nic} onChange={handleChange} style={inputStyle(errors.nic)} />
+        {errors.nic && <p style={styles.error}>{errors.nic}</p>}
 
-        <input type="text" name="nic" placeholder="NIC Number" value={formData.nic} onChange={handleChange} required style={{ padding: "10px", margin: "10px 0" }} />
+        {/* Age */}
+        <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} style={inputStyle(errors.age)} />
+        {errors.age && <p style={styles.error}>{errors.age}</p>}
 
-        <label style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <input type="checkbox" /> Option for No Show Refund
-        </label>
+        {/* Area */}
+        <input type="text" name="area" placeholder="Area" value={formData.area} onChange={handleChange} style={inputStyle(errors.area)} />
+        {errors.area && <p style={styles.error}>{errors.area}</p>}
 
-        <button type="submit" style={{ background: "#007bff", color: "white", padding: "12px", border: "none", borderRadius: "5px", cursor: "pointer" }}>Pay</button>
+        {/* Submit Button */}
+        <button type="submit" style={styles.button}>Proceed to Payment</button>
       </form>
 
-      {/* Right Sidebar */}
-      <div style={{ width: "20%", display: "flex", flexDirection: "column", gap: "15px" }}>
-        <div style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px" }}>
-          <h4>Patient Details</h4>
-          <p><strong>Name:</strong> {formData.name}</p>
-          <p><strong>NIC:</strong> {formData.nic}</p>
-          <p><strong>Phone:</strong> {formData.phone}</p>
-          <p><strong>Email:</strong> {formData.email}</p>
-        </div>
-
-        {/* Payment Details - Dynamically Display Doctor's Fee */}
-        <div style={{ background: "#f8f9fa", padding: "15px", borderRadius: "8px" }}>
-          <h4>Payment Details</h4>
-          <p>Host Fee + Doc Fee: {doctorFee}</p>
-          <p>eChannelling Fee: ₹ 399.00</p>
-          <p>Discount: Rs 0.00</p>
-          <p>No Show Fee: Rs 0.00</p>
-          <hr />
-          <p><strong>Total Fee: {doctorFee !== "N/A" ? `Rs ${parseInt(doctorFee.replace("₹", "")) + 399}.00` : "N/A"}</strong></p>
-        </div>
+      {/* Right Sidebar - Payment Details */}
+      <div style={styles.sidebar}>
+        <h3 style={styles.paymentTitle}>💳 Payment Details</h3>
+        <p><strong>Doctor’s Fee:</strong> Rs {doctorFee}</p>
+        <p><strong>eChannelling Fee:</strong> Rs {echannellingFee}</p>
+        <p><strong>Discount:</strong> Rs 0.00</p>
+        <hr />
+        <h4 style={styles.total}>Total: Rs {totalFee}.00</h4>
       </div>
     </div>
   );
 };
+
+// Styles
+const styles = {
+  container: {
+    display: "flex",
+    gap: "30px",
+    padding: "40px",
+    fontFamily: "'Poppins', sans-serif",
+    background: "#f4f8fc",
+    flexWrap: "wrap",
+    justifyContent: "center",
+  },
+  sidebar: {
+    width: "25%",
+    background: "#fff",
+    padding: "20px",
+    borderRadius: "10px",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+    textAlign: "center",
+    minWidth: "280px",
+  },
+  image: {
+    width: "100%",
+    borderRadius: "10px",
+  },
+  doctorName: {
+    color: "#0096C7",
+    marginTop: "15px",
+  },
+  form: {
+    flex: "1",
+    background: "#fff",
+    padding: "25px",
+    borderRadius: "10px",
+    boxShadow: "0 5px 15px rgba(0,0,0,0.1)",
+    minWidth: "300px",
+  },
+  formTitle: {
+    color: "#0096C7",
+    textAlign: "center",
+    marginBottom: "20px",
+  },
+  flexRow: {
+    display: "flex",
+    gap: "10px",
+    marginBottom: "10px",
+  },
+  input: {
+    flex: "1",
+    padding: "10px",
+    borderRadius: "6px",
+    border: "1px solid #ccc",
+  },
+  error: {
+    color: "red",
+    fontSize: "12px",
+  },
+  button: {
+    background: "#0096C7",
+    color: "white",
+    padding: "12px",
+    border: "none",
+    borderRadius: "8px",
+    cursor: "pointer",
+    width: "100%",
+    marginTop: "15px",
+    fontSize: "16px",
+    transition: "0.3s",
+  },
+  paymentTitle: {
+    color: "#0096C7",
+    textAlign: "center",
+  },
+  total: {
+    color: "#0096C7",
+    fontWeight: "bold",
+  },
+};
+
+// Input styling helper function
+const inputStyle = (error) => ({
+  width: "100%",
+  padding: "10px",
+  borderRadius: "6px",
+  border: `1px solid ${error ? "red" : "#ccc"}`,
+  marginBottom: "10px",
+});
 
 export default AppointmentForm;
