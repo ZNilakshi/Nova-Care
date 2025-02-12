@@ -37,41 +37,45 @@ const Payment = () => {
 
   return (
     <div style={styles.container}>
-      <div style={styles.card}>
-        <h2 style={styles.title}>💳 Pay Now</h2>
-        <p style={styles.fee}><strong>Total Fee:</strong> {totalFee}</p>
-        
-        <h3 style={styles.paymentTitle}>Choose Payment Method</h3>
-        <div style={styles.buttonGroup}>
-          <button 
-            onClick={() => setSelectedPayment("Visa")} 
-            style={{ ...styles.paymentButton, border: selectedPayment === "Visa" ? "3px solid #0096C7" : "black" }}
-          >
-            <img src="/visa.png" alt="Visa" style={styles.logo} />
-          </button>
-          <button 
-            onClick={() => setSelectedPayment("Mastercard")} 
-            style={{ ...styles.paymentButton, border: selectedPayment === "Mastercard" ? "3px solid #0096C7" : "black" }}
-          >
-            <img src="/master.png" alt="Mastercard" style={styles.logo} />
-          </button>
+      <div style={styles.contentWrapper}>
+        {/* Left Section - Pay Now */}
+        <div style={styles.leftSection}>
+          <h2 style={styles.title}>💳 Pay Now</h2>
+          <p style={styles.fee}><strong>Total Fee:</strong> {totalFee}</p>
+          
+          <h3 style={styles.paymentTitle}>Choose Payment Method</h3>
+          <div style={styles.buttonGroup}>
+            <button 
+              onClick={() => setSelectedPayment("Visa")} 
+              style={{ ...styles.paymentButton, border: selectedPayment === "Visa" ? "3px solid #0096C7" : "black" }}
+            >
+              <img src="/visa.png" alt="Visa" style={styles.smallLogo} />
+            </button>
+            <button 
+              onClick={() => setSelectedPayment("Mastercard")} 
+              style={{ ...styles.paymentButton, border: selectedPayment === "Mastercard" ? "3px solid #0096C7" : "black" }}
+            >
+              <img src="/master.png" alt="Mastercard" style={styles.smallLogo} />
+            </button>
+          </div>
+
+          <div style={styles.checkboxContainer}>
+            <input 
+              type="checkbox" 
+              id="terms" 
+              checked={acceptedTerms} 
+              onChange={() => setAcceptedTerms(!acceptedTerms)} 
+              style={styles.checkbox} 
+            />
+            <label htmlFor="terms" style={styles.label}> I Accept the Terms and Conditions</label>
+          </div>
+
+          <button onClick={handleProceed} style={styles.button}>Proceed To Payment</button>
         </div>
 
-        <div style={styles.checkboxContainer}>
-          <input 
-            type="checkbox" 
-            id="terms" 
-            checked={acceptedTerms} 
-            onChange={() => setAcceptedTerms(!acceptedTerms)} 
-            style={styles.checkbox} 
-          />
-          <label htmlFor="terms" style={styles.label}> I Accept the Terms and Conditions</label>
-        </div>
-
-        <button onClick={handleProceed} style={styles.button}>Proceed To Payment</button>
-
+        {/* Right Section - Payment Details */}
         {showPaymentDetails && (
-          <div style={styles.paymentDetails}>
+          <div style={styles.rightSection}>
             <h2 style={styles.title}>🔒 Payment Details</h2>
             <p style={styles.fee}><strong>Card Type:</strong> {selectedPayment}</p>
 
@@ -128,18 +132,16 @@ const Payment = () => {
 
 const styles = {
   container: { display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "#f4f8fc", padding: "20px" },
-  card: { background: "#fff", padding: "25px", borderRadius: "12px", boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", textAlign: "center", maxWidth: "400px", width: "100%" },
-  title: { color: "#0096C7", fontSize: "22px", marginBottom: "15px" },
-  fee: { fontSize: "18px", marginBottom: "20px" },
+  contentWrapper: { display: "flex", gap: "20px", maxWidth: "800px", width: "100%" },
+  leftSection: { flex: 1, background: "#fff", padding: "20px", borderRadius: "12px", boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", textAlign: "center" },
+  rightSection: { flex: 1, background: "#eef5f9", padding: "20px", borderRadius: "12px", boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)" },
   buttonGroup: { display: "flex", gap: "10px", justifyContent: "center" },
-  paymentButton: { padding: "12px", border: "none", borderRadius: "8px", cursor: "pointer", width: "80px", height: "50px", background: "transparent" },
-  button: { marginTop: "15px", background: "#0096C7", color: "white", padding: "12px", border: "none", borderRadius: "8px", cursor: "pointer", width: "100%", fontSize: "16px", transition: "0.3s", fontWeight: "bold", boxShadow: "0px 4px 10px rgba(0, 123, 255, 0.3)" },
-  logo: { width: "100%", height: "100%" },
-  formGroup: { marginBottom: "10px" },
+  paymentButton: { padding: "12px", borderRadius: "8px", cursor: "pointer", width: "80px", height: "50px", background: "transparent" },
+  button: { marginTop: "15px", background: "#0096C7", color: "white", padding: "12px", borderRadius: "8px", cursor: "pointer", width: "100%", fontSize: "16px" },
   row: { display: "flex", justifyContent: "space-between" },
   select: { width: "48%", padding: "8px" },
+  smallLogo: { width: "40px", height: "30px" },
   input: { width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #ccc" },
-  paymentDetails: { marginTop: "20px", padding: "15px", borderRadius: "10px", background: "#eef5f9", boxShadow: "0px 3px 10px rgba(0, 0, 0, 0.1)" }
 };
 
 export default Payment;
