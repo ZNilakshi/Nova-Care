@@ -1,5 +1,5 @@
 import React from "react";
-import { Carousel, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import { FaPhoneAlt } from "react-icons/fa";
 import ServicesSection from "../components/ServiceSection";
 import ClinicalExcellence from "../components/ClinicalExcellence";
@@ -10,80 +10,34 @@ import Footer from "../components/Footer";
 const HomePage = () => {
   return (
     <div style={{ position: "relative", textAlign: "left" }}>
-      {/* Hero Section - Carousel */}
-      <Carousel>
-        <Carousel.Item>
-          <div
-            style={{
-              background: "linear-gradient(to right, #004d7a, #008793, #00bf72)",
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "400px",
-              padding: "50px",
-              textAlign: "center",
-            }}
-          >
-            <div style={{ maxWidth: "600px" }}>
-              <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>
-                NOVA Care’s Expertise, <br />
-                <span style={{ color: "#FFD700" }}>Delivered at Your Home</span>
-              </h2>
-              <p style={{ fontSize: "1.1rem", marginTop: "10px" }}>
-                Step-down ICU | Physiotherapy | Attendant | Vaccination | Medical Equipment & More
-              </p>
-              <Button
-                variant="warning"
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  padding: "10px 20px",
-                  marginTop: "10px",
-                }}
-              >
-                BOOK NOW
-              </Button>
-            </div>
-          </div>
-        </Carousel.Item>
-
-        <Carousel.Item>
-          <div
-            style={{
-              background: "linear-gradient(to right, #004d7a, #008793, #00bf72)",
-              color: "white",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              height: "400px",
-              padding: "50px",
-              textAlign: "center",
-            }}
-          >
-            <div style={{ maxWidth: "600px" }}>
-              <h2 style={{ fontSize: "2rem", fontWeight: "bold" }}>
-                Trusted Healthcare, <br />
-                <span style={{ color: "#FFD700" }}>Right at Your Doorstep</span>
-              </h2>
-              <p style={{ fontSize: "1.1rem", marginTop: "10px" }}>
-                Quality home healthcare services tailored to your needs.
-              </p>
-              <Button
-                variant="warning"
-                style={{
-                  fontSize: "1rem",
-                  fontWeight: "bold",
-                  padding: "10px 20px",
-                  marginTop: "10px",
-                }}
-              >
-                LEARN MORE
-              </Button>
-            </div>
-          </div>
-        </Carousel.Item>
-      </Carousel>
+      {/* Video Section */}
+      <div style={{ position: "relative", width: "100%", height: "700px", overflow: "hidden" }}>
+        <video
+          autoPlay
+          loop
+          muted
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        >
+          <source src="/video.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            color: "white",
+            textAlign: "center",
+            
+            padding: "10px 20px",
+            borderRadius: "8px",
+          }}
+        >
+          <div style={{ fontSize: "82px", fontWeight: "bold" }}>Your Happiness Matters</div>
+          <div style={{ fontSize: "50px", fontWeight: "normal" , color: "black" ,}}>We care for you with excellence</div>
+        </div>
+      </div>
 
       {/* Floating Action Buttons */}
       <div
@@ -108,7 +62,7 @@ const HomePage = () => {
         >
           <FaPhoneAlt /> +91 8069991061
         </Button>
-           <Button variant="warning" style={{ fontWeight: "bold" }}>Book Appointment</Button>
+        <Button variant="warning" style={{ fontWeight: "bold" }}>Book Appointment</Button>
       </div>
 
       {/* Sections */}
@@ -120,7 +74,6 @@ const HomePage = () => {
       </div>
 
       {/* Footer */}
-      
       <Footer />
     </div>
   );

@@ -21,6 +21,7 @@
     "react-scripts": "5.0.1",
     "react-slick": "^0.30.3",
     "slick-carousel": "^1.8.1",
+    "swiper": "^11.2.4",
     "web-vitals": "^4.2.4"
   },
   "scripts": {
@@ -49,7 +50,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.5.1",
-    "tailwindcss": "^4.0.1"
+    "postcss": "^8.5.2",
+    "tailwindcss": "^4.0.6"
   }
 }
