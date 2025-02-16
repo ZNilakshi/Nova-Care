@@ -5,7 +5,6 @@ import ServicesSection from "../components/ServiceSection";
 import ClinicalExcellence from "../components/ClinicalExcellence";
 import Whychooseus from "../components/Whychooseus";
 import Hospitals from "../components/Hospitals";
-import Foot from "../components/Foot";
 import Footer from "../components/Footer";
 
 const HomePage = () => {
@@ -113,7 +112,7 @@ const HomePage = () => {
       </div>
 
       {/* Sections */}
-      <div style={{ marginTop: "50px" }}>
+      <div style={{ marginTop: "10px" }}>
         <ServicesSection />
         <ClinicalExcellence />
         <Whychooseus />
@@ -121,7 +120,7 @@ const HomePage = () => {
       </div>
 
       {/* Footer */}
-      <Foot />
+      
       <Footer />
     </div>
   );

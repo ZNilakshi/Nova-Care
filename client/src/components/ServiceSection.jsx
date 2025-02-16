@@ -34,7 +34,7 @@ const ServicesSection = () => {
           }}
           onClick={() => navigate(service.route)}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#FFD700";
+            e.currentTarget.style.background = "white";
             e.currentTarget.style.color = "#000";
           }}
           onMouseLeave={(e) => {

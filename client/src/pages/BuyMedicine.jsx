@@ -1,14 +1,13 @@
-import React, { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
-import { MdArrowBack, MdArrowForward } from "react-icons/md";
 
 const brands = [
   {
     name: "OZIVA",
     src: "/oziva.png",
     products: [
-      { name: "OZIVA Protein", price: 499, discount: "10% off", imgSrc: "/images/oziva_protein.png" },
+      { name: "OZIVA Protein", price: 499, discount: "10% off", imgSrc: "/oziva.png" },
       { name: "OZIVA Collagen", price: 699, discount: "15% off", imgSrc: "/images/oziva_collagen.png" }
     ]
   },
@@ -26,12 +25,7 @@ const brands = [
     products: [
       { name: "Pampers Diapers", price: 299, discount: "15% off", imgSrc: "/images/pampers_diapers.png" },
       { name: "Pampers Diapers", price: 299, discount: "15% off", imgSrc: "/images/pampers_diapers.png" },
-      { name: "Pampers B Wipes", price: 150, discount: "10% off", imgSrc: "/images/pampers_wipes.png" },
-      { name: "Pampers Diapers", price: 299, discount: "15% off", imgSrc: "/images/pampers_diapers.png" },
-      { name: "Pampers Baby Wipes", price: 150, discount: "10% off", imgSrc: "/images/pampers_wipes.png" },
-    
-      { name: "Pampes Baby Wipes", price: 150, discount: "10% off", imgSrc: "/images/pampers_wipes.png" }
-    ]
+     ]
   },
   {
     name: "Whisper",
@@ -109,28 +103,166 @@ const Navbar = ({ cart, navigate }) => (
 
 const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
   const [index, setIndex] = useState(0);
-  const visibleBrands = 5;
-  
-  const nextSlide = () => setIndex((prev) => (prev + 1 < brands.length - (visibleBrands - 1) ? prev + 1 : prev));
-  const prevSlide = () => setIndex((prev) => (prev > 0 ? prev - 1 : prev));
-  
+  const [visibleBrands, setVisibleBrands] = useState(2); // Default to 2 for mobile
+
+  // Adjust visible brands based on screen width
+  useEffect(() => {
+    const updateVisibleBrands = () => {
+      const width = window.innerWidth;
+      if (width < 600) setVisibleBrands(2); // Small screens
+      else if (width < 900) setVisibleBrands(4); // Medium screens
+      else if (width < 1200) setVisibleBrands(5); // Large tablets/small desktops
+      else setVisibleBrands(5); // Large desktops
+    };
+
+    updateVisibleBrands(); // Run once on mount
+    window.addEventListener("resize", updateVisibleBrands); // Listen for screen changes
+
+    return () => window.removeEventListener("resize", updateVisibleBrands); // Cleanup
+  }, []);
+
+  const nextSlide = () => {
+    if (index + visibleBrands < brands.length) {
+      setIndex(index + 1);
+    }
+  };
+
+  const prevSlide = () => {
+    if (index > 0) {
+      setIndex(index - 1);
+    }
+  };
+
   return (
-    <div style={{ padding: "10px", textAlign: "center", position: "relative", background: "#e3f2fd", borderRadius: "15px", boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)", margin: "10px 0 0 0" }}>
-      <h2 style={{ color: "#155724", fontSize: "26px", marginBottom: "15px", fontWeight: "bold" }}>Shop By Brand</h2>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <MdArrowBack size={40} style={{ cursor: "pointer", color: "#155724" }} onClick={prevSlide} />
-        <div style={{ display: "grid", gridTemplateColumns: `repeat(${visibleBrands}, 200px)`, gap: "10px", overflow: "hidden", padding: "5px" }}>
+    <div
+      style={{
+        padding: "10px",
+        textAlign: "center",
+        position: "relative",
+        background: "#e3f2fd",
+        borderRadius: "15px",
+        boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
+        margin: "10px auto",
+        maxWidth: "95%",
+      }}
+    >
+      <h2
+        style={{
+          color: "#155724",
+          fontSize: "26px",
+          marginBottom: "15px",
+          fontWeight: "bold",
+        }}
+      >
+        Shop By Brand
+      </h2>
+
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
+        {/* Left Arrow */}
+        {index > 0 && (
+          <button
+            onClick={prevSlide}
+            style={{
+              position: "absolute",
+              left: "-30px",
+              zIndex: 2,
+                 color: "black",
+              border: "none",
+              borderRadius: "50%",
+              width: "50px",
+              height: "50px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "24px",
+              boxShadow: "0 3px 10px rgba(0, 0, 0, 0.2)",
+              transition: "0.3s",
+            }}
+            onMouseOver={(e) => (e.target.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+          >
+            ❮
+          </button>
+        )}
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${visibleBrands}, 1fr)`,
+            gap: "10px",
+            width: "90%",
+            height: "230px",
+            overflow: "hidden",
+            padding: "5px",
+          }}
+        >
           {brands.slice(index, index + visibleBrands).map((brand, idx) => (
-            <div key={idx} 
-            onClick={() => handleBrandClick(brand)} 
-            style={{ backgroundColor: selectedBrand === brand.name ? "#d1f7d1" : "white", padding: "15px", borderRadius: "15px", textAlign: "center", cursor: "pointer", transition: "transform 0.3s", boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)" }}>
-         <img src={brand.src} alt={brand.name} style={{ width: "150px", height: "140px", borderRadius: "10px", transition: "0.3s" }} />
-         <p style={{ fontSize: "16px", fontWeight: "bold", marginTop: "10px", color: "#333" }}>{brand.name}</p>
-       </div>
-       
+            <div
+              key={idx}
+              onClick={() => handleBrandClick(brand)}
+              style={{
+                backgroundColor: selectedBrand === brand.name ? "#d1f7d1" : "white",
+                padding: "15px",
+                borderRadius: "15px",
+                textAlign: "center",
+                cursor: "pointer",
+                transition: "transform 0.3s",
+                boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              <img
+                src={brand.src}
+                alt={brand.name}
+                style={{
+                  width: "100%",
+                  maxWidth: "150px",
+                  height: "140px",
+                  borderRadius: "10px",
+                  transition: "0.3s",
+                }}
+              />
+              <p
+                style={{
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  marginTop: "10px",
+                  color: "#333",
+                }}
+              >
+                {brand.name}
+              </p>
+            </div>
           ))}
         </div>
-        <MdArrowForward size={30} style={{ cursor: "pointer", color: "#155724" }} onClick={nextSlide} />
+
+        {/* Right Arrow */}
+        {index + visibleBrands < brands.length && (
+          <button
+            onClick={nextSlide}
+            style={{
+              position: "absolute",
+              right: "-30px",
+              zIndex: 2,
+              color: "black",
+              border: "none",
+              borderRadius: "50%",
+              width: "50px",
+              height: "50px",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "24px",
+              boxShadow: "0 3px 10px rgba(0, 0, 0, 0.2)",
+              transition: "0.3s",
+            }}
+            onMouseOver={(e) => (e.target.style.transform = "scale(1.1)")}
+            onMouseOut={(e) => (e.target.style.transform = "scale(1)")}
+          >
+            ❯
+          </button>
+        )}
       </div>
     </div>
   );
@@ -141,7 +273,7 @@ const ProductList = ({ displayedProducts, cart, addToCart, increaseQuantity, dec
     <div 
       style={{ 
         display: "grid", 
-        gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", 
+        gridTemplateColumns: "repeat(auto-fit, minmax(150px, 2fr))", // Responsive grid
         gap: "20px",
         justifyContent: "center",
       }}
@@ -179,7 +311,7 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
       <h3 style={{ fontSize: "14px", marginTop: "10px" }}>{product.name}</h3>
       
       <p style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "5px" }}>
-        ₹{product.price} <span style={{ textDecoration: "line-through", color: "gray", fontSize: "12px" }}>MRP ₹{product.price * 2}</span>
+        ₹{product.price} <span style={{ textDecoration: "line-through", color: "gray", fontSize: "12px" }}> Rs {product.price * 2}</span>
       </p>
       <p style={{ color: "#008000", fontSize: "12px", fontWeight: "bold" }}>{product.discount}</p>
 
@@ -187,14 +319,14 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", background: "#f8f9fa", borderRadius: "5px", padding: "5px" }}>
           <button 
             onClick={() => decreaseQuantity(product)} 
-            style={{ backgroundColor: "white", color: "black", border: "1px solid gray", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
+            style={{ backgroundColor: "gray", color: "black", border: "3px solid gray", padding: "5px 15px", borderRadius: "5px", cursor: "pointer" }}
           >
             -
           </button>
-          <span style={{ fontWeight: "bold", fontSize: "14px" }}>{quantity}</span>
+          <span style={{ fontWeight: "bold", fontSize: "17px" }}>{quantity}</span>
           <button 
             onClick={() => increaseQuantity(product)} 
-            style={{ backgroundColor: "white", color: "black", border: "1px solid gray", padding: "5px 10px", borderRadius: "5px", cursor: "pointer" }}
+            style={{ backgroundColor: "gray", color: "black", border: "1px solid gray", padding: "5px 15px", borderRadius: "5px", cursor: "pointer" }}
           >
             +
           </button>

@@ -1,15 +1,9 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  FaHeartbeat, 
-  FaBrain, 
-  FaRibbon, 
-  FaVenus, 
-  FaHandHoldingMedical, 
-  FaEye, 
-  FaTint, 
-  FaProcedures 
+  FaHeartbeat, FaBrain, FaRibbon, FaVenus, FaHandHoldingMedical, 
+  FaEye, FaTint, FaProcedures 
 } from "react-icons/fa";
 
 const specialties = [
@@ -31,21 +25,34 @@ const ClinicalExcellence = () => {
     name: "",
   });
 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const detailsRef = useRef(null);
+
+  const handleSpecialtyClick = (specialty) => {
+    setSelectedSpecialty({ 
+      image: specialty.image, 
+      details: specialty.details, 
+      showButton: true, 
+      name: specialty.name 
+    });
+
+    // Scroll to details section on mobile view
+    if (window.innerWidth <= 768 && detailsRef.current) {
+      detailsRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
-    <section style={{ background: "linear-gradient(to bottom, #e3f2fd, #ffffff)", padding: "50px 20px" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto", textAlign: "center" }}>
-        <h2 style={{ fontSize: "28px", fontWeight: "bold", color: "#333" }}>
-          Explore our Centres of Clinical Excellence
-        </h2>
-        <p style={{ color: "#555", marginTop: "10px" }}>
+    <section style={styles.section}>
+      <div style={styles.container}>
+        <h2 style={styles.heading}>Explore our Centres of Clinical Excellence</h2>
+        <p style={styles.subHeading}>
           NOVA CARE Hospitals has dedicated Centres of Excellence for several key specialties and super specialties.
         </p>
 
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", marginTop: "30px" }}>
+        <div style={styles.contentWrapper} className="contentWrapper">
           {/* Left Side - Image and Details */}
-          <div style={{ flex: "2", minWidth: "300px", textAlign: "center", paddingRight: "20px", position: "relative" }}>
+          <div style={styles.leftPanel} className="leftPanel" ref={detailsRef}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedSpecialty.image}
@@ -53,42 +60,13 @@ const ClinicalExcellence = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                style={{ position: "relative" }}
               >
-                <img
-                  src={selectedSpecialty.image}
-                  alt="Specialty Details"
-                  style={{
-                    width: "100%",
-                    maxWidth: "600px",
-                    borderRadius: "10px",
-                    boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
-                    filter: "blur(2px)",
-                  }}
-                />
-                <div style={{
-                  position: "absolute",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  color: "black",
-                  padding: "20px",
-                  borderRadius: "10px",
-                  textAlign: "center",
-                  width: "100%",
-                }}>
-                  <p style={{ fontSize: "18px", fontWeight: "500" }}>{selectedSpecialty.details}</p>
+                <img src={selectedSpecialty.image} alt="Specialty Details" style={styles.image} className="image"/>
+                <div style={styles.detailsContainer}>
+                  <p style={styles.detailsText}>{selectedSpecialty.details}</p>
                   {selectedSpecialty.showButton && (
                     <button
-                      style={{
-                        padding: "10px 20px",
-                        backgroundColor: "#007bff",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        marginTop: "10px"
-                      }}
+                      style={styles.button}
                       onClick={() => navigate("/book-appointment", { state: { specialty: selectedSpecialty.name } })}
                     >
                       Find Doctors
@@ -100,47 +78,89 @@ const ClinicalExcellence = () => {
           </div>
 
           {/* Right Side - Specialties List */}
-          <div style={{ flex: "2", minWidth: "350px" }}>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit, minmax(135px, 1fr))",
-                gap: "10px",
-                width: "100%",
-              }}
-            >
+          <div style={styles.rightPanel} className="rightPanel">
+            <div style={styles.grid} className="grid">
               {specialties.map((specialty, index) => (
                 <div
                   key={index}
                   style={{
-                    background: "white",
-                    padding: "30px",
-                    borderRadius: "8px",
-                    boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                    textAlign: "center",
-                    transition: "transform 0.3s, border 0.3s",
-                    cursor: "pointer",
+                    ...styles.specialtyCard,
                     border: selectedSpecialty.name === specialty.name ? "3px solid #FFD700" : "3px solid transparent",
                   }}
-                  onClick={() => setSelectedSpecialty({ 
-                    image: specialty.image, 
-                    details: specialty.details, 
-                    showButton: true, 
-                    name: specialty.name 
-                  })}
+                  onClick={() => handleSpecialtyClick(specialty)}
                   onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
                   onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
                 >
-                  <div style={{ fontSize: "30px", display: "block" }}>{specialty.icon}</div>
-                  <p style={{ fontSize: "16px", fontWeight: "600", marginTop: "8px" }}>{specialty.name}</p>
+                  <div style={styles.icon}>{specialty.icon}</div>
+                  <p style={styles.specialtyName}>{specialty.name}</p>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Responsive Styles */}
+      <style>
+        {`
+          @media (max-width: 1024px) {
+            .contentWrapper {
+              flex-direction: column;
+              align-items: center;
+              text-align: center;
+            }
+            .leftPanel {
+              padding: 10px;
+              width: 100%;
+            }
+            .image {
+              width: 100%;
+              max-width: 400px;
+              height: auto;
+            }
+            .rightPanel {
+              width: 100%;
+              display: flex;
+              flex-wrap: wrap;
+              justify-content: center;
+              margin-top: 20px;
+            }
+            .grid {
+              display: grid;
+              grid-template-columns: repeat(2, 1fr);
+              gap: 15px;
+              width: 100%;
+              justify-content: center;
+            }
+          }
+
+          @media (max-width: 600px) {
+            .grid {
+              grid-template-columns: repeat(1, 1fr);
+            }
+          }
+        `}
+      </style>
     </section>
   );
+};
+
+const styles = {
+  section: { background: "linear-gradient(to bottom, #e3f2fd, #ffffff)", padding: "50px 20px", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" },
+  container: { maxWidth: "1100px", margin: "0 auto", textAlign: "center" },
+  heading: { fontSize: "28px", fontWeight: "bold", color: "#333" },
+  subHeading: { color: "#555", marginTop: "10px" },
+  contentWrapper: { display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "20px", marginTop: "30px" },
+  leftPanel: { flex: "2", minWidth: "300px", textAlign: "center", padding: "20px" },
+  image: { width: "100%", maxWidth: "400px", height: "auto", borderRadius: "10px", boxShadow: "0 4px 10px rgba(0,0,0,0.1)" },
+  detailsContainer: { marginTop: "15px", textAlign: "center" },
+  detailsText: { fontSize: "18px", fontWeight: "500" },
+  button: { padding: "10px 20px", backgroundColor: "#007bff", color: "white", border: "none", borderRadius: "5px", cursor: "pointer", marginTop: "10px" },
+  rightPanel: { flex: "2", minWidth: "350px" },
+  grid: { display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: "15px", width: "100%" },
+  specialtyCard: { background: "white", padding: "25px", borderRadius: "8px", boxShadow: "0 4px 8px rgba(0,0,0,0.1)", textAlign: "center", cursor: "pointer" },
+  icon: { fontSize: "30px" },
+  specialtyName: { fontSize: "16px", fontWeight: "600", marginTop: "8px" },
 };
 
 export default ClinicalExcellence;

@@ -131,17 +131,113 @@ const Payment = () => {
 };
 
 const styles = {
-  container: { display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "#f4f8fc", padding: "20px" },
-  contentWrapper: { display: "flex", gap: "20px", maxWidth: "800px", width: "100%" },
-  leftSection: { flex: 1, background: "#fff", padding: "20px", borderRadius: "12px", boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", textAlign: "center" },
-  rightSection: { flex: 1, background: "#eef5f9", padding: "20px", borderRadius: "12px", boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)" },
-  buttonGroup: { display: "flex", gap: "10px", justifyContent: "center" },
-  paymentButton: { padding: "12px", borderRadius: "8px", cursor: "pointer", width: "80px", height: "50px", background: "transparent" },
-  button: { marginTop: "15px", background: "#0096C7", color: "white", padding: "12px", borderRadius: "8px", cursor: "pointer", width: "100%", fontSize: "16px" },
-  row: { display: "flex", justifyContent: "space-between" },
-  select: { width: "48%", padding: "8px" },
-  smallLogo: { width: "40px", height: "30px" },
-  input: { width: "100%", padding: "10px", borderRadius: "5px", border: "1px solid #ccc" },
+  container: { 
+    display: "flex", 
+    justifyContent: "center", 
+    alignItems: "center", 
+    height: "100vh", 
+    background: "#f4f8fc", 
+    padding: "20px" 
+  },
+  contentWrapper: { 
+    display: "flex", 
+    gap: "20px", 
+    maxWidth: "800px", 
+    width: "100%",
+    flexWrap: "wrap"  // Allows wrapping on smaller screens
+  },
+  leftSection: { 
+    flex: 1, 
+    background: "#fff", 
+    padding: "20px", 
+    borderRadius: "12px", 
+    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", 
+    textAlign: "center",
+    minWidth: "300px" // Ensures minimum width for small screens
+  },
+  rightSection: { 
+    flex: 1, 
+    background: "#eef5f9", 
+    padding: "20px", 
+    borderRadius: "12px", 
+    boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", 
+    minWidth: "300px"
+  },
+  buttonGroup: { 
+    display: "flex", 
+    gap: "10px", 
+    justifyContent: "center", 
+    flexWrap: "wrap" // Wrap buttons on smaller screens
+  },
+  paymentButton: { 
+    padding: "12px", 
+    borderRadius: "8px", 
+    cursor: "pointer", 
+    width: "80px", 
+    height: "50px", 
+    background: "transparent",
+    display: "flex", 
+    justifyContent: "center", 
+    alignItems: "center"
+  },
+  button: { 
+    marginTop: "15px", 
+    background: "#0096C7", 
+    color: "white", 
+    padding: "12px", 
+    borderRadius: "8px", 
+    cursor: "pointer", 
+    width: "100%", 
+    fontSize: "16px"
+  },
+  row: { 
+    display: "flex", 
+    justifyContent: "space-between", 
+    gap: "10px", 
+    flexWrap: "wrap" // Wrap fields in smaller screens
+  },
+  select: { 
+    width: "48%", 
+    padding: "8px",
+    minWidth: "100px" // Prevents too small width on mobile
+  },
+  smallLogo: { 
+    width: "40px", 
+    height: "30px" 
+  },
+  input: { 
+    width: "100%", 
+    padding: "10px", 
+    borderRadius: "5px", 
+    border: "1px solid #ccc" 
+  },
+
+  // RESPONSIVE STYLES
+  "@media (max-width: 768px)": {
+    contentWrapper: { 
+      flexDirection: "column", 
+      alignItems: "center" 
+    },
+    leftSection: { 
+      width: "90%", 
+      marginBottom: "20px" 
+    },
+    rightSection: { 
+      width: "90%" 
+    },
+    buttonGroup: { 
+      flexDirection: "row", 
+      justifyContent: "center" 
+    },
+    row: { 
+      flexDirection: "column", 
+      gap: "10px" 
+    },
+    select: { 
+      width: "100%" 
+    }
+  }
 };
+
 
 export default Payment;
