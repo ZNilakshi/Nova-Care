@@ -91,15 +91,20 @@ const HomePage = () => {
   );
 };
 
-const Navbar = ({ cart, navigate }) => (
-  <nav style={{ backgroundColor: "#155724", color: "white", padding: "10px 20px", display: "flex", justifyContent: "space-between" }}>
-    <div style={{ fontSize: "20px", fontWeight: "bold" }}>NOVA CARE Pharmacy</div>
-    <div style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => navigate("/cart")}> 
-      <FaShoppingCart size={24} />
-      <span style={{ marginLeft: "5px", fontWeight: "bold" }}>{Object.keys(cart).length}</span>
-    </div>
-  </nav>
-);
+const Navbar = ({ cart, navigate }) => {
+  const totalItems = Object.values(cart).reduce((acc, qty) => acc + qty, 0);
+
+  return (
+    <nav style={{ backgroundColor: "#155724", color: "white", padding: "10px 20px", display: "flex", justifyContent: "space-between" }}>
+      <div style={{ fontSize: "20px", fontWeight: "bold" }}>NOVA CARE Pharmacy</div>
+      <div style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => navigate("/cart")}>
+        <FaShoppingCart size={24} />
+        <span style={{ marginLeft: "5px", fontWeight: "bold" }}>{totalItems}</span>
+      </div>
+    </nav>
+  );
+};
+
 
 const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
   const [index, setIndex] = useState(0);
@@ -342,10 +347,5 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
     </div>
   );
 };
-
-
-
-
-
 
 export default HomePage;
