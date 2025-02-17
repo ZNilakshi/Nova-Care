@@ -117,7 +117,7 @@ const styles = {
   container: {
     display: "flex",
     gap: "30px",
-    padding: "40px",
+    padding: "60px",
     fontFamily: "'Poppins', sans-serif",
     background: "#f4f8fc",
     flexWrap: "wrap",

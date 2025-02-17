@@ -54,6 +54,7 @@ const HomePage = () => {
   const [cart, setCart] = useState({});
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [displayedProducts, setDisplayedProducts] = useState(allProducts);
+  const [popupVisible, setPopupVisible] = useState(false); // State for popup visibility
 
   const handleBrandClick = (brand) => {
     if (brand === null) {
@@ -68,25 +69,69 @@ const HomePage = () => {
     }
   };
   
-  
+ 
 
-  const addToCart = (product) => setCart((prev) => ({ ...prev, [product.name]: 1 }));
-  const increaseQuantity = (product) => setCart((prev) => ({ ...prev, [product.name]: prev[product.name] + 1 }));
-  const decreaseQuantity = (product) => setCart((prev) => {
-    const updatedCart = { ...prev };
-    if (updatedCart[product.name] > 1) {
-      updatedCart[product.name] -= 1;
-    } else {
-      delete updatedCart[product.name];
-    }
-    return updatedCart;
-  });
+
+  const addToCart = (product) => {
+    setCart((prev) => ({ ...prev, [product.name]: 1 }));
+    setPopupVisible(true); // Show the popup when product is added to cart
+    setTimeout(() => setPopupVisible(false), 3000); // Hide the popup after 3 seconds
+  };
+
+  const increaseQuantity = (product) =>
+    setCart((prev) => ({ ...prev, [product.name]: prev[product.name] + 1 }));
+
+  const decreaseQuantity = (product) => {
+    setCart((prev) => {
+      const updatedCart = { ...prev };
+      if (updatedCart[product.name] > 1) {
+        updatedCart[product.name] -= 1;
+      } else {
+        delete updatedCart[product.name];
+      }
+      return updatedCart;
+    });
+  };
+
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", padding: "20px", backgroundColor: "#f8f9fa", position: "relative" }}>
       <Navbar cart={cart} navigate={navigate} />
       <BrandSelection brands={brands} selectedBrand={selectedBrand} handleBrandClick={handleBrandClick} />
       <ProductList displayedProducts={displayedProducts} cart={cart} addToCart={addToCart} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} />
+    {/* Popup for "View Cart" message */}
+    {popupVisible && (
+  <div
+    style={{
+      position: "fixed",
+      bottom: "20px",
+      right: "20px",
+      backgroundColor: "#333",
+      color: "#fff",
+      padding: "10px 20px",
+      borderRadius: "8px",
+      fontSize: "16px",
+      cursor: "pointer",
+      opacity: "0.8",
+      transition: "opacity 0.3s ease",
+    }}
+  >
+    <button
+      onClick={() => navigate("/cart")}
+      style={{
+        backgroundColor: "#155724",
+        color: "#fff",
+        border: "none",
+        padding: "10px 20px",
+        borderRadius: "5px",
+        cursor: "pointer",
+      }}
+    >
+      View Cart
+    </button>
+  </div>
+)}
+
     </div>
   );
 };
@@ -95,7 +140,7 @@ const Navbar = ({ cart, navigate }) => {
   const totalItems = Object.values(cart).reduce((acc, qty) => acc + qty, 0);
 
   return (
-    <nav style={{ backgroundColor: "#155724", color: "white", padding: "10px 20px", display: "flex", justifyContent: "space-between" }}>
+    <nav style={{ backgroundColor: "#155724", marginTop: "40px",  color: "white", padding: "10px 20px", display: "flex", justifyContent: "space-between" }}>
       <div style={{ fontSize: "20px", fontWeight: "bold" }}>NOVA CARE Pharmacy</div>
       <div style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => navigate("/cart")}>
         <FaShoppingCart size={24} />

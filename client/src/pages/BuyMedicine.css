@@ -1,0 +1,82 @@
+/* General Styles */
+.homepage {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  
+  /* Navbar */
+  .navbar {
+    background-color: #155724;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .cart-icon {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .cart-count {
+    margin-left: 5px;
+    font-weight: bold;
+  }
+  
+  /* Brand Selection */
+  .brand-selection {
+    text-align: center;
+    padding: 10px;
+    background: #e3f2fd;
+    border-radius: 15px;
+  }
+  
+  .brand-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  .brand-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+  
+  .brand-card.selected {
+    background-color: #d1f7d1;
+  }
+  
+  /* Product List */
+  .product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+    gap: 20px;
+  }
+  
+  .product-card {
+    background-color: white;
+    text-align: center;
+    border-radius: 10px;
+  }
+  .cart-popup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+  }
+  
+  .cart-popup:hover {
+    opacity: 1;
+  }
+    

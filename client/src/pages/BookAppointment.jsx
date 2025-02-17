@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import {  useLocation } from "react-router-dom";
 import DoctorCard, { doctors } from "./DoctorCard"; // Import doctors from DoctorCard.js
 
 import "./BookAppointment.css";
 
 const BookAppointment = () => {
-  const navigate = useNavigate();
   const location = useLocation();
   
   const queryParams = new URLSearchParams(location.search);
@@ -31,9 +30,7 @@ const BookAppointment = () => {
 
   return (
     <section className="book-appointment">
-      <div className="breadcrumb">
-        <span className="home-link" onClick={() => navigate("/")}>Home</span> &gt; <span className="bold">Book Appointment</span>
-      </div>
+      
 
       <h2 className="heading">Best Doctors in Sri Lanka</h2>
 

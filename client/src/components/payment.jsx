@@ -135,9 +135,9 @@ const styles = {
     display: "flex", 
     justifyContent: "center", 
     alignItems: "center", 
-    height: "100vh", 
+    
     background: "#f4f8fc", 
-    padding: "20px" 
+    padding: "70px" 
   },
   contentWrapper: { 
     display: "flex", 

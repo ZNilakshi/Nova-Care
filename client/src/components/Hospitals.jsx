@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
+import React, { useState, useEffect, useCallback } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; // New arrow icons
 
 const hospitals = [
   { name: "Colombo", image: "/colombo.jpg", address: "Plot No.1A, Colombo", contact: "+8401801066" },
@@ -19,16 +19,29 @@ const HospitalsInSriLanka = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handlePrev = () => {
-    const newIndex = currentIndex === 0 ? hospitals.length - 1 : currentIndex - 1;
-    setCurrentIndex(newIndex);
-    setSelectedHospital(hospitals[newIndex]);
-  };
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex === hospitals.length - 1 ? 0 : prevIndex + 1;
+      setSelectedHospital(hospitals[newIndex]);
+      return newIndex;
+    });
+  }, []);
 
-  const handleNext = () => {
-    const newIndex = currentIndex === hospitals.length - 1 ? 0 : currentIndex + 1;
-    setCurrentIndex(newIndex);
-    setSelectedHospital(hospitals[newIndex]);
+  useEffect(() => {
+    if (isMobile) {
+      const timer = setTimeout(() => {
+        handleNext();
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, isMobile, handleNext]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prevIndex) => {
+      const newIndex = prevIndex === 0 ? hospitals.length - 1 : prevIndex - 1;
+      setSelectedHospital(hospitals[newIndex]);
+      return newIndex;
+    });
   };
 
   return (
@@ -49,7 +62,6 @@ const HospitalsInSriLanka = () => {
         NOVACARE Group has over 10,00+ beds across 13+ hospitals, 60+ pharmacies, 70+ clinics, and 230+ diagnostic centers.
       </p>
 
-      {/* Layout for Desktop & Mobile */}
       <div
         style={{
           display: "flex",
@@ -61,25 +73,26 @@ const HospitalsInSriLanka = () => {
           gap: "30px",
         }}
       >
-        {/* Left Side: Locations (Mobile Slideshow / Desktop Grid) */}
+        {/* Mobile Slideshow / Desktop Grid */}
         <div style={{ width: isMobile ? "100%" : "50%" }}>
           {isMobile ? (
-            // Mobile Slideshow
             <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <button
                 onClick={handlePrev}
                 style={{
                   position: "absolute",
-                  left: "10px",
-                  background: "rgba(0,0,0,0.5)",
-                  border: "none",
-                  color: "white",
-                  padding: "10px",
+                  left: "5px",
+                       border: "none",
+                  color: "black",
+                  padding: "12px",
                   borderRadius: "50%",
                   cursor: "pointer",
+                  fontSize: "18px",
+                  transition: "0.3s",
+                  boxShadow: "0 4px 10px rgba(117, 115, 115, 0.2)",
                 }}
               >
-                <FaArrowLeft />
+                <FaChevronLeft />
               </button>
 
               <div>
@@ -101,20 +114,22 @@ const HospitalsInSriLanka = () => {
                 onClick={handleNext}
                 style={{
                   position: "absolute",
-                  right: "10px",
-                  background: "rgba(0,0,0,0.5)",
+                  right: "5px",
+                  
                   border: "none",
-                  color: "white",
-                  padding: "10px",
+                  color: "black",
+                  padding: "12px",
                   borderRadius: "50%",
                   cursor: "pointer",
+                  fontSize: "18px",
+                  transition: "0.3s",
+                  boxShadow: "0 4px 10px rgba(48, 47, 47, 0.2)",
                 }}
               >
-                <FaArrowRight />
+                <FaChevronRight />
               </button>
             </div>
           ) : (
-            // Desktop Grid
             <div
               style={{
                 display: "grid",
@@ -176,7 +191,6 @@ const HospitalsInSriLanka = () => {
             alt={selectedHospital.name}
             style={{
               width: "80%",
-             
               height: "auto",
               objectFit: "cover",
               borderRadius: "10px",

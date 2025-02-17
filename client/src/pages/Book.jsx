@@ -26,13 +26,8 @@ const Book = () => {
   });
 
   return (
-    <section style={{ padding: "40px", background: "#f5f9fc", fontFamily: "'Poppins', sans-serif" }}>
-      <div
-        style={{ fontSize: "14px", color: "#555", marginBottom: "20px", cursor: "pointer", display: "inline-block" }}
-        onClick={() => navigate(-1)}
-      >
-        ← Back to Doctors
-      </div>
+    <section style={{ padding: "60px", background: "#f5f9fc", fontFamily: "'Poppins', sans-serif" }}>
+      
 
       <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", gap: "25px", flexWrap: "wrap" }}>
         {/* LEFT SIDE: Locations */}
