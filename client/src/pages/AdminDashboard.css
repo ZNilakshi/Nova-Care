@@ -1,0 +1,150 @@
+/* Layout */
+.admin-dashboard {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 25%;
+    background-color: #1f2937;
+    color: white;
+    padding: 24px;
+  }
+  
+  .sidebar h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+  
+  .sidebar ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .sidebar li {
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  
+  .sidebar li:hover {
+    color: #d1d5db;
+  }
+  
+  /* Main Content */
+  .main-content {
+    width: 75%;
+    padding: 24px;
+  }
+  
+  /* Forms */
+  .form-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    background-color: white;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .form-container label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+  }
+  
+  .form-container input,
+  .form-container select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    margin-top: 4px;
+  }
+  
+  .form-container button {
+    grid-column: span 2;
+    background-color: #2563eb;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .form-container button:hover {
+    background-color: #1d4ed8;
+  }
+  
+  /* Doctors List */
+  .doctors-list {
+    background-color: white;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .doctor-card {
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .doctor-card h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .doctor-card p {
+    margin-top: 4px;
+  }
+  
+  .availability-item {
+    background-color: #f3f4f6;
+    padding: 6px;
+    border-radius: 4px;
+    margin-top: 4px;
+  }
+  
+  .doctor-photo {
+    width: 80px;
+    height: 80px;
+    margin-top: 8px;
+    border-radius: 8px;
+  }
+  .doctor-actions {
+    margin-top: 10px;
+  }
+  
+  .edit-btn {
+    background-color: #facc15;
+    color: black;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  
+  .edit-btn:hover {
+    background-color: #eab308;
+  }
+  
+  .delete-btn {
+    background-color: #ef4444;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .delete-btn:hover {
+    background-color: #dc2626;
+  }
+  

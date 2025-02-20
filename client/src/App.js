@@ -15,6 +15,7 @@ import DoctorCard from "./pages/DoctorCard"; // Ensure this is correctly placed
 import Payment from "./components/payment";
 import PharmacyList from "./pages/PharmacyList";
 import CartPage from "./pages/CartPage";
+import Admin from "./pages/Admin";
 
 
 const App = () => {
@@ -36,6 +37,8 @@ const App = () => {
         <Route path="/pharmacy-list" element={<PharmacyList />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/buy-medicine" element={<BuyMedicine />} />
+        <Route path="/admin" element={<Admin />} />
+  
       </Routes>
     </Router>
   );
