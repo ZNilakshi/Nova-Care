@@ -34,9 +34,9 @@ router.get("/", async (req, res) => {
 // Add or update availability for a doctor
 router.post("/updateAvailability/:id", async (req, res) => {
   try {
-    const { days, time, location, availableSlots } = req.body;
+    const { date, time, location, availableSlots } = req.body;
     
-    if (!days || !time || !location || !availableSlots) {
+    if (!date || !time || !location || !availableSlots) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
@@ -46,7 +46,7 @@ router.post("/updateAvailability/:id", async (req, res) => {
     }
 
     // Add new availability
-    doctor.availability.push({ days, time, location, availableSlots });
+    doctor.availability.push({ date, time, location, availableSlots });
 
     await doctor.save();
     res.status(200).json({ message: "Availability updated successfully", doctor });
@@ -87,6 +87,8 @@ router.put("/updateAvailability/:id", async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 });
+
+// Backend (Express.js)
 
 
 // Delete a doctor

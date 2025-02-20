@@ -1,4 +1,38 @@
 /* Layout */
+
+.toggle-box {
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin: 10px 0;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-align: center;
+}
+.form-container {
+  background: #fff;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 10px 0;
+}
+.doctors-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.doctor-card {
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  width: 250px;
+}
+
+.doctor-photo {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
 .admin-dashboard {
     display: flex;
     min-height: 100vh;

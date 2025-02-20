@@ -3,7 +3,8 @@ import "./AdminDashboard.css";
 
 
 const AdminDashboard = () => {
-
+  const [showDoctorForm, setShowDoctorForm] = useState(false);
+  const [showAvailabilityForm, setShowAvailabilityForm] = useState(false);
   const [doctors, setDoctors] = useState([]);
   const [doctor, setDoctor] = useState({
     name: "",
@@ -11,7 +12,7 @@ const AdminDashboard = () => {
     experience: "",
     degrees: "",
     languages: "",
-    locations: "",
+    locations: [],
     description: "",
     fee: "",
     photo: null,
@@ -31,7 +32,7 @@ const AdminDashboard = () => {
 
   const [availability, setAvailability] = useState({
     doctorIndex: "",
-    days: "",
+    date: "",
     time: "",
     location: "",
     availableSlots: "",
@@ -104,7 +105,7 @@ const AdminDashboard = () => {
       specialty: "",
       experience: "",
       degrees: "",
-      languages: "",
+      languages: [],
       locations: "",
       description: "",
       fee: "",
@@ -201,7 +202,7 @@ if (editingAvailabilityIndex !== null) {
       }
   
       // Reset form
-      setAvailability({ doctorIndex: "", days: "", time: "", location: "", availableSlots: "" });
+      setAvailability({ doctorIndex: "", date: "" ,  time: "", location: "", availableSlots: "" });
       setEditingAvailabilityIndex(null);
     }
   };
@@ -226,31 +227,106 @@ if (editingAvailabilityIndex !== null) {
 
       {/* Main Content */}
       <main className="main-content">
+
+      <div className="toggle-box" onClick={() => setShowDoctorForm(!showDoctorForm)}>
+     
         {/* Doctor Details Form */}
         <h2>{editingDoctorIndex !== null ? "Edit Doctor Details" : "Register Doctor"}</h2>
+       </div>
+       {showDoctorForm && (
+     
         <form onSubmit={handleDoctorSubmit} className="form-container">
-          {Object.keys(doctor).map((key) =>
-            key !== "photo" ? (
-              <div key={key}>
-                <label>{key.charAt(0).toUpperCase() + key.slice(1)}</label>
-                <input name={key} value={doctor[key]} onChange={handleDoctorChange} />
-              </div>
-            ) : null
-          )}
-
           <div>
-            <label>Photo</label>
-            <input type="file" accept="image/*" onChange={handlePhotoChange} />
-            {doctor.photo && <img src={doctor.photo} alt="Doctor" className="doctor-photo" />}
-          </div>
+              <label>Name</label>
+              <input name="name" value={doctor.name} onChange={handleDoctorChange} required />
+            </div>
+            {/* Specialty Dropdown */}
+            <div>
+              <label>Specialty</label>
+              <select name="specialty" value={doctor.specialty} onChange={handleDoctorChange} required>
+                <option value="">Select Specialty</option>
+                {["Cardiology", "Neurology", "Oncology", "Gynecology", "Dermatology", "Endocrinology", "Nephrology"].map((spec) => (
+                  <option key={spec} value={spec}>{spec}</option>
+                ))}
+              </select>
+            </div>
+         {/* Experience */}
+         <div>
+              <label>Experience (Years)</label>
+              <input type="number" name="experience" value={doctor.experience} onChange={handleDoctorChange} required />
+            </div>
 
-          <button type="submit">
-            {editingDoctorIndex !== null ? "Update Doctor" : "Register Doctor"}
-          </button>
+            <div>
+              <label>Degrees</label>
+              <input name="degrees" value={doctor.degrees} onChange={handleDoctorChange} required />
+            </div>
+
+            <div>
+              <label>Languages</label>
+              {["Sinhala", "English", "Tamil"].map((lang) => (
+                <label key={lang} className="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value={lang}
+                    checked={doctor.languages.includes(lang)}
+                    onChange={(e) => {
+                      const newLanguages = e.target.checked
+                        ? [...doctor.languages, lang]
+                        : doctor.languages.filter((l) => l !== lang);
+                      setDoctor({ ...doctor, languages: newLanguages });
+                    }}
+                  />
+                  {lang}
+                </label>
+              ))}
+            </div>
+ {/* Location Dropdown */}
+ <div>
+              <label>Location</label>
+              <select name="locations" value={doctor.locations} onChange={handleDoctorChange} required>
+                <option value="">Select Location</option>
+                {["Colombo", "Negombo", "Kalutara", "Gampaha"].map((loc) => (
+                  <option key={loc} value={loc}>{loc}</option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label>Description</label>
+              <textarea name="description" value={doctor.description} onChange={handleDoctorChange} required />
+            </div>
+
+            <div>
+              <label>Consultation Fee ($)</label>
+              <input type="number" name="fee" value={doctor.fee} onChange={handleDoctorChange} required />
+            </div>
+
+            <div>
+              <label>Photo</label>
+              <input type="file" accept="image/*" onChange={handlePhotoChange} />
+              {doctor.photo && <img src={doctor.photo} alt="Doctor" className="doctor-photo" />}
+            </div>
+
+            <button type="submit">
+              {editingDoctorIndex !== null ? "Update Doctor" : "Register Doctor"}
+            </button>
+          
+
+
+
+          
+
+        
+          
         </form>
-
+)}
+ <div className="toggle-box" onClick={() => setShowAvailabilityForm(!showAvailabilityForm)}>
+     
         {/* Availability Form */}
         <h2>{editingAvailabilityIndex !== null ? "Edit Availability" : "Add Availability"}</h2>
+       </div>
+
+       {showAvailabilityForm && (
         <form onSubmit={handleAvailabilitySubmit} className="form-container">
           <label>Doctor:</label>
           <select name="doctorIndex" onChange={handleAvailabilityChange} value={availability.doctorIndex}>
@@ -261,16 +337,34 @@ if (editingAvailabilityIndex !== null) {
               </option>
             ))}
           </select>
-          <input name="days" placeholder="Days" onChange={handleAvailabilityChange} value={availability.days} />
-          <input name="time" placeholder="Time" onChange={handleAvailabilityChange} value={availability.time} />
-          <input name="location" placeholder="Location" onChange={handleAvailabilityChange} value={availability.location} />
-          <input name="availableSlots" placeholder="Available Slots" onChange={handleAvailabilityChange} value={availability.availableSlots} />
-          
+          {/* Date Picker */}
+  <label>Date:</label>
+  <input type="date" name="date" onChange={handleAvailabilityChange} value={availability.date} required />
+
+  {/* Time Picker */}
+  <label>Time:</label>
+  <input type="time" name="time" onChange={handleAvailabilityChange} value={availability.time} required />
+
+  {/* Location Dropdown */}
+  <label>Location:</label>
+  <select name="location" onChange={handleAvailabilityChange} value={availability.location} required>
+    <option value="">Select Location</option>
+    {["Colombo", "Negombo", "Kalutara", "Gampaha"].map((loc) => (
+      <option key={loc} value={loc}>
+        {loc}
+      </option>
+    ))}
+  </select>
+
+  {/* Available Slots */}
+  <label>Available Slots:</label>
+  <input type="number" name="availableSlots" onChange={handleAvailabilityChange} value={availability.availableSlots} required />
+  
           <button type="submit">
             {editingAvailabilityIndex !== null ? "Update Availability" : "Add Availability"}
           </button>
         </form>
-
+       )}
         {/* Doctors List */}
         <h2>Doctors List</h2>
         <div className="doctors-list">
@@ -288,16 +382,22 @@ if (editingAvailabilityIndex !== null) {
 
               {/* Availability Section */}
               <h4>Availability:</h4>
-              {doc.availability.length > 0 ? (
-                doc.availability.map((slot, i) => (
-                  <p key={i} className="availability-item">
-                    {slot.days} | {slot.time} | {slot.location} | {slot.availableSlots} slots
-                    <button onClick={() => handleEditAvailability(index, i)}>Edit</button>
-                  </p>
-                ))
-              ) : (
-                <p>No availability added</p>
-              )}
+{doc.availability.length > 0 ? (
+  doc.availability.map((slot, i) => (
+    <p key={i} className="availability-item">
+      <strong>Date:</strong> {slot.date ? slot.date : "Not Available"} |
+      <strong> Time:</strong> {slot.time} |
+      <strong> Location:</strong> {slot.location} |
+      <strong> Slots:</strong> {slot.availableSlots}
+      <button onClick={() => handleEditAvailability(index, i)}>Edit</button>
+    </p>
+  ))
+) : (
+  <p>No availability added</p>
+)}
+
+
+
 
               <div className="doctor-actions">
                 <button onClick={() => handleEditDoctor(index)} className="edit-btn">Edit Details</button>
