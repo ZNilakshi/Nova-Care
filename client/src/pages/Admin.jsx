@@ -4,9 +4,6 @@ import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
 
-  
-
-
   const [doctors, setDoctors] = useState([]);
   const [doctor, setDoctor] = useState({
     name: "",
@@ -60,28 +57,31 @@ const AdminDashboard = () => {
   const handleDoctorSubmit = (e) => {
     e.preventDefault();
     if (editingDoctorIndex !== null) {
-      setDoctors((prevDoctors) => {
-        const updatedDoctors = [...prevDoctors];
-        updatedDoctors[editingDoctorIndex] = {
-          ...updatedDoctors[editingDoctorIndex], // Keep existing availability
-          ...doctor, // Update only the allowed fields
-        };
-        return updatedDoctors;
-      });
-      setEditingDoctorIndex(null);
+      fetch(`http://localhost:5000/api/doctors/update/${doctors[editingDoctorIndex]._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(doctor),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          alert(data.message);
+          fetchDoctors(); // Refresh list
+        })
+        .catch((err) => console.error(err));
     } else {
-        fetch("http://localhost:5000/api/doctors/add", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(doctor),
-          })
-            .then((res) => res.json())
-            .then((data) => {
-              alert(data.message);
-              setDoctors([...doctors, { ...doctor, availability: [] }]);
-            })
-            .catch((err) => console.error(err));
-              }
+      fetch("http://localhost:5000/api/doctors/add", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(doctor),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          alert(data.message);
+          fetchDoctors();
+        })
+        .catch((err) => console.error(err));
+    }
+    
 
     setDoctor({
       name: "",
@@ -161,15 +161,14 @@ const AdminDashboard = () => {
   
       // Send full availability array to backend
       try {
-        const updatedAvailability = [
-          ...doctors[doctorIndex].availability,
-          {
-            days: availability.days,
-            time: availability.time,
-            location: availability.location,
-            availableSlots: availability.availableSlots,
-          },
-        ];
+        let updatedAvailability = [...doctors[doctorIndex].availability];
+
+if (editingAvailabilityIndex !== null) {
+  updatedAvailability[editingAvailabilityIndex] = { ...availability };
+} else {
+  updatedAvailability.push({ ...availability });
+}
+     
   
         const response = await fetch(
           `http://localhost:5000/api/doctors/updateAvailability/${doctorId}`,
