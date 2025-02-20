@@ -56,8 +56,12 @@ const AdminDashboard = () => {
   // Handle Doctor Submission (Add / Update)
   const handleDoctorSubmit = (e) => {
     e.preventDefault();
+  
     if (editingDoctorIndex !== null) {
-      fetch(`http://localhost:5000/api/doctors/update/${doctors[editingDoctorIndex]._id}`, {
+      // Get doctor ID
+      const doctorId = doctors[editingDoctorIndex]._id;
+  
+      fetch(`http://localhost:5000/api/doctors/update/${doctorId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(doctor),
@@ -65,7 +69,16 @@ const AdminDashboard = () => {
         .then((res) => res.json())
         .then((data) => {
           alert(data.message);
-          fetchDoctors(); // Refresh list
+  
+          // Update frontend state
+          setDoctors((prevDoctors) =>
+            prevDoctors.map((doc, index) =>
+              index === editingDoctorIndex ? { ...doc, ...doctor } : doc
+            )
+          );
+  
+          setEditingDoctorIndex(null);
+          resetDoctorForm();
         })
         .catch((err) => console.error(err));
     } else {
@@ -77,12 +90,15 @@ const AdminDashboard = () => {
         .then((res) => res.json())
         .then((data) => {
           alert(data.message);
-          fetchDoctors();
+          fetchDoctors(); // Fetch updated list
+          resetDoctorForm();
         })
         .catch((err) => console.error(err));
     }
-    
-
+  };
+  
+  // Reset Doctor Form
+  const resetDoctorForm = () => {
     setDoctor({
       name: "",
       specialty: "",
@@ -95,6 +111,7 @@ const AdminDashboard = () => {
       photo: null,
     });
   };
+  
 
  // Edit Doctor Details (Only allowed fields)
  const handleEditDoctor = (index) => {
@@ -102,17 +119,7 @@ const AdminDashboard = () => {
     setDoctor({ name, specialty, experience, degrees, languages, locations, description, fee, photo });
     setEditingDoctorIndex(index);
 
-    fetch(`http://localhost:5000/api/doctors/update/${doctors[index]._id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(doctor),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          alert(data.message);
-          setEditingDoctorIndex(null);
-        })
-        .catch((err) => console.error(err));
+   
       
   };
 
