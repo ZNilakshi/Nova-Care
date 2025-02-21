@@ -16,6 +16,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increase URL-
 
 // Routes
 app.use("/api/doctors", doctorRoutes);
+app.use("/api/doctors", require("./routes/doctorRoutes"));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

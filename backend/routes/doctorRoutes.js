@@ -42,6 +42,22 @@ router.post("/add", upload.single("photo"), async (req, res) => {
   }
 });
 
+// Get a doctor by ID
+router.get("/:id", async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.params.id);
+
+    if (!doctor) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    res.status(200).json(doctor);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+
 // Get all doctors
 router.get("/", async (req, res) => {
   try {
