@@ -2,20 +2,40 @@ const express = require("express");
 const Doctor = require("../models/Doctor");
 const router = express.Router();
 
-// Add a new doctor
-router.post("/add", async (req, res) => {
+const multer = require("multer");
+const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB file size limit
+
+router.post("/add", upload.single("photo"), async (req, res) => {
   try {
-    console.log("Received data:", req.body); // Log incoming data
-    const { name, specialty, experience, degrees, languages, locations, description, fee } = req.body;
+    console.log(req.body); // Text fields
+    console.log(req.file); // Uploaded file
+
+     const { name, specialty, experience, degrees, languages, locations, description, fee } = req.body;
 
     if (!name || !specialty || !experience || !degrees || !languages || !locations || !description || !fee) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
-    const newDoctor = new Doctor(req.body);
-    await newDoctor.save();
+    // Store image as Base64 (alternative: Upload to Cloudinary, S3, etc.)
+    let photo = "";
+    if (req.file) {
+      photo = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+    }
 
-    res.json({ success: true, message: "Doctor added successfully!", doctor: newDoctor });
+    const newDoctor = new Doctor({
+      name,
+      specialty,
+      experience,
+      degrees,
+      languages,
+      locations,
+      description,
+      fee,
+      photo, // Save Base64 image
+    });
+
+    await newDoctor.save();
+    res.status(201).json({ success: true, message: "Doctor added successfully!", doctor: newDoctor });
   } catch (error) {
     console.error("Error in /add route:", error);
     res.status(500).json({ success: false, message: "Server error", error: error.message });

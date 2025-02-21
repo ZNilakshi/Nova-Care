@@ -11,7 +11,7 @@ const AdminDashboard = () => {
     specialty: "",
     experience: "",
     degrees: "",
-    languages: "",
+    languages: [],
     locations: [],
     description: "",
     fee: "",
@@ -50,9 +50,14 @@ const AdminDashboard = () => {
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setDoctor({ ...doctor, photo: URL.createObjectURL(file) });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setDoctor({ ...doctor, photo: reader.result }); // Store base64 string
+      };
+      reader.readAsDataURL(file);
     }
   };
+  
 
   // Handle Doctor Submission (Add / Update)
   const handleDoctorSubmit = (e) => {
@@ -106,7 +111,7 @@ const AdminDashboard = () => {
       experience: "",
       degrees: "",
       languages: [],
-      locations: "",
+      locations: [],
       description: "",
       fee: "",
       photo: null,
@@ -202,7 +207,7 @@ if (editingAvailabilityIndex !== null) {
       }
   
       // Reset form
-      setAvailability({ doctorIndex: "", date: "" ,  time: "", location: "", availableSlots: "" });
+      setAvailability({ doctorIndex: "", date: "",  time: "", location: "", availableSlots: "" });
       setEditingAvailabilityIndex(null);
     }
   };
@@ -282,14 +287,27 @@ if (editingAvailabilityIndex !== null) {
             </div>
  {/* Location Dropdown */}
  <div>
-              <label>Location</label>
-              <select name="locations" value={doctor.locations} onChange={handleDoctorChange} required>
-                <option value="">Select Location</option>
-                {["Colombo", "Negombo", "Kalutara", "Gampaha"].map((loc) => (
-                  <option key={loc} value={loc}>{loc}</option>
-                ))}
-              </select>
-            </div>
+  <label>Locations</label>
+  {["Colombo", "Negombo", "Kalutara", "Gampaha"].map((loc) => (
+    <label key={loc} className="checkbox-label">
+      <input
+        type="checkbox"
+        value={loc}
+        checked={doctor.locations.includes(loc)}
+        onChange={(e) => {
+          const newLocations = e.target.checked
+            ? [...doctor.locations, loc]
+            : doctor.locations.filter((l) => l !== loc);
+          setDoctor({ ...doctor, locations: newLocations });
+        }}
+      />
+      {loc}
+    </label>
+  ))}
+</div>
+
+
+            
 
             <div>
               <label>Description</label>
@@ -374,8 +392,8 @@ if (editingAvailabilityIndex !== null) {
               <p><strong>Specialty:</strong> {doc.specialty}</p>
               <p><strong>Experience:</strong> {doc.experience} years</p>
               <p><strong>Degrees:</strong> {doc.degrees}</p>
-              <p><strong>Languages:</strong> {doc.languages}</p>
-              <p><strong>Location:</strong> {doc.locations}</p>
+              <p><strong>Languages:</strong> {doc.languages.join(", ")}</p>
+              <p><strong>Locations:</strong> {doc.locations.join(", ") }</p>
               <p><strong>Description:</strong> {doc.description}</p>
               <p><strong>Fee:</strong> ${doc.fee}</p>
               {doc.photo && <img src={doc.photo} alt={doc.name} className="doctor-photo" />}
@@ -385,8 +403,9 @@ if (editingAvailabilityIndex !== null) {
 {doc.availability.length > 0 ? (
   doc.availability.map((slot, i) => (
     <p key={i} className="availability-item">
-      <strong>Date:</strong> {slot.date ? slot.date : "Not Available"} |
+       <strong> Date:</strong> {slot.date } |
       <strong> Time:</strong> {slot.time} |
+     
       <strong> Location:</strong> {slot.location} |
       <strong> Slots:</strong> {slot.availableSlots}
       <button onClick={() => handleEditAvailability(index, i)}>Edit</button>
