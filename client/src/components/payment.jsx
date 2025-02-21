@@ -26,14 +26,41 @@ const Payment = () => {
     setShowPaymentDetails(true);
   };
 
-  const handlePay = () => {
+  const handlePay = async () => {
     if (!cardNumber || !expiryMonth || !expiryYear || !cvn) {
-      alert("Please fill in all required fields.");
-      return;
+        alert("Please fill in all required fields.");
+        return;
     }
-    alert("Payment Successful!");
-    navigate("/");
-  };
+
+    try {
+        // Simulate payment processing
+        setTimeout(async () => {
+            alert("Payment Successful!");
+
+            // Call backend API to update slot
+            const doctorId = location.state?.doctorId; // Ensure doctorId is passed from previous page
+            if (doctorId) {
+                const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/decrease-slot`, {
+                    method: "PATCH",
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    console.log("Slot updated successfully.");
+                } else {
+                    console.error("Failed to update slot:", data.message);
+                }
+            }
+
+            navigate("/");
+        }, 1000);
+    } catch (error) {
+        console.error("Error processing payment:", error);
+    }
+};
+
+  
 
   return (
     <div style={styles.container}>
@@ -114,12 +141,13 @@ const Payment = () => {
             <div style={styles.formGroup}>
               <label>CVN *</label>
               <input 
-                type="text" 
-                value={cvn} 
-                onChange={(e) => setCvn(e.target.value)} 
-                style={styles.input} 
-                placeholder="123"
-              />
+  type="password" 
+  value={cvn} 
+  onChange={(e) => setCvn(e.target.value)} 
+  style={styles.input} 
+  placeholder="123"
+/>
+
             </div>
 
             <button onClick={handlePay} style={styles.button}>Pay</button>

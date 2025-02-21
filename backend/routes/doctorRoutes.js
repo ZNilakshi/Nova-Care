@@ -1,9 +1,13 @@
 const express = require("express");
 const Doctor = require("../models/Doctor");
 const router = express.Router();
-
 const multer = require("multer");
 const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB file size limit
+
+/** 
+ * @route POST /api/doctors/add
+ * @desc Add a new doctor
+ */
 
 router.post("/add", upload.single("photo"), async (req, res) => {
   try {
@@ -42,7 +46,12 @@ router.post("/add", upload.single("photo"), async (req, res) => {
   }
 });
 
-// Get a doctor by ID
+/**
+ * @route GET /api/doctors/:id
+ * @desc Get a single doctor by ID
+ */
+
+
 router.get("/:id", async (req, res) => {
   try {
     const doctor = await Doctor.findById(req.params.id);
@@ -57,9 +66,12 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+/**
+ * @route GET /api/doctors/
+ * @desc Get all doctors
+ */
 
 
-// Get all doctors
 router.get("/", async (req, res) => {
   try {
     const doctors = await Doctor.find();
@@ -68,6 +80,42 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+
+/**
+ * @route PATCH /api/doctors/:id/decrease-slot
+ * @desc Decrease available slots by 1 when an appointment is booked
+ */
+router.patch("/:id/decrease-slot", async (req, res) => {
+  try {
+    const doctor = await Doctor.findById(req.params.id);
+
+    if (!doctor) {
+      return res.status(404).json({ success: false, message: "Doctor not found" });
+    }
+
+    if (doctor.availableSlots && doctor.availableSlots > 0) {
+      const updatedDoctor = await Doctor.findByIdAndUpdate(
+        req.params.id,
+        { $inc: { availableSlots: -1 } }, // Decrease availableSlots by 1
+        { new: true } // Return the updated document
+      );
+
+      res.status(200).json({
+        success: true,
+        message: "Slot updated successfully",
+        data: updatedDoctor,
+      });
+    } else {
+      res.status(400).json({ success: false, message: "No available slots left" });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Server error", error: error.message });
+  }
+});
+
+
+
 // Add or update availability for a doctor
 router.post("/updateAvailability/:id", async (req, res) => {
   try {
@@ -125,7 +173,7 @@ router.put("/updateAvailability/:id", async (req, res) => {
   }
 });
 
-// Backend (Express.js)
+
 
 
 // Delete a doctor

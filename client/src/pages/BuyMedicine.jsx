@@ -393,4 +393,5 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
   );
 };
 
+export { allProducts };
 export default HomePage;

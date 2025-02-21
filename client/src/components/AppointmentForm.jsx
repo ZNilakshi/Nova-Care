@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { doctors } from "../pages/DoctorCard"; // Import doctors list
 
 const AppointmentForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { doctorName, date, time, specialization, doctorPhoto } = location.state || {};
 
-  // ✅ Doctor Fee Calculation
-  const selectedDoctor = doctors.find((doctor) => doctor.name === doctorName);
-  const doctorFee = selectedDoctor ? parseInt(selectedDoctor.fee.replace(/\D/g, "")) : 0;
+  const doctorFee = location.state?.doctorFee || 0; // Ensure it has a default value
+  const parsedDoctorFee = doctorFee
+  ? typeof doctorFee === "string"
+    ? parseInt(doctorFee.replace(/\D/g, ""))
+    : Number(doctorFee)
+  : 0;
   const echannellingFee = 399;
-  const totalFee = doctorFee + echannellingFee;
-
+  const totalFee = parsedDoctorFee + echannellingFee;
+  
   const [formData, setFormData] = useState({
     title: "Mr",
     name: "",
@@ -48,9 +50,12 @@ const AppointmentForm = () => {
 
     navigate("/payment", {
       state: {
+        doctorName,
         totalFee: `Rs ${totalFee}.00`,
+        appointmentDetails: { date, time, specialization },
       },
     });
+    
   };
 
   return (
@@ -99,15 +104,15 @@ const AppointmentForm = () => {
         <button type="submit" style={styles.button}>Proceed to Payment</button>
       </form>
 
-      {/* Right Sidebar - Payment Details */}
-      <div style={styles.sidebar}>
-        <h3 style={styles.paymentTitle}>💳 Payment Details</h3>
-        <p><strong>Doctor’s Fee:</strong> Rs {doctorFee}</p>
-        <p><strong>eChannelling Fee:</strong> Rs {echannellingFee}</p>
-        <p><strong>Discount:</strong> Rs 0.00</p>
-        <hr />
-        <h4 style={styles.total}>Total: Rs {totalFee}.00</h4>
-      </div>
+    {/* Right Sidebar - Payment Details */}
+<div style={styles.sidebar}>
+  <h3 style={styles.paymentTitle}>💳 Payment Details</h3>
+  <p><strong>Doctor’s Fee:</strong> Rs {doctorFee || "0.00"}</p>
+  <p><strong>eChannelling Fee:</strong> Rs {echannellingFee}</p>
+   <hr />
+  <h4 style={styles.total}>Total: Rs {totalFee}.00</h4>
+</div>
+
     </div>
   );
 };

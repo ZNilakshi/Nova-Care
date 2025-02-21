@@ -98,6 +98,10 @@ const Book = () => {
               <p style={{ fontSize: "16px", color: "#666", margin: "5px 0" }}>{doctor.specialty} - {doctor.experience} years</p>
               <p style={{ fontSize: "14px", color: "#888", margin: "0" }}><b>Degrees:</b> {doctor.degrees}</p>
               <p style={{ fontSize: "14px", color: "#888", margin: "0" }}><b>Languages:</b> {doctor.languages.join(", ")}</p>
+              <p style={{ fontSize: "14px", fontWeight: "bold", color: "#333", marginBottom: "10px" }}>
+          Fee:  <span style={{ color: "#FFD700" }}>Rs .{doctor.fee}.00</span>
+        </p>
+        
             </div>
           </div>
 
@@ -117,7 +121,15 @@ const Book = () => {
           <p style={{ margin: "0", fontSize: "14px", color: "#888" }}>📍 Location: <b>{session.location}</b></p> {/* Add this line */}
         </div>
         <button
-          onClick={() => navigate("/appointment-form", { state: { doctorName: doctor.name, date: session.date, time: session.time, doctorPhoto: doctor.photo, location: session.location } })}
+          onClick={() => navigate("/appointment-form", 
+            { state: { doctorName: doctor.name, 
+              date: session.date, 
+              time: session.time, 
+              doctorPhoto: doctor.photo,
+               location: session.location,
+               specialization: doctor.specialization,
+               doctorFee: Number(doctor.fee) // Pass fee here
+             } })}
           style={{
             background: "#0096C7",
             color: "white",
