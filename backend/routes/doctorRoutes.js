@@ -58,6 +58,7 @@ router.get("/:id", async (req, res) => {
 });
 
 
+
 // Get all doctors
 router.get("/", async (req, res) => {
   try {
