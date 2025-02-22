@@ -41,6 +41,7 @@ const AdminDashboard = () => {
   const [editingDoctorIndex, setEditingDoctorIndex] = useState(null);
   const [editingAvailabilityIndex, setEditingAvailabilityIndex] = useState(null);
 
+  
   // Handle Doctor Input Change
   const handleDoctorChange = (e) => {
     setDoctor({ ...doctor, [e.target.name]: e.target.value });

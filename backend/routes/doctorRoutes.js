@@ -89,51 +89,72 @@ router.get("/", async (req, res) => {
 
 router.patch("/:doctorId/decrease-slot", async (req, res) => {
   try {
-      const { doctorId } = req.params;
-      const { sessionLocation, date, time } = req.body;
+    const { doctorId } = req.params;
+    let { sessionLocation, date, time } = req.body;
 
-      console.log(`Received request to decrease slot for: ${doctorId}`);
-      console.log("Request Body:", req.body);
+    console.log(`Received request to decrease slot for: ${doctorId}`);
+    console.log("Request Body:", req.body);
 
-      if (!doctorId || !sessionLocation || !date || !time) {
-          return res.status(400).json({ success: false, message: "Missing required fields." });
+    if (!doctorId || !sessionLocation || !date || !time) {
+      return res.status(400).json({ success: false, message: "Missing required fields." });
+    }
+
+    // 🔍 Fetch doctor availability before updating
+    const doctor = await Doctor.findById(doctorId);
+    if (!doctor) {
+      return res.status(404).json({ success: false, message: "Doctor not found." });
+    }
+    console.log("Doctor's Availability Before Update:", doctor.availability);
+
+    // ⏳ Fix Time Calculation (Convert String -> Number -> Adjust)
+    const [hours, minutes] = time.split(":").map(Number); // Convert "hh:mm" to numbers
+    let newHours = hours;
+    let newMinutes = minutes + 15; // Add 15 minutes
+
+    if (newMinutes >= 60) {
+      newMinutes -= 60;
+      newHours += 1;
+    }
+
+    // Ensure two-digit format (e.g., "09:05" instead of "9:5")
+    const updatedTime = `${String(newHours).padStart(2, "0")}:${String(newMinutes).padStart(2, "0")}`;
+
+    console.log("New Appointment Time:", updatedTime);
+
+    // 🔄 Update the slot and modify the appointment time
+    const updateResult = await Doctor.updateOne(
+      {
+        _id: doctorId,
+        "availability.location": sessionLocation,
+        "availability.date": date,
+        "availability.time": time, // Match the original time
+      },
+      {
+        $inc: { "availability.$.availableSlots": -1 }, // Decrease slot count
+        $set: { "availability.$.time": updatedTime }, // Update the time
       }
+    );
 
-      // 🔍 Fetch and log the doctor's availability before updating
-      const doctor = await Doctor.findById(doctorId);
-      if (!doctor) {
-          return res.status(404).json({ success: false, message: "Doctor not found." });
-      }
-      console.log("Doctor's Availability Before Update:", doctor.availability);
+    console.log("Update Result:", updateResult);
 
-      // 🔄 Update query
-      const updateResult = await Doctor.updateOne(
-          { 
-              _id: doctorId, 
-              "availability.location": sessionLocation, 
-              "availability.date": date, 
-              "availability.time": time 
-          },
-          { $inc: { "availability.$.availableSlots": -1 } } // Decrease slot count by 1
-      );
+    // 🔍 Fetch and log the doctor's availability after update
+    const updatedDoctor = await Doctor.findById(doctorId);
+    console.log("Doctor's Availability After Update:", updatedDoctor.availability);
 
-      console.log("Update Result:", updateResult);
+    if (updateResult.modifiedCount === 0) {
+      return res.status(400).json({ success: false, message: "Slot not updated. Check session details." });
+    }
 
-      // 🔍 Fetch and log the doctor's availability after updating
-      const updatedDoctor = await Doctor.findById(doctorId);
-      console.log("Doctor's Availability After Update:", updatedDoctor.availability);
-
-      if (updateResult.modifiedCount === 0) {
-          return res.status(400).json({ success: false, message: "Slot not updated. Check session details." });
-      }
-
-      res.json({ success: true, message: "Slot updated successfully." });
+    res.json({ success: true, message: "Slot updated successfully.", newTime: updatedTime });
 
   } catch (error) {
-      console.error("Error updating slot:", error);
-      res.status(500).json({ success: false, message: "Server error." });
+    console.error("Error updating slot:", error);
+    res.status(500).json({ success: false, message: "Server error." });
   }
 });
+
+
+
 
 
 

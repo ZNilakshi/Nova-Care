@@ -25,52 +25,53 @@ const Payment = () => {
     }
     setShowPaymentDetails(true);
   };
-
   const handlePay = async () => {
     if (!cardNumber || !expiryMonth || !expiryYear || !cvn) {
-        alert("Please fill in all required fields.");
-        return;
+      alert("Please fill in all required fields.");
+      return;
     }
-
+  
     console.log("Payment Page State:", location.state);
-
+  
     try {
-        alert("Processing Payment...");
-        console.log("Doctor ID:", doctorId);
-
-        if (!doctorId) {
-            console.error("doctorId is missing. Cannot update slot.");
-            return;
-        }
-
-        const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/decrease-slot`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                sessionLocation: appointmentDetails?.sessionLocation,
-                date: appointmentDetails?.date,
-                time: appointmentDetails?.time,
-            }),
-        });
-
-        console.log("Response Status:", response.status);
-
-        if (!response.ok) {
-            const errorMessage = await response.text(); // Get raw error message
-            console.error("Failed to update slot:", errorMessage);
-            alert("Failed to update slot: " + errorMessage);
-            return;
-        }
-
-        const data = await response.json();
-        console.log("Slot updated successfully:", data);
-        alert("Payment Successful & Slot Reduced!");
-        navigate("/");
+      alert("Processing Payment...");
+      console.log("Doctor ID:", doctorId);
+  
+      if (!doctorId) {
+        console.error("doctorId is missing. Cannot update slot.");
+        return;
+      }
+  
+      const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/decrease-slot`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionLocation: appointmentDetails?.sessionLocation,
+          date: appointmentDetails?.date,
+          time: appointmentDetails?.time,
+        }),
+      });
+  
+      console.log("Response Status:", response.status);
+  
+      if (!response.ok) {
+        const errorMessage = await response.text();
+        console.error("Failed to update slot:", errorMessage);
+        alert("Failed to update slot: " + errorMessage);
+        return;
+      }
+  
+      const data = await response.json();
+      console.log("Slot updated successfully:", data);
+      
+      alert(`Payment Successful! Your new appointment time is: ${data.newTime}`);
+      navigate("/");
     } catch (error) {
-        console.error("Error updating slot:", error);
-        alert("Error updating slot: " + error.message);
+      console.error("Error updating slot:", error);
+      alert("Error updating slot: " + error.message);
     }
-};
+  };
+  
 
 
   return (
