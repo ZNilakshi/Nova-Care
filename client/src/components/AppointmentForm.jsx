@@ -4,17 +4,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 const AppointmentForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { doctorName, date, time, specialization, doctorPhoto } = location.state || {};
+  const {  doctorId, doctorName, date, time, specialization, doctorPhoto, location: sessionLocation, doctorFee } = location.state || {};
 
-  const doctorFee = location.state?.doctorFee || 0; // Ensure it has a default value
-  const parsedDoctorFee = doctorFee
-  ? typeof doctorFee === "string"
-    ? parseInt(doctorFee.replace(/\D/g, ""))
-    : Number(doctorFee)
-  : 0;
+  const parsedDoctorFee = doctorFee ? (typeof doctorFee === "string" ? parseInt(doctorFee.replace(/\D/g, "")) : Number(doctorFee)) : 0;
   const echannellingFee = 399;
   const totalFee = parsedDoctorFee + echannellingFee;
-  
+  console.log("Appointment Form State:", location.state);
+
   const [formData, setFormData] = useState({
     title: "Mr",
     name: "",
@@ -28,52 +24,45 @@ const AppointmentForm = () => {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setErrors({ ...errors, [e.target.name]: "" }); // Remove error on change
+    setErrors({ ...errors, [e.target.name]: "" });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     let newErrors = {};
-
-    // Required fields validation
     ["name", "phone", "nic", "age", "area"].forEach((field) => {
       if (!formData[field]) {
         newErrors[field] = "This field is required";
       }
     });
-
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       alert("Please fill in all required fields.");
       return;
     }
-
     navigate("/payment", {
       state: {
+        doctorId, 
         doctorName,
         totalFee: `Rs ${totalFee}.00`,
-        appointmentDetails: { date, time, specialization },
+        appointmentDetails: { date, time, specialization, sessionLocation },
       },
     });
-    
   };
 
   return (
     <div style={styles.container}>
-      {/* Left Sidebar - Doctor Info */}
       <div style={styles.sidebar}>
         <img src={doctorPhoto || "https://via.placeholder.com/100"} alt={doctorName || "Doctor"} style={styles.image} />
         <h3 style={styles.doctorName}>{doctorName || "Dr. Not Specified"}</h3>
-        <p><strong>Specialization:</strong> {specialization || "General"}</p>
+        <p><strong>Specialization:</strong> {specialization || "Not specified"}</p>
+        <p><strong>Location:</strong> {sessionLocation || "Not specified"}</p>
         <p><strong>Session Date:</strong> {date || "TBD"}</p>
         <p><strong>Session Time:</strong> {time || "TBD"}</p>
       </div>
 
-      {/* Center Form */}
       <form onSubmit={handleSubmit} style={styles.form}>
         <h2 style={styles.formTitle}>📅 Book Your Appointment</h2>
-
-        {/* Title & Name */}
         <div style={styles.flexRow}>
           <select name="title" value={formData.title} onChange={handleChange} style={styles.input}>
             <option value="Mr">Mr</option>
@@ -83,39 +72,38 @@ const AppointmentForm = () => {
           <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} style={inputStyle(errors.name)} />
         </div>
         {errors.name && <p style={styles.error}>{errors.name}</p>}
-
-        {/* Phone */}
         <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} style={inputStyle(errors.phone)} />
         {errors.phone && <p style={styles.error}>{errors.phone}</p>}
-
-        {/* NIC */}
         <input type="text" name="nic" placeholder="National ID (NIC)" value={formData.nic} onChange={handleChange} style={inputStyle(errors.nic)} />
         {errors.nic && <p style={styles.error}>{errors.nic}</p>}
-
-        {/* Age */}
         <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} style={inputStyle(errors.age)} />
         {errors.age && <p style={styles.error}>{errors.age}</p>}
-
-        {/* Area */}
         <input type="text" name="area" placeholder="Area" value={formData.area} onChange={handleChange} style={inputStyle(errors.area)} />
         {errors.area && <p style={styles.error}>{errors.area}</p>}
-
-        {/* Submit Button */}
         <button type="submit" style={styles.button}>Proceed to Payment</button>
       </form>
 
-    {/* Right Sidebar - Payment Details */}
-<div style={styles.sidebar}>
-  <h3 style={styles.paymentTitle}>💳 Payment Details</h3>
-  <p><strong>Doctor’s Fee:</strong> Rs {doctorFee || "0.00"}</p>
-  <p><strong>eChannelling Fee:</strong> Rs {echannellingFee}</p>
-   <hr />
-  <h4 style={styles.total}>Total: Rs {totalFee}.00</h4>
-</div>
-
+      <div style={styles.sidebar}>
+        <h3 style={styles.paymentTitle}>💳 Payment Details</h3>
+        <p><strong>Doctor’s Fee:</strong> Rs {doctorFee || "0.00"}</p>
+        <p><strong>eChannelling Fee:</strong> Rs {echannellingFee}</p>
+        <hr />
+        <h4 style={styles.total}>Total: Rs {totalFee}.00</h4>
+      </div>
     </div>
   );
 };
+
+
+const inputStyle = (error) => ({
+  width: "100%",
+  padding: "10px",
+  borderRadius: "6px",
+  border: `1px solid ${error ? "red" : "#ccc"}`,
+  marginBottom: "10px",
+});
+
+
 
 // Styles
 const styles = {
@@ -195,13 +183,6 @@ const styles = {
   },
 };
 
-// Input styling helper function
-const inputStyle = (error) => ({
-  width: "100%",
-  padding: "10px",
-  borderRadius: "6px",
-  border: `1px solid ${error ? "red" : "#ccc"}`,
-  marginBottom: "10px",
-});
+
 
 export default AppointmentForm;

@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 const Payment = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { totalFee } = location.state || { totalFee: "N/A" };
+  const { totalFee, doctorId, appointmentDetails } = location.state || {};
 
   const [selectedPayment, setSelectedPayment] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -32,35 +32,46 @@ const Payment = () => {
         return;
     }
 
+    console.log("Payment Page State:", location.state);
+
     try {
-        // Simulate payment processing
-        setTimeout(async () => {
-            alert("Payment Successful!");
+        alert("Processing Payment...");
+        console.log("Doctor ID:", doctorId);
 
-            // Call backend API to update slot
-            const doctorId = location.state?.doctorId; // Ensure doctorId is passed from previous page
-            if (doctorId) {
-                const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/decrease-slot`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json" },
-                });
+        if (!doctorId) {
+            console.error("doctorId is missing. Cannot update slot.");
+            return;
+        }
 
-                const data = await response.json();
-                if (data.success) {
-                    console.log("Slot updated successfully.");
-                } else {
-                    console.error("Failed to update slot:", data.message);
-                }
-            }
+        const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/decrease-slot`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                sessionLocation: appointmentDetails?.sessionLocation,
+                date: appointmentDetails?.date,
+                time: appointmentDetails?.time,
+            }),
+        });
 
-            navigate("/");
-        }, 1000);
+        console.log("Response Status:", response.status);
+
+        if (!response.ok) {
+            const errorMessage = await response.text(); // Get raw error message
+            console.error("Failed to update slot:", errorMessage);
+            alert("Failed to update slot: " + errorMessage);
+            return;
+        }
+
+        const data = await response.json();
+        console.log("Slot updated successfully:", data);
+        alert("Payment Successful & Slot Reduced!");
+        navigate("/");
     } catch (error) {
-        console.error("Error processing payment:", error);
+        console.error("Error updating slot:", error);
+        alert("Error updating slot: " + error.message);
     }
 };
 
-  
 
   return (
     <div style={styles.container}>
@@ -68,22 +79,19 @@ const Payment = () => {
         {/* Left Section - Pay Now */}
         <div style={styles.leftSection}>
           <h2 style={styles.title}>💳 Pay Now</h2>
-          <p style={styles.fee}><strong>Total Fee:</strong> {totalFee}</p>
+          <p style={styles.fee}><strong>Total Fee:</strong> {totalFee || "N/A"}</p>
           
           <h3 style={styles.paymentTitle}>Choose Payment Method</h3>
           <div style={styles.buttonGroup}>
-            <button 
-              onClick={() => setSelectedPayment("Visa")} 
-              style={{ ...styles.paymentButton, border: selectedPayment === "Visa" ? "3px solid #0096C7" : "black" }}
-            >
-              <img src="/visa.png" alt="Visa" style={styles.smallLogo} />
-            </button>
-            <button 
-              onClick={() => setSelectedPayment("Mastercard")} 
-              style={{ ...styles.paymentButton, border: selectedPayment === "Mastercard" ? "3px solid #0096C7" : "black" }}
-            >
-              <img src="/master.png" alt="Mastercard" style={styles.smallLogo} />
-            </button>
+            {["Visa", "Mastercard"].map((type) => (
+              <button
+                key={type}
+                onClick={() => setSelectedPayment(type)}
+                style={{ ...styles.paymentButton, border: selectedPayment === type ? "3px solid #0096C7" : "black" }}
+              >
+                <img src={`/${type.toLowerCase()}.png`} alt={type} style={styles.smallLogo} />
+              </button>
+            ))}
           </div>
 
           <div style={styles.checkboxContainer}>
@@ -141,13 +149,12 @@ const Payment = () => {
             <div style={styles.formGroup}>
               <label>CVN *</label>
               <input 
-  type="password" 
-  value={cvn} 
-  onChange={(e) => setCvn(e.target.value)} 
-  style={styles.input} 
-  placeholder="123"
-/>
-
+                type="password" 
+                value={cvn} 
+                onChange={(e) => setCvn(e.target.value)} 
+                style={styles.input} 
+                placeholder="123"
+              />
             </div>
 
             <button onClick={handlePay} style={styles.button}>Pay</button>
@@ -158,12 +165,12 @@ const Payment = () => {
   );
 };
 
+// Styles
 const styles = {
   container: { 
     display: "flex", 
     justifyContent: "center", 
     alignItems: "center", 
-    
     background: "#f4f8fc", 
     padding: "70px" 
   },
@@ -172,7 +179,7 @@ const styles = {
     gap: "20px", 
     maxWidth: "800px", 
     width: "100%",
-    flexWrap: "wrap"  // Allows wrapping on smaller screens
+    flexWrap: "wrap"
   },
   leftSection: { 
     flex: 1, 
@@ -181,7 +188,7 @@ const styles = {
     borderRadius: "12px", 
     boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", 
     textAlign: "center",
-    minWidth: "300px" // Ensures minimum width for small screens
+    minWidth: "300px"
   },
   rightSection: { 
     flex: 1, 
@@ -195,7 +202,7 @@ const styles = {
     display: "flex", 
     gap: "10px", 
     justifyContent: "center", 
-    flexWrap: "wrap" // Wrap buttons on smaller screens
+    flexWrap: "wrap"
   },
   paymentButton: { 
     padding: "12px", 
@@ -218,54 +225,6 @@ const styles = {
     width: "100%", 
     fontSize: "16px"
   },
-  row: { 
-    display: "flex", 
-    justifyContent: "space-between", 
-    gap: "10px", 
-    flexWrap: "wrap" // Wrap fields in smaller screens
-  },
-  select: { 
-    width: "48%", 
-    padding: "8px",
-    minWidth: "100px" // Prevents too small width on mobile
-  },
-  smallLogo: { 
-    width: "40px", 
-    height: "30px" 
-  },
-  input: { 
-    width: "100%", 
-    padding: "10px", 
-    borderRadius: "5px", 
-    border: "1px solid #ccc" 
-  },
-
-  // RESPONSIVE STYLES
-  "@media (max-width: 768px)": {
-    contentWrapper: { 
-      flexDirection: "column", 
-      alignItems: "center" 
-    },
-    leftSection: { 
-      width: "90%", 
-      marginBottom: "20px" 
-    },
-    rightSection: { 
-      width: "90%" 
-    },
-    buttonGroup: { 
-      flexDirection: "row", 
-      justifyContent: "center" 
-    },
-    row: { 
-      flexDirection: "column", 
-      gap: "10px" 
-    },
-    select: { 
-      width: "100%" 
-    }
-  }
 };
-
 
 export default Payment;

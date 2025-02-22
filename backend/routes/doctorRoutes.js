@@ -86,33 +86,60 @@ router.get("/", async (req, res) => {
  * @route PATCH /api/doctors/:id/decrease-slot
  * @desc Decrease available slots by 1 when an appointment is booked
  */
-router.patch("/:id/decrease-slot", async (req, res) => {
+
+router.patch("/:doctorId/decrease-slot", async (req, res) => {
   try {
-    const doctor = await Doctor.findById(req.params.id);
+      const { doctorId } = req.params;
+      const { sessionLocation, date, time } = req.body;
 
-    if (!doctor) {
-      return res.status(404).json({ success: false, message: "Doctor not found" });
-    }
+      console.log(`Received request to decrease slot for: ${doctorId}`);
+      console.log("Request Body:", req.body);
 
-    if (doctor.availableSlots && doctor.availableSlots > 0) {
-      const updatedDoctor = await Doctor.findByIdAndUpdate(
-        req.params.id,
-        { $inc: { availableSlots: -1 } }, // Decrease availableSlots by 1
-        { new: true } // Return the updated document
+      if (!doctorId || !sessionLocation || !date || !time) {
+          return res.status(400).json({ success: false, message: "Missing required fields." });
+      }
+
+      // 🔍 Fetch and log the doctor's availability before updating
+      const doctor = await Doctor.findById(doctorId);
+      if (!doctor) {
+          return res.status(404).json({ success: false, message: "Doctor not found." });
+      }
+      console.log("Doctor's Availability Before Update:", doctor.availability);
+
+      // 🔄 Update query
+      const updateResult = await Doctor.updateOne(
+          { 
+              _id: doctorId, 
+              "availability.location": sessionLocation, 
+              "availability.date": date, 
+              "availability.time": time 
+          },
+          { $inc: { "availability.$.availableSlots": -1 } } // Decrease slot count by 1
       );
 
-      res.status(200).json({
-        success: true,
-        message: "Slot updated successfully",
-        data: updatedDoctor,
-      });
-    } else {
-      res.status(400).json({ success: false, message: "No available slots left" });
-    }
+      console.log("Update Result:", updateResult);
+
+      // 🔍 Fetch and log the doctor's availability after updating
+      const updatedDoctor = await Doctor.findById(doctorId);
+      console.log("Doctor's Availability After Update:", updatedDoctor.availability);
+
+      if (updateResult.modifiedCount === 0) {
+          return res.status(400).json({ success: false, message: "Slot not updated. Check session details." });
+      }
+
+      res.json({ success: true, message: "Slot updated successfully." });
+
   } catch (error) {
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.error("Error updating slot:", error);
+      res.status(500).json({ success: false, message: "Server error." });
   }
 });
+
+
+
+
+
+
 
 
 
