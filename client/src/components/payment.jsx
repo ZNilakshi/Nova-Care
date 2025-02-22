@@ -25,6 +25,10 @@ const Payment = () => {
     }
     setShowPaymentDetails(true);
   };
+  
+  
+  
+ 
   const handlePay = async () => {
     if (!cardNumber || !expiryMonth || !expiryYear || !cvn) {
       alert("Please fill in all required fields.");
@@ -42,35 +46,49 @@ const Payment = () => {
         return;
       }
   
+      // ✅ Send date & time exactly as entered
+      const rawDate = appointmentDetails.date; // Example: "Sat, Mar 22, 2025"
+      const rawTime = appointmentDetails.time; // Example: "10:27 AM"
+  
+      console.log("Sending API Request with:", {
+        sessionLocation: appointmentDetails?.sessionLocation,
+        date: rawDate,  // No conversion
+        time: rawTime,  // No conversion
+      });
+  
       const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/decrease-slot`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           sessionLocation: appointmentDetails?.sessionLocation,
-          date: appointmentDetails?.date,
-          time: appointmentDetails?.time,
+          date: rawDate, 
+          time: rawTime, 
         }),
       });
   
       console.log("Response Status:", response.status);
   
       if (!response.ok) {
-        const errorMessage = await response.text();
-        console.error("Failed to update slot:", errorMessage);
-        alert("Failed to update slot: " + errorMessage);
+        const errorData = await response.json();
+        console.error("Failed to update slot:", errorData.message);
+        alert("Failed to update slot: " + errorData.message);
         return;
       }
   
       const data = await response.json();
       console.log("Slot updated successfully:", data);
-      
-      alert(`Payment Successful! Your new appointment time is: ${data.newTime}`);
+  
+      alert(`Payment Successful! `);
       navigate("/");
+  
     } catch (error) {
       console.error("Error updating slot:", error);
       alert("Error updating slot: " + error.message);
     }
   };
+  
+  
+  
   
 
 
@@ -172,6 +190,7 @@ const styles = {
     display: "flex", 
     justifyContent: "center", 
     alignItems: "center", 
+    
     background: "#f4f8fc", 
     padding: "70px" 
   },
@@ -180,7 +199,7 @@ const styles = {
     gap: "20px", 
     maxWidth: "800px", 
     width: "100%",
-    flexWrap: "wrap"
+    flexWrap: "wrap"  // Allows wrapping on smaller screens
   },
   leftSection: { 
     flex: 1, 
@@ -189,7 +208,7 @@ const styles = {
     borderRadius: "12px", 
     boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.1)", 
     textAlign: "center",
-    minWidth: "300px"
+    minWidth: "300px" // Ensures minimum width for small screens
   },
   rightSection: { 
     flex: 1, 
@@ -203,7 +222,7 @@ const styles = {
     display: "flex", 
     gap: "10px", 
     justifyContent: "center", 
-    flexWrap: "wrap"
+    flexWrap: "wrap" // Wrap buttons on smaller screens
   },
   paymentButton: { 
     padding: "12px", 
@@ -226,6 +245,53 @@ const styles = {
     width: "100%", 
     fontSize: "16px"
   },
+  row: { 
+    display: "flex", 
+    justifyContent: "space-between", 
+    gap: "10px", 
+    flexWrap: "wrap" // Wrap fields in smaller screens
+  },
+  select: { 
+    width: "48%", 
+    padding: "8px",
+    minWidth: "100px" // Prevents too small width on mobile
+  },
+  smallLogo: { 
+    width: "40px", 
+    height: "30px" 
+  },
+  input: { 
+    width: "100%", 
+    padding: "10px", 
+    borderRadius: "5px", 
+    border: "1px solid #ccc" 
+  },
+
+  // RESPONSIVE STYLES
+  "@media (max-width: 768px)": {
+    contentWrapper: { 
+      flexDirection: "column", 
+      alignItems: "center" 
+    },
+    leftSection: { 
+      width: "90%", 
+      marginBottom: "20px" 
+    },
+    rightSection: { 
+      width: "90%" 
+    },
+    buttonGroup: { 
+      flexDirection: "row", 
+      justifyContent: "center" 
+    },
+    row: { 
+      flexDirection: "column", 
+      gap: "10px" 
+    },
+    select: { 
+      width: "100%" 
+    }
+  }
 };
 
 export default Payment;

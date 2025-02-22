@@ -59,17 +59,37 @@ const DoctorCard = ({ doctor, index }) => {
       {/* Appointment Section */}
       <div style={{ textAlign: "center" }}>
         {/* Display Availability */}
+{/* Display Availability */}
 {doctor.availability?.length > 0 ? (
   <div>
-    {doctor.availability.map((slot, index) => (
-      <p key={index} style={{ fontSize: "14px", color: "#555", marginBottom: "5px" }}>
-        <strong>{slot.date}</strong> | {slot.time} | {slot.location} ({slot.availableSlots} slots)
-      </p>
-    ))}
+    {doctor.availability.map((slot, index) => {
+      const date = new Date(slot.date); // Convert string to Date object
+      const formattedDate = date.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+      });
+
+      const formattedTime = new Date(`1970-01-01T${slot.time}`).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true, // AM/PM format
+      });
+
+      return (
+        <p key={index} style={{ fontSize: "14px", color: "#555", marginBottom: "5px" }}>
+          <strong>{formattedDate}</strong> | {formattedTime} | {slot.location} ({slot.availableSlots} slots remaining)
+        </p>
+      );
+    })}
   </div>
 ) : (
   <p style={{ fontSize: "14px", color: "#555", marginBottom: "10px" }}>No availability data</p>
 )}
+
+
+
  {/* Displaying Fee */}
         <p style={{ fontSize: "14px", fontWeight: "bold", color: "#333", marginBottom: "10px" }}>
           Fee: <span style={{ color: "#FFD700" }}>{doctor.fee}</span>

@@ -112,45 +112,72 @@ const Book = () => {
             </h3>
 
             {filteredSessions.length > 0 ? (
-              filteredSessions.map((session, index) => (
-                <div key={index} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px", borderBottom: "1px solid #ddd" }}>
-                  <div>
-                    <p style={{ margin: "0", fontSize: "15px", color: "#444" }}>{session.date}</p>
-                    <p style={{ margin: "0", fontSize: "18px", color: "#0096C7", fontWeight: "bold" }}>{session.time}</p>
-                    <p style={{ margin: "0", fontSize: "14px", color: "#888" }}>🩺 Available Slots: <b>{session.availableSlots}</b></p>
-                    <p style={{ margin: "0", fontSize: "14px", color: "#888" }}>📍 Location: <b>{session.location}</b></p>
-                  </div>
-                  <button
-                    onClick={() => navigate("/appointment-form", {
-                      state: {
-                        doctorId: doctor._id, // Add doctorId here
-  
-                        doctorName: doctor.name,
-                        date: session.date,
-                        time: session.time,
-                        doctorPhoto: doctor.photo,
-                        location: session.location,
-                        specialization: doctor.specialty,
-                        doctorFee: Number(doctor.fee)
-                      }
-                    })}
-                    style={{
-                      background: "#0096C7",
-                      color: "white",
-                      padding: "10px 15px",
-                      border: "none",
-                      borderRadius: "6px",
-                      cursor: "pointer",
-                      transition: "0.3s"
-                    }}
-                  >
-                    📅 Book
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p style={{ fontSize: "14px", color: "#888" }}>No available sessions.</p>
-            )}
+              filteredSessions.map((session, index) => {
+                // Format date
+                const dateObj = new Date(session.date);
+                const formattedDate = isNaN(dateObj)
+                  ? "Invalid Date"
+                  : dateObj.toLocaleDateString("en-US", {
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    });
+
+                // Format time safely
+                let formattedTime = "Invalid Time";
+                if (session.time) {
+                  const timeParts = session.time.split(":");
+                  if (timeParts.length === 2) {
+                    const [hour, minute] = timeParts;
+                    formattedTime = new Date(1970, 0, 1, hour, minute).toLocaleTimeString("en-US", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    });
+                  }
+                }
+
+    return (
+      <div key={index} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px", borderBottom: "1px solid #ddd" }}>
+        <div>
+          <p style={{ margin: "0", fontSize: "15px", color: "#444" }}>{formattedDate}</p>
+          <p style={{ margin: "0", fontSize: "18px", color: "#0096C7", fontWeight: "bold" }}>{formattedTime}</p>
+          <p style={{ margin: "0", fontSize: "14px", color: "#888" }}>🩺 Available Slots: <b>{session.availableSlots}</b></p>
+          <p style={{ margin: "0", fontSize: "14px", color: "#888" }}>📍 Location: <b>{session.location}</b></p>
+        </div>
+        <button
+          onClick={() => navigate("/appointment-form", {
+            state: {
+              doctorId: doctor._id,
+              doctorName: doctor.name,
+              date: formattedDate,
+              time: formattedTime,
+              doctorPhoto: doctor.photo,
+              location: session.location,
+              specialization: doctor.specialty,
+              doctorFee: Number(doctor.fee)
+            }
+          })}
+          style={{
+            background: "#0096C7",
+            color: "white",
+            padding: "10px 15px",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            transition: "0.3s"
+          }}
+        >
+          📅 Book
+        </button>
+      </div>
+    );
+  })
+) : (
+  <p style={{ fontSize: "14px", color: "#888" }}>No available sessions.</p>
+)}
+
           </div>
         </div>
       </div>

@@ -87,57 +87,73 @@ router.get("/", async (req, res) => {
  * @desc Decrease available slots by 1 when an appointment is booked
  */
 
+const moment = require("moment");
+
 router.patch("/:doctorId/decrease-slot", async (req, res) => {
   try {
     const { doctorId } = req.params;
     let { sessionLocation, date, time } = req.body;
 
     console.log(`Received request to decrease slot for: ${doctorId}`);
-    console.log("Request Body:", req.body);
+    console.log("Raw Request Body:", req.body);
 
     if (!doctorId || !sessionLocation || !date || !time) {
       return res.status(400).json({ success: false, message: "Missing required fields." });
     }
 
-    // 🔍 Fetch doctor availability before updating
+    // ✅ Convert Date: "Sat, Mar 22, 2025" → "2025-03-22"
+    const formattedDate = moment(date, "ddd, MMM D, YYYY").format("YYYY-MM-DD");
+    if (!moment(formattedDate, "YYYY-MM-DD", true).isValid()) {
+      console.log("❌ Invalid date format received:", date);
+      return res.status(400).json({ success: false, message: "Invalid date format." });
+    }
+
+    // ✅ Convert Time: "10:27 AM" → "10:27" (24-hour format)
+    const formattedTime = moment(time, ["h:mm A", "HH:mm"]).format("HH:mm");
+    console.log("Converted Date:", formattedDate);
+    console.log("Converted Time:", formattedTime);
+
+    // ✅ Add 15 minutes to appointment time
+    const newAppointmentTime = moment(formattedTime, "HH:mm").add(15, "minutes").format("HH:mm");
+    console.log("New Appointment Time:", newAppointmentTime);
+
+    // Fetch doctor availability
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
       return res.status(404).json({ success: false, message: "Doctor not found." });
     }
     console.log("Doctor's Availability Before Update:", doctor.availability);
 
-    // ⏳ Fix Time Calculation (Convert String -> Number -> Adjust)
-    const [hours, minutes] = time.split(":").map(Number); // Convert "hh:mm" to numbers
-    let newHours = hours;
-    let newMinutes = minutes + 15; // Add 15 minutes
+    // Find exact match in availability
+    const matchingAvailability = doctor.availability.find(
+      (slot) =>
+        slot.date === formattedDate &&
+        moment(slot.time, "HH:mm").format("HH:mm") === formattedTime &&
+        slot.location === sessionLocation
+    );
 
-    if (newMinutes >= 60) {
-      newMinutes -= 60;
-      newHours += 1;
+    if (!matchingAvailability) {
+      console.log("❌ No matching availability found.");
+      return res.status(400).json({ success: false, message: "No matching availability found." });
     }
 
-    // Ensure two-digit format (e.g., "09:05" instead of "9:5")
-    const updatedTime = `${String(newHours).padStart(2, "0")}:${String(newMinutes).padStart(2, "0")}`;
-
-    console.log("New Appointment Time:", updatedTime);
-
-    // 🔄 Update the slot and modify the appointment time
+    // ✅ Reduce slot by 1 & update appointment time
     const updateResult = await Doctor.updateOne(
       {
         _id: doctorId,
+        "availability.date": formattedDate,
+        "availability.time": formattedTime,
         "availability.location": sessionLocation,
-        "availability.date": date,
-        "availability.time": time, // Match the original time
       },
       {
-        $inc: { "availability.$.availableSlots": -1 }, // Decrease slot count
-        $set: { "availability.$.time": updatedTime }, // Update the time
+        $inc: { "availability.$.availableSlots": -1 },
+        $set: { "availability.$.time": newAppointmentTime },
       }
     );
 
     console.log("Update Result:", updateResult);
 
-    // 🔍 Fetch and log the doctor's availability after update
+    // Fetch updated doctor availability
     const updatedDoctor = await Doctor.findById(doctorId);
     console.log("Doctor's Availability After Update:", updatedDoctor.availability);
 
@@ -145,13 +161,18 @@ router.patch("/:doctorId/decrease-slot", async (req, res) => {
       return res.status(400).json({ success: false, message: "Slot not updated. Check session details." });
     }
 
-    res.json({ success: true, message: "Slot updated successfully.", newTime: updatedTime });
+    res.json({ success: true, message: "Slot updated successfully.", newTime: newAppointmentTime });
 
   } catch (error) {
     console.error("Error updating slot:", error);
     res.status(500).json({ success: false, message: "Server error." });
   }
 });
+
+
+module.exports = router;
+
+
 
 
 

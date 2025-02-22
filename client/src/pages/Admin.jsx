@@ -1,4 +1,4 @@
-import React, { useState ,useEffect } from "react";
+import React, { useState ,useEffect ,  useCallback } from "react";
 import "./AdminDashboard.css";
 
 
@@ -17,18 +17,29 @@ const AdminDashboard = () => {
     fee: "",
     photo: null,
   });
+ 
  // Fetch doctors from API
- const fetchDoctors = () => {
-    fetch("http://localhost:5000/api/doctors")
-      .then((res) => res.json())
-      .then((data) => setDoctors(data))
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    fetchDoctors();
-  }, []);
-
+ const fetchDoctors = useCallback ( () => {
+  fetch("http://localhost:5000/api/doctors")
+    .then((res) => res.json())
+    .then((data) => {
+      // Format availability dates & times before setting state
+      const formattedDoctors = data.map((doc) => ({
+        ...doc,
+        availability: doc.availability.map((slot) => ({
+          ...slot,
+          formattedDate: formatDate(slot.date),
+          formattedTime: formatTime(slot.time),
+        })),
+      }));
+      setDoctors(formattedDoctors);
+    })
+    .catch((err) => console.error(err));
+ }, [] );
+ 
+useEffect(() => {
+  fetchDoctors();
+}, [fetchDoctors]);
 
   const [availability, setAvailability] = useState({
     doctorIndex: "",
@@ -42,6 +53,27 @@ const AdminDashboard = () => {
   const [editingAvailabilityIndex, setEditingAvailabilityIndex] = useState(null);
 
   
+  // Format Date (YYYY-MM-DD → "Friday, Feb 21, 2025")
+  const formatDate = (dateString) => {
+    const dateObj = new Date(dateString);
+    return dateObj.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  // Format Time ("15:30" → "3:30 PM")
+  const formatTime = (timeString) => {
+    if (!timeString) return "";
+    const [hour, minute] = timeString.split(":");
+    return new Date(0, 0, 0, hour, minute).toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
   // Handle Doctor Input Change
   const handleDoctorChange = (e) => {
     setDoctor({ ...doctor, [e.target.name]: e.target.value });
@@ -404,8 +436,8 @@ if (editingAvailabilityIndex !== null) {
 {doc.availability.length > 0 ? (
   doc.availability.map((slot, i) => (
     <p key={i} className="availability-item">
-       <strong> Date:</strong> {slot.date } |
-      <strong> Time:</strong> {slot.time} |
+       <strong> Date:</strong> {slot.formattedDate } |
+      <strong> Time:</strong> {slot.formattedTime} |
      
       <strong> Location:</strong> {slot.location} |
       <strong> Slots:</strong> {slot.availableSlots}
