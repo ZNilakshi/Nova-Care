@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const doctorRoutes = require("./routes/doctorRoutes");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 dotenv.config();
 connectDB();
@@ -17,6 +18,20 @@ app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increase URL-
 // Routes
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/doctors", require("./routes/doctorRoutes"));
+
+app.post("/create-payment-intent", async (req, res) => {
+    const { amount } = req.body;
+    try {
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount * 100,
+            currency: "usd",
+        });
+
+        res.send({ clientSecret: paymentIntent.client_secret });
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -12,7 +12,7 @@ import BuyMedicine from "./pages/BuyMedicine";
 import Book from "./pages/Book";
 import AppointmentForm from "./components/AppointmentForm";
 import DoctorCard from "./pages/DoctorCard"; // Ensure this is correctly placed
-import Payment from "./components/payment";
+
 import PharmacyList from "./pages/PharmacyList";
 import CartPage from "./pages/CartPage";
 import Admin from "./pages/Admin";
@@ -32,8 +32,7 @@ const App = () => {
         <Route path="/health-checkup" element={<HealthCheckup />} />
         <Route path="/consult-online" element={<ConsultOnline />} />
         <Route path="/appointment-form" element={<AppointmentForm />} />
-        <Route path="/payment" element={<Payment />} />
-         <Route path="/doctorcard" element={<DoctorCard />} /> {/* Fixed the route */}
+        <Route path="/doctorcard" element={<DoctorCard />} /> {/* Fixed the route */}
         <Route path="/pharmacy-list" element={<PharmacyList />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/buy-medicine" element={<BuyMedicine />} />
