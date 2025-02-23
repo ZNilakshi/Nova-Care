@@ -2,7 +2,19 @@ const express = require("express");
 const Doctor = require("../models/Doctor");
 const router = express.Router();
 const multer = require("multer");
-const upload = multer({ limits: { fileSize: 10 * 1024 * 1024 } }); // 10MB file size limit
+const path = require("path");
+
+// Multer Storage for Doctor Photos
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, "uploads/doctors/");
+  },
+  filename: (req, file, cb) => {
+      cb(null, "doctor_" + Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({ storage });
 
 /** 
  * @route POST /api/doctors/add
@@ -20,12 +32,11 @@ router.post("/add", upload.single("photo"), async (req, res) => {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
-    // Store image as Base64 (alternative: Upload to Cloudinary, S3, etc.)
+    // Store image 
     let photo = "";
-    if (req.file) {
-      photo = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
-    }
-
+        if (req.file) {
+            photo = `/uploads/doctors/${req.file.filename}`;
+        }
     const newDoctor = new Doctor({
       name,
       specialty,
@@ -35,7 +46,7 @@ router.post("/add", upload.single("photo"), async (req, res) => {
       locations,
       description,
       fee,
-      photo, // Save Base64 image
+      photo: req.file ? `http://localhost:5000/uploads/doctors/${req.file.filename}` : null,
     });
 
     await newDoctor.save();
@@ -45,6 +56,20 @@ router.post("/add", upload.single("photo"), async (req, res) => {
     res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 });
+
+
+router.post("/uploadPhoto", upload.single("photo"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ success: false, message: "No file uploaded" });
+  }
+  res.json({
+    success: true,
+    message: "File uploaded successfully",
+    filePath: `/uploads/doctors/${req.file.filename}`,
+  });
+});
+
+
 
 /**
  * @route GET /api/doctors/:id
@@ -174,7 +199,7 @@ router.patch("/:doctorId/decrease-slot", async (req, res) => {
 
 
 
-module.exports = router;
+
 
 
 

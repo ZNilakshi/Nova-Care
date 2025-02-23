@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/db");
 const doctorRoutes = require("./routes/doctorRoutes");
+const productRoutes = require("./routes/productRoutes");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 dotenv.config();
@@ -14,10 +15,13 @@ const app = express();
 app.use(cors());
 app.use(express.json({ limit: "10mb" })); // Increase JSON payload size
 app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increase URL-encoded payload size
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/doctors", require("./routes/doctorRoutes"));
+
+app.use("/api", productRoutes);
 
 app.post("/create-payment-intent", async (req, res) => {
     const { amount } = req.body;

@@ -35,7 +35,7 @@ const AdminDashboard = () => {
       setDoctors(formattedDoctors);
     })
     .catch((err) => console.error(err));
- }, [] );
+ }, [setDoctors] );
  
 useEffect(() => {
   fetchDoctors();
@@ -82,15 +82,27 @@ useEffect(() => {
   // Handle Photo Upload
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setDoctor({ ...doctor, photo: reader.result }); // Store base64 string
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("photo", file);  // Match backend
+
+    fetch("http://localhost:5000/api/doctors/uploadPhoto", {
+        method: "POST",
+        body: formData,
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      console.log("Uploaded file path:", data.filePath);
+      setDoctor((prev) => ({
+          ...prev,
+          photo: `http://localhost:5000${data.filePath}`, // Ensure the correct URL
+      }));
+  })
   
+    .catch((err) => console.error("Upload error:", err));
+};
+
 
   // Handle Doctor Submission (Add / Update)
   const handleDoctorSubmit = (e) => {

@@ -11,11 +11,11 @@ import ConsultOnline from "./pages/ConsultOnline";
 import BuyMedicine from "./pages/BuyMedicine";
 import Book from "./pages/Book";
 import AppointmentForm from "./components/AppointmentForm";
-import DoctorCard from "./pages/DoctorCard"; // Ensure this is correctly placed
-
+import DoctorCard from "./pages/DoctorCard"; 
 import PharmacyList from "./pages/PharmacyList";
 import CartPage from "./pages/CartPage";
 import Admin from "./pages/Admin";
+import PAdmin from "./pages/PAdmin";
 
 
 const App = () => {
@@ -37,6 +37,7 @@ const App = () => {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/buy-medicine" element={<BuyMedicine />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/padmin" element={<PAdmin />} />
   
       </Routes>
     </Router>
