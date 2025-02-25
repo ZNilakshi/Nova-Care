@@ -1,82 +1,187 @@
 /* General Styles */
-.homepage {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-    background-color: #f8f9fa;
-  }
-  
-  /* Navbar */
-  .navbar {
-    background-color: #155724;
-    color: white;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .cart-icon {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-  }
-  
-  .cart-count {
-    margin-left: 5px;
-    font-weight: bold;
-  }
-  
-  /* Brand Selection */
-  .brand-selection {
-    text-align: center;
-    padding: 10px;
-    background: #e3f2fd;
-    border-radius: 15px;
-  }
-  
-  .brand-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .brand-card {
-    background-color: white;
-    padding: 15px;
-    border-radius: 15px;
-    cursor: pointer;
-  }
-  
-  .brand-card.selected {
-    background-color: #d1f7d1;
-  }
-  
-  /* Product List */
-  .product-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
-    gap: 20px;
-  }
-  
-  .product-card {
-    background-color: white;
-    text-align: center;
-    border-radius: 10px;
-  }
-  .cart-popup {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #333;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-  }
-  
-  .cart-popup:hover {
-    opacity: 1;
-  }
-    
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+  margin: 0;
+  padding: 0;
+}
+
+/* Navbar Styles */
+nav {
+  background-color: #155724;
+  margin-top: 40px;
+  color: white;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav div {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.cart-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.cart-icon span {
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+/* Brand Selection Styles */
+.brand-selection {
+  padding: 10px;
+  text-align: center;
+  position: relative;
+  background: #e3f2fd;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 10px auto;
+  max-width: 95%;
+}
+
+.brand-selection h2 {
+  color: #155724;
+  font-size: 26px;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.brand-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  justify-content: center;
+  padding: 5px;
+}
+
+.brand-card {
+  background-color: white;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.3s;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.brand-card:hover {
+  transform: scale(1.05);
+}
+
+.brand-card img {
+  width: 100%;
+  max-width: 150px;
+  height: 140px;
+  border-radius: 10px;
+  transition: 0.3s;
+}
+
+.brand-card p {
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+  color: #333;
+}
+
+/* Product List Styles */
+.product-list {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Product Card Styles */
+.product-card {
+  background-color: white;
+  padding: 15px;
+  text-align: center;
+  border-radius: 10px;
+  min-width: 160px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.product-card img {
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+}
+
+.product-card h3 {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.product-card p {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.discount {
+  color: #008000;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Cart Button Styles */
+.add-button {
+  background-color: #004d40;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}
+
+/* Quantity Controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: #f8f9fa;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.quantity-controls button {
+  background-color: gray;
+  color: black;
+  border: 1px solid gray;
+  padding: 5px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Popup Styles */
+.popup {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.popup button {
+  background-color: #155724;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}

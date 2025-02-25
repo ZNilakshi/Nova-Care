@@ -2,67 +2,37 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 
-const brands = [
-  {
-    name: "OZIVA",
-    src: "/oziva.png",
-    products: [
-      { name: "OZIVA Protein", price: 499, discount: "10% off", imgSrc: "/oziva.png" },
-      { name: "OZIVA Collagen", price: 699, discount: "15% off", imgSrc: "/images/oziva_collagen.png" }
-    ]
-  },
-  {
-    name: "Vaseline",
-    src: "/vaseline.png",
-    products: [
-      { name: "Vaseline Moisturizer", price: 199, discount: "20% off", imgSrc: "/images/vaseline_moisturizer.png" },
-      { name: "Vaseline Lip Balm", price: 99, discount: "10% off", imgSrc: "/images/vaseline_lipbalm.png" }
-    ]
-  },
-  {
-    name: "Pampers",
-    src: "/pampers.png",
-    products: [
-      { name: "Pampers Diapers", price: 299, discount: "15% off", imgSrc: "/images/pampers_diapers.png" },
-      { name: "Pampers Diapers", price: 299, discount: "15% off", imgSrc: "/images/pampers_diapers.png" },
-     ]
-  },
-  {
-    name: "Whisper",
-    src: "/whisper.png",
-    products: [
-      { name: "Whisper Pads", price: 250, discount: "10% off", imgSrc: "/images/whisper_pads.png" },
-      { name: "Whisper Ultra", price: 280, discount: "12% off", imgSrc: "/images/whisper_ultra.png" }
-    ]
-  },
-  {
-    name: "CeraVe",
-    src: "/cerave.png",
-    products: [
-      { name: "CeraVe Cleanser", price: 899, discount: "12% off", imgSrc: "/images/cerave_cleanser.png" },
-      { name: "CeraVe Moisturizer", price: 999, discount: "15% off", imgSrc: "/images/cerave_moisturizer.png" }
-    ]
-  }
-];
+const BuyMedicinePage = () => {
 
-
-
-const allProducts = brands.flatMap((brand) => brand.products);
-
-const HomePage = () => {
   const navigate = useNavigate();
-  const [cart, setCart] = useState({});
-  const [selectedBrand, setSelectedBrand] = useState(null);
-  const [displayedProducts, setDisplayedProducts] = useState(allProducts);
+  const [brands, setBrands] = useState([]);
+ 
+  const [cart] = useState(() => {
+    return JSON.parse(localStorage.getItem("cart")) || {}; // Load from localStorage
+  });
+   const [selectedBrand, setSelectedBrand] = useState(null);
+  const [displayedProducts, setDisplayedProducts] = useState([]);
   const [popupVisible, setPopupVisible] = useState(false); // State for popup visibility
 
+  // Fetch brands and products from the backend
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/brands");
+        const data = await response.json();
+        setBrands(data);
+        setDisplayedProducts(data.flatMap((brand) => brand.products));
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
   const handleBrandClick = (brand) => {
-    if (brand === null) {
+    if (selectedBrand === brand.name) {
       setSelectedBrand(null);
-      setDisplayedProducts(allProducts);
-    } else if (selectedBrand === brand.name) {
-      setSelectedBrand(null);
-      setDisplayedProducts(allProducts);
+      setDisplayedProducts(brands.flatMap((brand) => brand.products));
     } else {
       setSelectedBrand(brand.name);
       setDisplayedProducts(brand.products);
@@ -70,28 +40,54 @@ const HomePage = () => {
   };
   
  
-
-
+  useEffect(() => {
+    Object.keys(cart).forEach((productName) => {
+      localStorage.setItem("product_" + productName, JSON.stringify(cart[productName]));
+    });
+  }, [cart]);
+  
   const addToCart = (product) => {
-    setCart((prev) => ({ ...prev, [product.name]: 1 }));
-    setPopupVisible(true); // Show the popup when product is added to cart
-    setTimeout(() => setPopupVisible(false), 3000); // Hide the popup after 3 seconds
-  };
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-  const increaseQuantity = (product) =>
-    setCart((prev) => ({ ...prev, [product.name]: prev[product.name] + 1 }));
+    // Check if the product already exists in the cart
+    let existingProduct = cart.find(item => item.name === product.name);
+    
+    if (existingProduct) {
+        existingProduct.quantity += 1; // Increase quantity
+    } else {
+        cart.push({ ...product, quantity: 1 }); // Add new product with quantity
+    }
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+
+    // Show popup for 3 seconds
+    setPopupVisible(true);
+    setTimeout(() => {
+        setPopupVisible(false);
+    }, 13000);
+};
+
+
+  const increaseQuantity = (product) => {
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart = cart.map(item => 
+        item.name === product.name ? { ...item, quantity: item.quantity + 1 } : item
+    );
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+};
 
   const decreaseQuantity = (product) => {
-    setCart((prev) => {
-      const updatedCart = { ...prev };
-      if (updatedCart[product.name] > 1) {
-        updatedCart[product.name] -= 1;
-      } else {
-        delete updatedCart[product.name];
-      }
-      return updatedCart;
-    });
-  };
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    cart = cart.map(item => 
+        item.name === product.name ? { ...item, quantity: item.quantity - 1 } : item
+    ).filter(item => item.quantity > 0); // Remove item if quantity reaches 0
+
+    localStorage.setItem("cart", JSON.stringify(cart));
+};
+
 
 
   return (
@@ -136,19 +132,68 @@ const HomePage = () => {
   );
 };
 
-const Navbar = ({ cart, navigate }) => {
-  const totalItems = Object.values(cart).reduce((acc, qty) => acc + qty, 0);
+const Navbar = ({ navigate }) => {
+  const [cart, setCart] = useState([]);
+
+  // Load cart from localStorage whenever it changes
+  useEffect(() => {
+    const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCart(storedCart);
+  }, []);
+
+  // Calculate total quantity correctly
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <nav style={{ backgroundColor: "#155724", marginTop: "40px",  color: "white", padding: "10px 20px", display: "flex", justifyContent: "space-between" }}>
-      <div style={{ fontSize: "20px", fontWeight: "bold" }}>NOVA CARE Pharmacy</div>
-      <div style={{ cursor: "pointer", display: "flex", alignItems: "center" }} onClick={() => navigate("/cart")}>
+    <nav
+      style={{
+        backgroundColor: "#155724",
+        marginTop: "40px",
+        color: "white",
+        padding: "10px 20px",
+        display: "flex",
+        justifyContent: "space-between",
+      }}
+    >
+      <div style={{ fontSize: "20px", fontWeight: "bold" }}>
+        NOVA CARE Pharmacy
+      </div>
+      <div
+        style={{
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          position: "relative",
+        }}
+        onClick={() => navigate("/cart")}
+      >
         <FaShoppingCart size={24} />
-        <span style={{ marginLeft: "5px", fontWeight: "bold" }}>{totalItems}</span>
+        {totalItems > 0 && (
+          <span
+            style={{
+              backgroundColor: "red",
+              color: "white",
+              borderRadius: "50%",
+              width: "18px",
+              height: "18px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "12px",
+              fontWeight: "bold",
+              position: "absolute",
+              top: "-5px",
+              right: "-10px",
+            }}
+          >
+            {totalItems}
+          </span>
+        )}
       </div>
     </nav>
   );
 };
+
 
 
 const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
@@ -261,17 +306,8 @@ const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
                 boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
               }}
             >
-              <img
-                src={brand.src}
-                alt={brand.name}
-                style={{
-                  width: "100%",
-                  maxWidth: "150px",
-                  height: "140px",
-                  borderRadius: "10px",
-                  transition: "0.3s",
-                }}
-              />
+           <img src={`http://localhost:5000${brand.image}`} alt={brand.name}  style={{ width: "120px", height: "120px", borderRadius: "10px" }}/>
+
               <p
                 style={{
                   fontSize: "16px",
@@ -344,7 +380,14 @@ const ProductList = ({ displayedProducts, cart, addToCart, increaseQuantity, dec
 
 
 const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuantity }) => {
-  const quantity = cart[product.name] || 0; 
+  const [quantity, setQuantity] = useState(cart[product.name]?.quantity || 0);
+
+  useEffect(() => {
+    // Sync quantity with cart updates
+    const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
+    const cartItem = updatedCart.find((item) => item.name === product.name);
+    setQuantity(cartItem ? cartItem.quantity : 0);
+  }, [cart, product.name]);
 
   return (
     <div 
@@ -353,29 +396,39 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
         padding: "15px", 
         textAlign: "center", 
         borderRadius: "10px", 
-        minWidth: "160px", // Adjust the width to fit 5 products per row
+        minWidth: "160px", 
         boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)"
       }}
     >
-      <img src={product.imgSrc} alt={product.name} style={{ width: "120px", height: "120px", borderRadius: "10px" }} />
+      <img 
+        src={`http://localhost:5000${product.image}`} 
+        alt={product.name}  
+        style={{ width: "120px", height: "120px", borderRadius: "10px" }} 
+      />
       <h3 style={{ fontSize: "14px", marginTop: "10px" }}>{product.name}</h3>
       
       <p style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "5px" }}>
-        ₹{product.price} <span style={{ textDecoration: "line-through", color: "gray", fontSize: "12px" }}> Rs {product.price * 2}</span>
+        Rs.{product.price} <span style={{ textDecoration: "line-through", color: "gray", fontSize: "12px" }}>Rs {product.price * 2}</span>
       </p>
       <p style={{ color: "#008000", fontSize: "12px", fontWeight: "bold" }}>{product.discount}</p>
 
       {quantity > 0 ? (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", background: "#f8f9fa", borderRadius: "5px", padding: "5px" }}>
           <button 
-            onClick={() => decreaseQuantity(product)} 
+            onClick={() => {
+              decreaseQuantity(product);
+              setQuantity(quantity - 1);
+            }} 
             style={{ backgroundColor: "gray", color: "black", border: "3px solid gray", padding: "5px 15px", borderRadius: "5px", cursor: "pointer" }}
           >
             -
           </button>
           <span style={{ fontWeight: "bold", fontSize: "17px" }}>{quantity}</span>
           <button 
-            onClick={() => increaseQuantity(product)} 
+            onClick={() => {
+              increaseQuantity(product);
+              setQuantity(quantity + 1);
+            }} 
             style={{ backgroundColor: "gray", color: "black", border: "1px solid gray", padding: "5px 15px", borderRadius: "5px", cursor: "pointer" }}
           >
             +
@@ -383,7 +436,10 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
         </div>
       ) : (
         <button 
-          onClick={() => addToCart(product)} 
+          onClick={() => {
+            addToCart(product);
+            setQuantity(1);
+          }} 
           style={{ backgroundColor: "#004d40", color: "white", border: "none", padding: "10px", borderRadius: "5px", cursor: "pointer", fontWeight: "bold", width: "100%" }}
         >
           ADD
@@ -393,5 +449,5 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
   );
 };
 
-export { allProducts };
-export default HomePage;
+
+export default BuyMedicinePage;

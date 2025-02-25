@@ -168,10 +168,7 @@ useEffect(() => {
  const handleEditDoctor = (index) => {
     const { name, specialty, experience, degrees, languages, locations, description, fee, photo } = doctors[index];
     setDoctor({ name, specialty, experience, degrees, languages, locations, description, fee, photo });
-    setEditingDoctorIndex(index);
-
-   
-      
+    setEditingDoctorIndex(index);   
   };
 
   // Delete Doctor
@@ -226,9 +223,7 @@ if (editingAvailabilityIndex !== null) {
 } else {
   updatedAvailability.push({ ...availability });
 }
-     
-  
-        const response = await fetch(
+ const response = await fetch(
           `http://localhost:5000/api/doctors/updateAvailability/${doctorId}`,
           {
             method: "PUT", // 🔥 Change from POST to PUT
