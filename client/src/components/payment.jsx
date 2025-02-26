@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements, useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { useNavigate } from "react-router-dom";
 
 const stripePromise = loadStripe("pk_test_51QtYgJKkJcTRQClqduXmKSglIZ7P4kvBTqtHqWIFTpwjvWwkEqVUGHqod0e0j83NjSv9ox5hD2QDxbZTJ1GbCuGm00QQ62Nn1T");
 
@@ -9,6 +10,7 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
     const elements = useElements();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [message, setMessage] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,12 +18,12 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
         setError(null);
 
         if (!stripe || !elements) {
-            setError("Stripe is not loaded yet. Please try again.");
+            setMessage("Stripe is not loaded yet. Please try again.");
             setLoading(false);
             return;
         }
         if (!appointmentDetails) {
-          setError("Appointment details are missing. Please try again.");
+            setMessage("Appointment details are missing. Please try again.");
           setLoading(false);
           return;
       }
@@ -50,7 +52,7 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
             if (result.error) {
                 setError(result.error.message);
             } else if (result.paymentIntent.status === "succeeded") {
-                alert("Payment Successful!");
+                setMessage("Payment Successful!");
                 onPaymentSuccess(appointmentDetails, doctorId);
             }
         } catch (err) {
@@ -63,7 +65,7 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
     return (
         <form onSubmit={handleSubmit} style={{ textAlign: "center", padding: "20px" }}>
             <CardElement />
-            {error && <p style={{ color: "red" }}>{error}</p>}
+            {message && <p style={{ color: "red" }}>{error}</p>}
             <button 
                 type="submit" 
                 disabled={loading} 
@@ -84,6 +86,8 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
 
 const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
    
+    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
   const handlePaymentSuccess = async (appointmentDetails, doctorId) => {
     console.log("Received appointment details:", appointmentDetails);
@@ -91,13 +95,13 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
 
     
     try {
-        alert("Processing Appointment...");
+        setMessage("Processing Appointment...");
 
         console.log("Received appointmentDetails:", appointmentDetails);
 
         if (!appointmentDetails) {
             console.error("❌ Appointment details are missing.");
-            alert("Appointment details are missing. Please try again.");
+            setMessage("Appointment details are missing. Please try again.");
             return;
         }
 
@@ -105,7 +109,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
 
         if (!sessionLocation || !date || !time) {
             console.error("❌ Missing sessionLocation, date, or time in appointmentDetails");
-            alert("Missing session location, date, or time. Please check the appointment details.");
+            setMessage("Missing session location, date, or time. Please check the appointment details.");
             return;
         }
 
@@ -126,18 +130,18 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
         if (!response.ok) {
             const errorData = await response.json();
             console.error("❌ Failed to update slot:", errorData.message);
-            alert("Failed to update slot: " + errorData.message);
+            setMessage("Failed to update slot: " + errorData.message);
             return;
         }
 
         const data = await response.json();
         console.log("✅ Slot updated successfully:", data);
 
-        alert(`Appointment Confirmed!`);
-
+        setMessage(`Appointment Confirmed!`);
+        setTimeout(() => navigate("/"), 3000);
     } catch (error) {
         console.error("❌ Error updating slot:", error);
-        alert("Error updating slot: " + error.message);
+        setMessage("Error updating slot: " + error.message);
     }
 };
 
@@ -145,6 +149,8 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
     return (
         <div style={{ textAlign: "center", padding: "20px" }}>
             <p><strong>Total Fee:</strong> Rs{totalFee}.00</p>
+            {message && <p style={{ color: message.includes("Confirmed") ? "green" : "blue" }}>{message}</p>}
+         
             <Elements stripe={stripePromise}>
                 <CheckoutForm 
                     totalFee={totalFee} 

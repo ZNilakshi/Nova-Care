@@ -32,7 +32,7 @@ const DoctorCard = ({ doctor, index }) => {
 
       {/* Doctor Details */}
       <div>
-        <h4 style={{ margin: "0", fontSize: "18px", fontWeight: "bold" }}>{doctor.name}</h4>
+        <h4 style={{ margin: "0", fontSize: "18px", fontWeight: "bold" }}>Dr {doctor.name}</h4>
         <span
           style={{
             display: "inline-block",
@@ -44,9 +44,15 @@ const DoctorCard = ({ doctor, index }) => {
             marginTop: "5px",
           }}
         >
-          {doctor.experience}, {doctor.specialty}
+           {doctor.specialty}
+          
         </span>
-        <p style={{ margin: "5px 0", fontSize: "14px" }}>{doctor.degrees}</p>
+        <p style={{ margin: "5px 0", fontSize: "14px" }}>
+          <strong>Degrees:</strong> {doctor.degrees}
+        </p>
+           <p style={{ margin: "5px 0", fontSize: "14px" }}>
+          <strong>Experience:</strong> {doctor.experience} Years
+        </p>
         <p style={{ margin: "5px 0", fontSize: "14px" }}>
           <strong>Language:</strong> {doctor.languages.join(", ")}
         </p>

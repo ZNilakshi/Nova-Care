@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
 import Home from "./pages/Home";
 import ServicesSection from "./components/ServiceSection";
 import BookAppointment from "./pages/BookAppointment";
@@ -23,6 +25,7 @@ const App = () => {
   return (
     <Router>
       <Navbar />
+     
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<ServicesSection />} />
@@ -42,6 +45,7 @@ const App = () => {
         <Route path="/checkout" element={<Checkout />} />
   
       </Routes>
+      <Footer />
     </Router>
   );
 };

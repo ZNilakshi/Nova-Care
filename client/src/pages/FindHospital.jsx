@@ -6,7 +6,7 @@ const hospitals = [
     name: "Colombo General Hospital",
     image: "/colombo.jpg",
     address: "Plot No.1A, Colombo",
-    contact: "+8401801066",
+    contact: "+9401801066",
        history: "Established in 1864, Colombo General Hospital is one of the oldest and most renowned hospitals in Sri Lanka.",
     specialties: ["Cardiology", "Neurology", "Orthopedics", "Oncology"],
     hours: "Open 24/7",
@@ -21,7 +21,7 @@ const hospitals = [
     name: "Gampaha City Hospital",
     image: "/gampaha.jpg",
     address: "Plot No.1A, Gampaha",
-    contact: "+9100000000",
+    contact: "+94702610684",
        history: "Founded in 1952, Gampaha City Hospital has been a key healthcare provider in the region.",
     specialties: ["Pediatrics", "Gynecology", "Urology"],
     hours: "8 AM - 10 PM",
@@ -36,7 +36,7 @@ const hospitals = [
     name: "Negombo Regional Hospital",
     image: "/negombo.jpg",
     address: "Plot No.1A, Negombo",
-    contact: "+9100000000",
+    contact: "+9400000000",
        history: "A state-of-the-art hospital established in 1980, specializing in dermatology and ENT services.",
     specialties: ["Dermatology", "ENT", "Pulmonology"],
     hours: "9 AM - 8 PM",
@@ -51,7 +51,7 @@ const hospitals = [
     name: "Galle National Hospital",
     image: "/galle.jpg",
     address: "Plot No.1A, Galle",
-    contact: "+9100000000",
+    contact: "+9400000000",
        history: "A leading hospital in southern Sri Lanka, known for cancer treatment and mental health services.",
     specialties: ["Oncology", "Psychiatry", "Neurosurgery"],
     hours: "Open 24/7",
@@ -109,10 +109,10 @@ const HospitalList = () => {
       </div>
 
       {/* CSS Styling */}
-      <style jsx>{`
+      <style>{`
        .header {
           text-align: center;
-          
+            padding-top: 65px;
           color: black;
       
          
@@ -121,25 +121,31 @@ const HospitalList = () => {
           display: flex;
           flex-wrap: wrap;
           min-height: 100vh;
+           color: black;
+      
          
         }
 
         .sidebar {
           width: 250px;
-          border-right: 1px solid #ddd;
-          padding-right: 15px;
+          border-right: 1px  #e3f2fd;
+          
+          background-color: #e3f2fd;
+      
         }
 
         .sidebar ul {
           list-style: none;
-          padding: 0;
+          padding: 10px;
+          color: white;
+      
         }
 
         .sidebar li {
           padding: 10px;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid white;
           cursor: pointer;
-          font-size: 14px;
+          font-size: 16px;
           color: black;
         }
 
@@ -177,7 +183,7 @@ const HospitalList = () => {
           width: 100%;
           max-width: 700px;
           padding: 15px;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+          box-shadow: 0 4px 10px #007bff;
           border-radius: 8px;
           background: #fff;
         }
@@ -216,7 +222,7 @@ const HospitalList = () => {
           .sidebar {
             width: 100%;
             border-right: none;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #e3f2fd;
             padding-bottom: 10px;
           }
           .sidebar ul {

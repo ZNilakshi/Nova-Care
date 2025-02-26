@@ -93,14 +93,16 @@ const Book = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "20px" }}>
             <img src={doctor.photo} alt={doctor.name} style={{ width: "90px", height: "90px", borderRadius: "50%", objectFit: "cover" }} />
             <div>
-              <h2 style={{ fontSize: "22px", color: "#0096C7", margin: "0" }}>{doctor.name}</h2>
+              <h2 style={{ fontSize: "22px", color: "#0096C7", margin: "0" }}>Dr {doctor.name}</h2>
               <p style={{ fontSize: "16px", color: "#666", margin: "5px 0" }}>
-                {doctor.specialty || doctor.specialization || "Specialty not available"} - {doctor.experience} years
+                {doctor.specialty || doctor.specialization || "Specialty not available"} 
               </p>
+              <p style={{ fontSize: "14px", color: "#888", margin: "0" }}><b>Experience:</b> {doctor.experience} Years</p>
+            
               <p style={{ fontSize: "14px", color: "#888", margin: "0" }}><b>Degrees:</b> {doctor.degrees}</p>
               <p style={{ fontSize: "14px", color: "#888", margin: "0" }}><b>Languages:</b> {doctor.languages?.join(", ") || "N/A"}</p>
               <p style={{ fontSize: "14px", fontWeight: "bold", color: "#333", marginBottom: "10px" }}>
-                Fee: <span style={{ color: "#FFD700" }}>Rs .{doctor.fee}.00</span>
+                Fee: <span style={{ color: "black" }}>Rs .{doctor.fee}.00</span>
               </p>
             </div>
           </div>

@@ -108,17 +108,19 @@ const [editingProduct, setEditingProduct] = useState(null);
         headers: { "Content-Type": "multipart/form-data" },
       });
   
-      console.log("Brand updated successfully:", res.data);
+      setBrands(
+        brands.map((brand) => (brand._id === editingBrand._id ? res.data : brand))
+      );
+  
       setEditingBrand(null);
     } catch (err) {
-      console.error("Error updating brand:", err.response ? err.response.data : err.message);
       alert("Error updating brand");
     }
   };
   
   const editProduct = async () => {
-    if (!editingProduct.name || !editingProduct.price) {
-      return alert("Please fill all fields!");
+    if (!editingProduct || !editingProduct._id) {
+      return alert("Product not selected!");
     }
   
     const formData = new FormData();
@@ -141,7 +143,7 @@ const [editingProduct, setEditingProduct] = useState(null);
             ? {
                 ...brand,
                 products: brand.products.map((product) =>
-                  product._id === editingProduct._id ? { ...product, ...res.data } : product
+                  product._id === editingProduct._id ? { ...product, ...res.data.product } : product
                 ),
               }
             : brand
@@ -153,6 +155,7 @@ const [editingProduct, setEditingProduct] = useState(null);
       alert("Error updating product");
     }
   };
+  
   
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif", maxWidth: "800px", margin: "auto" }}>

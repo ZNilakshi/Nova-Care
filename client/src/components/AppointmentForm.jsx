@@ -24,6 +24,7 @@ const AppointmentForm = () => {
     phone: "",
     nic: "",
     age: "",
+    spc: "",
   });
 
   const [errors, setErrors] = useState({});
@@ -37,14 +38,19 @@ const AppointmentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     let newErrors = {};
-    ["name", "phone", "nic", "age"].forEach((field) => {
+    ["name", "phone",  "age"].forEach((field) => {
       if (!formData[field]) {
         newErrors[field] = "This field is required";
       }
     });
+    // Validate phone number format (10 digits)
+  const phoneRegex = /^[0-9]{10}$/;
+  if (formData.phone && !phoneRegex.test(formData.phone)) {
+    newErrors.phone = "Invalid phone number ";
+  }
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      alert("Please fill in all required fields.");
+     
       return;
     }
     setShowPayment(true); // Show payment form
@@ -55,7 +61,7 @@ const AppointmentForm = () => {
       {/* Sidebar with doctor details */}
       <div style={styles.sidebar}>
         <img src={doctorPhoto || "https://via.placeholder.com/100"} alt={doctorName || "Doctor"} style={styles.image} />
-        <h3 style={styles.doctorName}>{doctorName || "Dr. Not Specified"}</h3>
+        <h3 style={styles.doctorName}>Dr. {doctorName || "Dr. Not Specified"}</h3>
         <p><strong>Specialization:</strong> {specialization || "Not specified"}</p>
         <p><strong>Location:</strong> {sessionLocation || "Not specified"}</p>
         <p><strong>Session Date:</strong> {date || "TBD"}</p>
@@ -75,23 +81,26 @@ const AppointmentForm = () => {
             <input type="text" name="name" placeholder="Full Name" value={formData.name} onChange={handleChange} style={inputStyle(errors.name)} />
           </div>
           {errors.name && <p style={styles.error}>{errors.name}</p>}
-          <input type="text" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} style={inputStyle(errors.phone)} />
+          <input type="text" name="phone" placeholder="Whatsapp Number" value={formData.phone} onChange={handleChange} style={inputStyle(errors.phone)} />
           {errors.phone && <p style={styles.error}>{errors.phone}</p>}
           <input type="text" name="nic" placeholder="National ID (NIC)" value={formData.nic} onChange={handleChange} style={inputStyle(errors.nic)} />
           {errors.nic && <p style={styles.error}>{errors.nic}</p>}
           <input type="number" name="age" placeholder="Age" value={formData.age} onChange={handleChange} style={inputStyle(errors.age)} />
           {errors.age && <p style={styles.error}>{errors.age}</p>}
-            <button type="submit" style={styles.button}>Proceed to Payment</button>
+          <input type="text" name="spc" placeholder="Any Special notes" value={formData.spc} onChange={handleChange} style={inputStyle(errors.spc)} />
+          
+          <button type="submit" style={styles.button}>Proceed to Payment</button>
         </form>
       ) : (
         /* Show entered user details and payment component */
         <div style={styles.userDetailsContainer}>
-          <h2 style={styles.sectionTitle}>👤 Patient Details</h2>
+          <h2 style={styles.sectionTitle}> Patient Details</h2>
           <p><strong>Name:</strong> {formData.title} {formData.name}</p>
           <p><strong>Phone:</strong> {formData.phone}</p>
           <p><strong>NIC:</strong> {formData.nic}</p>
           <p><strong>Age:</strong> {formData.age}</p>
-                 </div>
+          <p><strong>Special Note:</strong> {formData.spc}</p>
+          </div>
       )}
 
       {/* Payment Details Sidebar */}
@@ -108,7 +117,7 @@ const AppointmentForm = () => {
       {/* Payment Section (Visible after form submission) */}
       {showPayment && (
         <div style={styles.paymentContainer}>
-          <h2>💳 Payment Section</h2>
+          <h2> Payment Section</h2>
           <Payment 
     totalFee={totalFee}
     doctorId={doctorId}
@@ -140,7 +149,7 @@ const styles = {
   container: {
     display: "flex",
     gap: "30px",
-    padding: "60px",
+    padding: "80px",
     fontFamily: "'Poppins', sans-serif",
     background: "#f4f8fc",
     flexWrap: "wrap",
