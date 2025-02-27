@@ -158,6 +158,37 @@ const [editingProduct, setEditingProduct] = useState(null);
     }
   };
   
+  const deleteBrand = async (id) => {
+    console.log("Deleting brand:", id);  // ✅ Log the ID
+  
+    if (!id) return alert("Invalid brand ID!");
+  
+    try {
+      await axios.delete(`${API_URL}/api/delete-brand/${id}`);
+      setBrands(brands.filter((brand) => brand._id !== id));
+    } catch (err) {
+      console.error("Error deleting brand:", err.response?.data || err);
+      alert("Error deleting brand");
+    }
+  };
+  
+  
+
+  const deleteProduct = async (id) => {
+    if (!id) return alert("Invalid product ID!");
+  
+    try {
+      await axios.delete(`${API_URL}/api/delete-product/${id}`);
+      setBrands(
+        brands.map((brand) => ({
+          ...brand,
+          products: brand.products.filter((product) => product._id !== id),
+        }))
+      );
+    } catch (err) {
+      alert("Error deleting product");
+    }
+  };
   
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif", maxWidth: "800px", margin: "auto" }}>
@@ -211,7 +242,8 @@ const [editingProduct, setEditingProduct] = useState(null);
             <div key={brand._id} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
               <h3>{brand.name}</h3>
               <button onClick={() => setEditingBrand(brand)}>Edit</button>
-
+              <button onClick={() => deleteBrand(brand._id)}>Delete</button>
+          
               {brand.image && (
                 <img
                   src={`http://localhost:5000${brand.image}`} // ✅ Fixed Image URL
@@ -226,6 +258,8 @@ const [editingProduct, setEditingProduct] = useState(null);
                     <li key={product._id}>
                       {product.name} - ${product.price} ({product.discount}% off)
                       <button onClick={() => setEditingProduct(product)}>Edit</button>
+                      <button onClick={() => deleteProduct(product._id, brand._id)}>Delete</button>
+                  
                       {product.image && (
                         <img
                           src={`http://localhost:5000${product.image}`} // ✅ Fixed Product Image URL

@@ -97,48 +97,47 @@ router.put("/update-product/:brandId/:productId", upload.single("image"), async 
 });
 
 // ✅ Delete Product
-router.delete("/delete-product/:brandId/:productId", async (req, res) => {
+
+
+router.delete("/api/delete-brand/:id", async (req, res) => {
+  console.log("Deleting brand with ID:", req.params.id);
+
   try {
-    const { brandId, productId } = req.params;
-    const brand = await Brand.findById(brandId);
-
-    if (!brand) return res.status(404).json({ message: "Brand not found" });
-
-    // ✅ Remove product
-    brand.products = brand.products.filter((product) => product._id.toString() !== productId);
-
-    await brand.save();
-    res.json({ message: "Product deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-router.put("/api/edit-brand/:id", upload.single("image"), async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid Brand ID" });
-    }
-
-    let brand = await Brand.findById(id);
+    const brand = await Brand.findByIdAndDelete(req.params.id);
     if (!brand) {
+      console.log("Brand not found in database");
       return res.status(404).json({ message: "Brand not found" });
     }
-
-    brand.name = req.body.name;
-    if (req.file) {
-      brand.image = `/uploads/${req.file.filename}`;
-    }
-
-    await brand.save();
-    res.json(brand);
+    res.json({ message: "Brand deleted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error updating brand" });
+    console.error("Error deleting brand:", error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 
+
+router.delete("/api/delete-product/:id", async (req, res) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    return res.status(400).json({ message: "Invalid product ID format" });
+  }
+
+  try {
+    const brand = await Brand.findOneAndUpdate(
+      { "products._id": req.params.id }, // Find the brand containing this product
+      { $pull: { products: { _id: req.params.id } } }, // Remove the product
+      { new: true }
+    );
+
+    if (!brand) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    res.json({ message: "Product deleted successfully", brand });
+  } catch (error) {
+    console.error("Error deleting product:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
 
 
 
@@ -150,7 +149,7 @@ router.put("/api/edit-product/:productId", upload.single("image"), async (req, r
       return res.status(400).json({ message: "Invalid Product ID" });
     }
 
-    const brand = await Brand.findOne({ "products._id": mongoose.Types.ObjectId(productId) });
+    const brand = await Brand.findOne({ "products._id": new mongoose.Types.ObjectId(productId) });
 
     if (!brand) return res.status(404).json({ message: "Product not found in any brand" });
 
@@ -171,6 +170,10 @@ router.put("/api/edit-product/:productId", upload.single("image"), async (req, r
     res.status(500).json({ message: "Error updating product" });
   }
 });
+
+
+
+
 
 
 
