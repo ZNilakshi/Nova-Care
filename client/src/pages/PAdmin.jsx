@@ -104,9 +104,10 @@ const [editingProduct, setEditingProduct] = useState(null);
     }
   
     try {
-      const res = await axios.put(`${API_URL}/edit-brand/${editingBrand._id}`, formData, {
+      const res = await axios.put(`${API_URL}/api/edit-brand/${editingBrand._id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      
   
       setBrands(
         brands.map((brand) => (brand._id === editingBrand._id ? res.data : brand))
@@ -133,9 +134,10 @@ const [editingProduct, setEditingProduct] = useState(null);
     }
   
     try {
-      const res = await axios.put(`${API_URL}/edit-product/${editingProduct._id}`, formData, {
+      const res = await axios.put(`${API_URL}/api/edit-product/${editingProduct._id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      
   
       setBrands(
         brands.map((brand) =>
@@ -248,6 +250,7 @@ const [editingProduct, setEditingProduct] = useState(null);
       <input type="file" name="editBrandImage" onChange={(e) => setEditingBrand({ ...editingBrand, image: e.target.files[0] })} />
       <button onClick={editBrand}>Save Changes</button>
       <button onClick={() => setEditingBrand(null)}>Cancel</button>
+      console.log("Editing brand:", brand);
   </div>
 )}
 {editingProduct && (
@@ -260,6 +263,9 @@ const [editingProduct, setEditingProduct] = useState(null);
       <input type="file" name="editProductImage" onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.files[0] })} />
       <button onClick={editProduct}>Save Changes</button>
       <button onClick={() => setEditingProduct(null)}>Cancel</button>
+     
+console.log("Editing product:", product);
+
   </div>
 )}
 
