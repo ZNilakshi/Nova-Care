@@ -5,7 +5,7 @@ const connectDB = require("./config/db");
 const doctorRoutes = require("./routes/doctorRoutes");
 const productRoutes = require("./routes/productRoutes");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
-const appointment = require("./routes/appointment"); // Import appointment routes
+const orderRoutes = require("./routes/orderRoutes");
 
 dotenv.config();
 connectDB();
@@ -21,8 +21,12 @@ app.use("/uploads", express.static("uploads"));
 // Routes
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/doctors", require("./routes/doctorRoutes"));
-app.use("/api", appointment); // Use appointment routes
 app.use("/api", require("./routes/productRoutes"));
+// Routes
+const appointmentRoutes = require("./routes/appointments");
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/orders", orderRoutes);
+
 
 app.post("/create-payment-intent", async (req, res) => {
     const { amount } = req.body;

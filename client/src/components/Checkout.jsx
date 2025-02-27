@@ -51,10 +51,27 @@ export default function Checkout() {
     setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
   };
 
-  const handlePaymentSuccess = () => {
-    localStorage.removeItem("cart");
-    navigate("/");
+  const handlePaymentSuccess = async () => {
+    const orderDetails = {
+      ...userDetails,
+      items: cart,
+      totalAmount: subtotal,
+    };
+  
+    try {
+      await fetch("http://localhost:5000/api/orders/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderDetails),
+      });
+  
+      localStorage.removeItem("cart");
+      navigate("/");
+    } catch (error) {
+      console.error("Error saving order:", error);
+    }
   };
+  
 
   return (
     <div style={styles.container}>

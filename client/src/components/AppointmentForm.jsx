@@ -35,26 +35,57 @@ const AppointmentForm = () => {
     setErrors({ ...errors, [e.target.name]: "" });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {};
-    ["name", "phone",  "age"].forEach((field) => {
+    ["name", "phone", "age"].forEach((field) => {
       if (!formData[field]) {
         newErrors[field] = "This field is required";
       }
     });
-    // Validate phone number format (10 digits)
-  const phoneRegex = /^[0-9]{10}$/;
-  if (formData.phone && !phoneRegex.test(formData.phone)) {
-    newErrors.phone = "Invalid phone number ";
-  }
+  
+    const phoneRegex = /^[0-9]{10}$/;
+    if (formData.phone && !phoneRegex.test(formData.phone)) {
+      newErrors.phone = "Invalid phone number";
+    }
+  
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-     
       return;
     }
-    setShowPayment(true); // Show payment form
+  
+    const appointmentData = {
+      doctorId,
+      doctorName,
+      specialization,
+      sessionLocation,
+      date,
+      time,
+      doctorFee: parsedDoctorFee,
+      echannellingFee,
+      totalFee,
+      patient: formData,
+      paymentStatus: "Pending",
+    };
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(appointmentData),
+      });
+  
+      if (response.ok) {
+        setShowPayment(true);
+      } else {
+        console.error("Failed to book appointment");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
+  
+
 
   return (
     <div style={styles.container}>
