@@ -5,7 +5,6 @@ import ServicesSection from "../components/ServiceSection";
 import ClinicalExcellence from "../components/ClinicalExcellence";
 import Whychooseus from "../components/Whychooseus";
 import Hospitals from "../components/Hospitals";
-import Footer from "../components/Footer";
 
 const HomePage = () => {
   return (
@@ -38,8 +37,6 @@ const HomePage = () => {
         <Hospitals />
       </Container>
 
-      {/* Footer */}
-      <Footer />
 
       {/* Styles */}
       <style>{`

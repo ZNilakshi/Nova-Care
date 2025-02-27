@@ -66,7 +66,7 @@ router.post("/add-product/:brandId", upload.single("image"), async (req, res) =>
 });
 
 // ✅ Update Product
-router.put("/update-product/:brandId/:productId", upload.single("image"), async (req, res) => {
+router.put("api/update-product/:brandId/:productId", upload.single("image"), async (req, res) => {
   try {
     const { name, price, discount, quantity } = req.body;
     const { brandId, productId } = req.params;
@@ -170,6 +170,33 @@ router.put("/api/edit-product/:productId", upload.single("image"), async (req, r
     res.status(500).json({ message: "Error updating product" });
   }
 });
+router.put("/api/edit-brand/:id", upload.single("image"), async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid Brand ID" });
+    }
+
+    let brand = await Brand.findById(id);
+    if (!brand) {
+      return res.status(404).json({ message: "Brand not found" });
+    }
+
+    brand.name = req.body.name;
+    if (req.file) {
+      brand.image = `/uploads/${req.file.filename}`;
+    }
+
+    await brand.save();
+    res.json(brand);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating brand" });
+  }
+});
+
+
 
 
 

@@ -2,10 +2,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; // New arrow icons
 
 const hospitals = [
-  { name: "Colombo", image: "/colombo.jpg", address: "Plot No.1A, Colombo", contact: "+8401801066" },
-  { name: "Gampaha", image: "/gampaha.jpg", address: "Plot No.1A, Gampaha", contact: "+9100000000" },
-  { name: "Negombo", image: "/negombo.jpg", address: "Plot No.1A, Negombo", contact: "+9100000000" },
-  { name: "Galle", image: "/galle.jpg", address: "Plot No.1A, Galle", contact: "+9100000000" },
+  { name: "Colombo", image: "/colombo.jpg", address: " E. W. Perera Mawatha, Colombo 10, Sri Lanka. ", contact: "+94715801066" },
+  { name: "Gampaha", image: "/gampaha.jpg", address: " Perera Mawatha, Gampaha, Sri Lanka. ", contact: "+9474560000" },
+  { name: "Negombo", image: "/negombo.jpg", address: " Perera Mawatha, Negombo, Sri Lanka.", contact: "+94740485000" },
+  { name: "Galle", image: "/galle.jpg", address: " Perera Mawatha, Galle, Sri Lanka.", contact: "+9474245000" },
 ];
 
 const HospitalsInSriLanka = () => {
@@ -178,7 +178,7 @@ const HospitalsInSriLanka = () => {
         <div
           style={{
             width: isMobile ? "100%" : "45%",
-            background: "#fff",
+            background: "#e3f2fd",
             padding: "20px",
             borderRadius: "10px",
             boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
