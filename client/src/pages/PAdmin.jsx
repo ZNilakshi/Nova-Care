@@ -1,5 +1,21 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { Edit3, Trash2 } from "lucide-react";
+
+import "./PAdmin.css";
+
+
+
+const Modal = ({ isOpen,  children }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="modal-overlay">
+      <div className="modal-content">
+            {children}
+      </div>
+    </div>
+  );
+};
 
 export default function AdminAddBrands() {
   const [brands, setBrands] = useState([]);
@@ -172,8 +188,6 @@ const [editingProduct, setEditingProduct] = useState(null);
     }
   };
   
-  
-
   const deleteProduct = async (id) => {
     if (!id) return alert("Invalid product ID!");
   
@@ -200,19 +214,21 @@ const [editingProduct, setEditingProduct] = useState(null);
       {/* Add Brand Button */}
       <button onClick={() => setShowBrandModal(true)}>Add Brand</button>
 
-      {showBrandModal && (
-        <div>
+      <Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
+      <div>
           <input type="text" name="brandName" placeholder="Brand Name" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
           <input type="file" name="brandImage" onChange={(e) => setBrandImage(e.target.files[0])} />
           <button onClick={addBrand}>Add Brand</button>
           <button onClick={() => setShowBrandModal(false)}>Cancel</button>
         </div>
-      )}
+        </Modal>
+      
 
       {/* Add Product Button */}
       <button onClick={() => setShowProductModal(true)}>Add Product</button>
 
-      {showProductModal && (
+      <Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
+  
         <div>
           <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
             <option value="">Select a brand</option>
@@ -230,7 +246,7 @@ const [editingProduct, setEditingProduct] = useState(null);
           <button onClick={addProduct}>Add Product</button>
           <button onClick={() => setShowProductModal(false)}>Cancel</button>
         </div>
-      )}
+     </Modal>
 
       {/* Display Brands and Products */}
       <div>
@@ -255,42 +271,50 @@ const [editingProduct, setEditingProduct] = useState(null);
 
         {/* Products on the Right */}
         <div style={{ width: "70%", padding: "10px" }}>
-          {selectedBrand ? (
-            <div>
-              <h2>{selectedBrand.name} - Products</h2>
+          {selectedBrand && (
+        <div className="product-list">
+          <h2>{selectedBrand.name} - Products</h2>
               {selectedBrand.image && (
                 <img src={`http://localhost:5000${selectedBrand.image}`} alt={selectedBrand.name} style={{ width: "100px" }} />
               )}
-              <button onClick={() => setEditingBrand(selectedBrand)}>Edit</button>
-<button onClick={() => deleteBrand(selectedBrand._id)}>Delete</button>
+              <button onClick={() => setEditingBrand(selectedBrand)}><Edit3 /></button>
+<button onClick={() => deleteBrand(selectedBrand._id)}><Trash2 /></button>
 
-              <ul>
-                {selectedBrand.products && selectedBrand.products.length > 0 ? (
-                  selectedBrand.products.map((product) => (
-                    <li key={product._id} style={{ borderBottom: "1px solid #ddd", padding: "5px" }}>
-                      {product.name} - ${product.price} ({product.discount}% off)
-                      {product.image && (
-                        <img src={`http://localhost:5000${product.image}`} alt={product.name} style={{ width: "50px" }} />
-                      )}
-                       <button onClick={() => setEditingProduct(product)}>Edit</button>
-                       <button onClick={() => deleteProduct(product._id, selectedBrand._id)}>Delete</button>
-
-                    </li>
-                  ))
-                ) : (
-                  <p>No products available for this brand.</p>
-                )}
-              </ul>
-            </div>
-          ) : (
-            <div>
-              
-            </div>
-          )}
+          <table>
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Discount</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedBrand.products?.map((product) => (
+                <tr key={product._id}>
+                  <td><img src={`http://localhost:5000${product.image}`} alt={product.name} style={{ width: "50px" }} /></td>
+                  <td>{product.name}</td>
+                  <td>Rs. {product.price}</td>
+                  <td>{product.discount}%</td>
+                  <td>{product.quantity}</td>
+                  <td>
+                    <button onClick={() => setEditingProduct(product)}><Edit3 /></button>
+                    <button onClick={() => deleteProduct(product._id)}><Trash2 /></button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
         </div>
       </div>
            {/* Edit Brand Modal */}
-           {editingBrand && (
+           <Modal isOpen={editingBrand} onClose={() => setEditingBrand(false)}>
+  
+  
   <div>
     <h3>Edit Brand</h3>
       <input type="text" name="editBrandName" value={editingBrand?.name || ""} onChange={(e) => setEditingBrand({ ...editingBrand, name: e.target.value })} />
@@ -299,8 +323,9 @@ const [editingProduct, setEditingProduct] = useState(null);
       <button onClick={() => setEditingBrand(null)}>Cancel</button>
  
   </div>
-)}
-{editingProduct && (
+</Modal>
+<Modal isOpen={editingProduct} onClose={() => setEditingProduct(false)}>
+  
   <div>
     <h3>Edit Product</h3>
       <input type="text" name="editProductName" value={editingProduct?.name || ""} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} />
@@ -313,7 +338,7 @@ const [editingProduct, setEditingProduct] = useState(null);
      
 
   </div>
-)}
+</Modal>
 
 
       </div>
