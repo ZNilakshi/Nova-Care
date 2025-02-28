@@ -234,48 +234,61 @@ const [editingProduct, setEditingProduct] = useState(null);
 
       {/* Display Brands and Products */}
       <div>
-        <h2>Brands List</h2>
-        {brands.length === 0 ? (
-          <p>No brands added yet.</p>
-        ) : (
-          brands.map((brand) => (
-            <div key={brand._id} style={{ border: "1px solid #ccc", padding: "10px", marginBottom: "10px" }}>
-              <h3>{brand.name}</h3>
-              <button onClick={() => setEditingBrand(brand)}>Edit</button>
-              <button onClick={() => deleteBrand(brand._id)}>Delete</button>
-          
-              {brand.image && (
-                <img
-                  src={`http://localhost:5000${brand.image}`} // ✅ Fixed Image URL
-                  alt={brand.name}
-                  style={{ width: "100px" }}
-                />
+      <div style={{ display: "flex" }}>
+        {/* Brands List on the Left */}
+        <div style={{ width: "30%", borderRight: "2px solid #ccc", padding: "10px" }}>
+          <h2>Brands</h2>
+          {loading && <p>Loading...</p>}
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <ul>
+            {brands.length === 0 ? (
+              <p>No brands added yet.</p>
+            ) : (
+              brands.map((brand) => (
+                <li key={brand._id} style={{ cursor: "pointer", padding: "5px", borderBottom: "1px solid #ddd" }} onClick={() => setSelectedBrand(brand)}>
+                  {brand.name}
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+
+        {/* Products on the Right */}
+        <div style={{ width: "70%", padding: "10px" }}>
+          {selectedBrand ? (
+            <div>
+              <h2>{selectedBrand.name} - Products</h2>
+              {selectedBrand.image && (
+                <img src={`http://localhost:5000${selectedBrand.image}`} alt={selectedBrand.name} style={{ width: "100px" }} />
               )}
-              <h4>Products:</h4>
-              {brand.products && brand.products.length > 0 ? (
-                <ul>
-                  {brand.products.map((product) => (
-                    <li key={product._id}>
+              <button onClick={() => setEditingBrand(selectedBrand)}>Edit</button>
+<button onClick={() => deleteBrand(selectedBrand._id)}>Delete</button>
+
+              <ul>
+                {selectedBrand.products && selectedBrand.products.length > 0 ? (
+                  selectedBrand.products.map((product) => (
+                    <li key={product._id} style={{ borderBottom: "1px solid #ddd", padding: "5px" }}>
                       {product.name} - ${product.price} ({product.discount}% off)
-                      <button onClick={() => setEditingProduct(product)}>Edit</button>
-                      <button onClick={() => deleteProduct(product._id, brand._id)}>Delete</button>
-                  
                       {product.image && (
-                        <img
-                          src={`http://localhost:5000${product.image}`} // ✅ Fixed Product Image URL
-                          alt={product.name}
-                          style={{ width: "50px" }}
-                        />
+                        <img src={`http://localhost:5000${product.image}`} alt={product.name} style={{ width: "50px" }} />
                       )}
+                       <button onClick={() => setEditingProduct(product)}>Edit</button>
+                       <button onClick={() => deleteProduct(product._id, selectedBrand._id)}>Delete</button>
+
                     </li>
-                  ))}
-                </ul>
-              ) : (
-                <p>No products added for this brand.</p>
-              )}
+                  ))
+                ) : (
+                  <p>No products available for this brand.</p>
+                )}
+              </ul>
             </div>
-          ))
-        )}
+          ) : (
+            <div>
+              
+            </div>
+          )}
+        </div>
+      </div>
            {/* Edit Brand Modal */}
            {editingBrand && (
   <div>
