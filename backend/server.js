@@ -7,6 +7,8 @@ const productRoutes = require("./routes/productRoutes");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const orderRoutes = require("./routes/orderRoutes");
 
+const whatsappRoutes = require("./routes/whatsapp");
+
 dotenv.config();
 connectDB();
 
@@ -26,6 +28,8 @@ app.use("/api", require("./routes/productRoutes"));
 const appointmentRoutes = require("./routes/appointments");
 app.use("/api/appointments", appointmentRoutes);
 app.use("/api/orders", orderRoutes);
+
+app.use("/api", whatsappRoutes);
 
 
 app.post("/create-payment-intent", async (req, res) => {

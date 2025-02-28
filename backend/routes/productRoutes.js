@@ -17,16 +17,24 @@ const upload = multer({ storage });
 // ✅ Add Brand Route
 router.post("/add-brand", upload.single("image"), async (req, res) => {
   try {
-    const { name } = req.body;
-    const image = req.file ? `/uploads/${req.file.filename}` : null;
+      console.log("Request Body:", req.body);
+      console.log("Uploaded File:", req.file);
 
-    const newBrand = new Brand({ name, image, products: [] });
-    await newBrand.save();
-    res.json(newBrand);
+      const { name } = req.body;
+      const image = req.file ? `/uploads/${req.file.filename}` : null;
+
+      if (!name || !image) {
+          return res.status(400).json({ message: "All fields are required" });
+      }
+
+      const newBrand = new Brand({ name, image, products: [] });
+      await newBrand.save();
+      res.json(newBrand);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+      res.status(500).json({ error: error.message });
   }
 });
+
 
 // ✅ Get All Brands
 router.get("/brands", async (req, res) => {

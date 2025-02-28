@@ -155,9 +155,12 @@ const AppointmentForm = () => {
     appointmentDetails={{
         sessionLocation,
         date,
-        time
+        time,
+        patientPhone: formData.phone,  
+        doctorName: doctorName        
     }}
 />
+
 
 
         </div>

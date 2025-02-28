@@ -1,0 +1,62 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 10px; /* Ensures spacing on small screens */
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%; /* Adjusts width dynamically */
+    max-width: 400px; /* Prevents it from becoming too large */
+    position: relative;
+  }
+  
+  .modal-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+    padding: 5px;
+  }
+  
+  .modal-close:hover {
+    color: red;
+    transform: scale(1.2);
+  }
+  
+  .open-form-btn {
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+  }
+  
+  .open-form-btn:hover {
+    background: #0056b3;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 480px) {
+    .modal-content {
+      width: 95%;
+      padding: 15px;
+    }
+  }
+  

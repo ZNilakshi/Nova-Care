@@ -12,6 +12,7 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
     const [error, setError] = useState(null);
     const [message, setMessage] = useState("");
 
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -105,7 +106,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
             return;
         }
 
-        const { sessionLocation, date, time } = appointmentDetails;
+        const { sessionLocation, date, time ,patientPhone, doctorName} = appointmentDetails;
 
         if (!sessionLocation || !date || !time) {
             console.error("❌ Missing sessionLocation, date, or time in appointmentDetails");
@@ -134,17 +135,27 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
             return;
         }
 
-        const data = await response.json();
-        console.log("✅ Slot updated successfully:", data);
+        console.log("✅ Slot updated successfully!");
 
-        setMessage(`Appointment Confirmed!`);
-        setTimeout(() => navigate("/"), 3000);
-    } catch (error) {
-        console.error("❌ Error updating slot:", error);
-        setMessage("Error updating slot: " + error.message);
-    }
+        // 📩 Send WhatsApp Confirmation Message
+       // 📩 Send WhatsApp Confirmation Message
+       console.log("📩 Sending WhatsApp confirmation...");
+       await fetch("http://localhost:5000/api/send-whatsapp-message", {
+           method: "POST",
+           headers: { "Content-Type": "application/json" },
+           body: JSON.stringify({
+               phone: patientPhone,
+               message: `Hello, your appointment with Dr. ${doctorName} is confirmed! 📅 Date: ${date}, ⏰ Time: ${time}, 📍 Location: ${sessionLocation}. Thank you!`
+           }),
+       });
+
+       setMessage("Appointment Confirmed! WhatsApp notification sent.");
+       setTimeout(() => navigate("/"), 3000);
+   } catch (error) {
+       console.error("❌ Error processing appointment:", error);
+       setMessage("Error processing appointment: " + error.message);
+   }
 };
-
 
     return (
         <div style={{ textAlign: "center", padding: "20px" }}>

@@ -134,7 +134,7 @@ const [editingProduct, setEditingProduct] = useState(null);
     }
   
     try {
-      const res = await axios.put(`${API_URL}/edit-product/${editingProduct._id}`, formData, {
+      const res = await axios.put(`${API_URL}/api/edit-product/${editingProduct._id}`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       
