@@ -295,7 +295,7 @@ if (editingAvailabilityIndex !== null) {
      <div className="form-group">
        <div className="floating-label">
          <input type="text" name="name" value={doctor.name} onChange={handleDoctorChange} required />
-         <label>Name</label>
+         <label>Doctor Name</label>
        </div>
      </div>
  
@@ -304,7 +304,7 @@ if (editingAvailabilityIndex !== null) {
        <div className="floating-label">
          <select name="specialty" value={doctor.specialty} onChange={handleDoctorChange} required>
            <option value="" hidden></option>
-           {["Cardiology", "Neurology", "Oncology", "Gynecology", "Dermatology", "Endocrinology", "Nephrology"].map((spec) => (
+           {["Cardiology", "Neurology", "Oncology", "Gynecology", "Dermatology","Ophthalmology" ,"Endocrinology", "Nephrology"].map((spec) => (
              <option key={spec} value={spec}>{spec}</option>
            ))}
          </select>
@@ -335,7 +335,51 @@ if (editingAvailabilityIndex !== null) {
          <label>Description</label>
        </div>
      </div>
- 
+     <div className="form-group">
+    <label>Languages</label>
+    <div className="checkbox-group">
+      {["Sinhala", "English", "Tamil"].map((lang) => (
+        <label key={lang} className="checkbox-label">
+          <input
+            type="checkbox"
+            value={lang}
+            checked={doctor.languages.includes(lang)}
+            onChange={(e) => {
+              const newLanguages = e.target.checked
+                ? [...doctor.languages, lang]
+                : doctor.languages.filter((l) => l !== lang);
+              setDoctor({ ...doctor, languages: newLanguages });
+            }}
+          />
+          {lang}
+        </label>
+      ))}
+    </div>
+  </div>
+
+  {/* Locations */}
+  <div className="form-group">
+    <label>Locations</label>
+    <div className="checkbox-group">
+      {["Colombo", "Negombo", "Kalutara", "Gampaha"].map((loc) => (
+        <label key={loc} className="checkbox-label">
+          <input
+            type="checkbox"
+            value={loc}
+            checked={doctor.locations.includes(loc)}
+            onChange={(e) => {
+              const newLocations = e.target.checked
+                ? [...doctor.locations, loc]
+                : doctor.locations.filter((l) => l !== loc);
+              setDoctor({ ...doctor, locations: newLocations });
+            }}
+          />
+          {loc}
+        </label>
+      ))}
+    </div>
+  </div>
+
      {/* Fee */}
      <div className="form-group">
        <div className="floating-label">
@@ -442,6 +486,8 @@ if (editingAvailabilityIndex !== null) {
     <div className="doctor-info">
       <h3 className="doctor-name">{doc.name}</h3>
       <p className="doctor-specialty">{doc.specialty}</p>
+      <p>{doc.description}</p>
+
     </div>
   </div>
 
@@ -450,8 +496,8 @@ if (editingAvailabilityIndex !== null) {
     <p><strong>Degrees:</strong> {doc.degrees}</p>
     <p><strong>Languages:</strong> {doc.languages.join(", ")}</p>
     <p><strong>Locations:</strong> {doc.locations.join(", ")}</p>
-    <p><strong>Description:</strong> {doc.description}</p>
-    <p className="doctor-fee"><strong>Fee:</strong> Rs. {doc.fee}.00</p>
+       <p className="doctor-fee"><strong>Fee:</strong> Rs. {doc.fee}.00</p>
+  
   </div>
 
   <div className="doctor-actions">
