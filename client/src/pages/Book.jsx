@@ -48,8 +48,8 @@ const Book = () => {
     : [];
 
   return (
-    <section style={{ padding: "60px", background: "#f5f9fc", fontFamily: "'Poppins', sans-serif" }}>
-      <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", gap: "25px", flexWrap: "wrap" }}>
+    <section style={{ padding: "10px",  background: "#f5f9fc", fontFamily: "'Poppins', sans-serif" ,  minHeight: "50vh",}}>
+      <div style={{ maxWidth: "95%", margin: "80px auto", display: "flex", gap: "25px", flexWrap: "wrap" }}>
         {/* LEFT SIDE: Locations */}
         <div style={{ width: "30%", minWidth: "250px", background: "#fff", padding: "20px", borderRadius: "10px", boxShadow: "0 5px 15px rgba(0,0,0,0.1)" }}>
           <h3 style={{ fontSize: "18px", color: "#0096C7", marginBottom: "15px" }}>📍 Available Locations</h3>

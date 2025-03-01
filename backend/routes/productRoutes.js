@@ -206,6 +206,33 @@ router.put("/api/edit-brand/:id", upload.single("image"), async (req, res) => {
 
 
 
+router.put("/reduce-stock", async (req, res) => {
+  try {
+    const { items } = req.body;
+
+    for (const item of items) {
+      const brand = await Brand.findOne({ "products._id": item._id });
+
+      if (!brand) continue; // Skip if brand not found
+
+      const productIndex = brand.products.findIndex((p) => p._id.toString() === item._id);
+      if (productIndex === -1) continue;
+
+      // Reduce quantity
+      brand.products[productIndex].quantity -= item.quantity;
+      if (brand.products[productIndex].quantity < 0) {
+        brand.products[productIndex].quantity = 0; // Ensure stock doesn't go negative
+      }
+
+      await brand.save();
+    }
+
+    res.json({ message: "Stock updated successfully" });
+  } catch (error) {
+    console.error("Error updating stock:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 

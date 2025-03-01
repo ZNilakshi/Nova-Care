@@ -11,7 +11,8 @@ const FooterBottom = () => {
       justifyContent: "center",
       alignItems: "center",
       flexWrap: "wrap",
-      textAlign: "center"
+      textAlign: "center",
+      
     }}>
       
       {/* Copyright Text */}

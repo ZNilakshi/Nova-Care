@@ -64,7 +64,13 @@ export default function Checkout() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderDetails),
       });
-  
+   // Reduce product quantity in the database
+   await fetch("http://localhost:5000/api/reduce-stock", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ items: cart }), // Send purchased items
+  });
+
       localStorage.removeItem("cart");
       navigate("/");
     } catch (error) {
@@ -106,7 +112,7 @@ const styles = {
   container: {
     display: "flex",
     maxWidth: "800px",
-    margin: "auto",
+    margin: "65px auto",
     padding: "16px",
     backgroundColor: "white",
     borderRadius: "8px",
@@ -126,7 +132,7 @@ const styles = {
   submitButton: {
     width: "100%",
     padding: "12px",
-    background: "#007bff",
+    background: "#155724",
     color: "white",
     fontSize: "16px",
     fontWeight: "600",

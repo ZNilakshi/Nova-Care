@@ -414,7 +414,11 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
       </p>
       <p style={{ color: "#008000", fontSize: "12px", fontWeight: "bold" }}>{product.discount}% off</p>
 
-      {quantity > 0 ? (
+      {product.quantity === 0 ? (
+        <p style={{ color: "red", fontSize: "14px", fontWeight: "bold", marginTop: "10px" }}>
+          Out of Stock
+        </p>
+      ) : quantity > 0 ? (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", background: "#f8f9fa", borderRadius: "5px", padding: "5px" }}>
           <button 
             onClick={() => {
@@ -450,6 +454,7 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
     </div>
   );
 };
+
 
 
 export default BuyMedicinePage;
