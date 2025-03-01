@@ -271,25 +271,16 @@ if (editingAvailabilityIndex !== null) {
  const closeAvailabilityForm = () => setShowAvailabilityForm(false);
 
   return (
-    <div className="admin-dashboard">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <h2>Admin Dashboard</h2>
-        <ul>
-          <li>Manage Doctors</li>
-        </ul>
-        <ul>
-          <li>Manage Products</li>
-        </ul> 
-      </aside>
+    <div >
+   
 
       {/* Main Content */}
-      <main className="main-content">
+      <main >
 
-      <button onClick={openDoctorForm} className="open-form-btn">
+      <button className="bu"  onClick={openDoctorForm} >
           Add  Doctor
         </button>
-        <button onClick={openAvailabilityForm} className="open-form-btn">
+        <button  className="bu" onClick={openAvailabilityForm} >
           Manage Availability
         </button>
           <Modal isOpen={showDoctorForm} onClose={closeDoctorForm}>
@@ -371,10 +362,9 @@ if (editingAvailabilityIndex !== null) {
 
 </Modal>
 
-       <Modal isOpen={showAvailabilityForm} onClose={closeAvailabilityForm}>
-          
-    
-  <form onSubmit={handleAvailabilitySubmit} className="availability-form">
+<Modal isOpen={showAvailabilityForm} onClose={closeAvailabilityForm}>
+  
+   <form onSubmit={handleAvailabilitySubmit} className="availability-form">
     <h2>{editingAvailabilityIndex !== null ? "Update Availability" : "Add Availability"}</h2>
 
     <div className="form-grid">
@@ -441,7 +431,7 @@ if (editingAvailabilityIndex !== null) {
 </Modal>
 
         {/* Doctors List */}
-        <h2>Doctors List</h2>
+   
         <div className="doctors-list">
       {doctors.map((doc, index) => (
         <div key={index} className="doctor-row">

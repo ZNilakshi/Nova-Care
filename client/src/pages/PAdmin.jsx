@@ -1,21 +1,12 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { Edit3, Trash2 } from "lucide-react";
+import { Edit3, Trash2, Loader2  } from "lucide-react";
+import Modal from "../components/Modal";
 
-import "./PAdmin.css";
+import "./product.css";
 
 
 
-const Modal = ({ isOpen,  children }) => {
-  if (!isOpen) return null;
-  return (
-    <div className="modal-overlay">
-      <div className="modal-content">
-            {children}
-      </div>
-    </div>
-  );
-};
 
 export default function AdminAddBrands() {
   const [brands, setBrands] = useState([]);
@@ -205,31 +196,50 @@ const [editingProduct, setEditingProduct] = useState(null);
   };
   
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif", maxWidth: "800px", margin: "auto" }}>
-      <h1 style={{ textAlign: "center" }}>Admin Panel - Manage Brands</h1>
-
+    <div style={{ fontFamily: "Arial, sans-serif", maxWidth: "95%", margin: "auto" }}>
+     
       {error && <p style={{ color: "red", textAlign: "center" }}>{error}</p>}
       {loading && <p style={{ textAlign: "center" }}>Loading...</p>}
 
       {/* Add Brand Button */}
-      <button onClick={() => setShowBrandModal(true)}>Add Brand</button>
-
-      <Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
-      <div>
+      <div  style={{ marginBottom: "20px",}}> 
+      <button className="bu" onClick={() => setShowBrandModal(true)}>Add Brand</button>
+      <button className="bu" onClick={() => setShowProductModal(true)}>Add Product</button>
+      
+      </div>
+<Modal isOpen={showBrandModal} onClose={() => setShowBrandModal(false)}>
+<form className="container">
+<h2>Add Brand</h2>
+      <div className="grid">
+        
+      <div className="form-group">
+      <div className="floating-label">
           <input type="text" name="brandName" placeholder="Brand Name" value={brandName} onChange={(e) => setBrandName(e.target.value)} />
-          <input type="file" name="brandImage" onChange={(e) => setBrandImage(e.target.files[0])} />
-          <button onClick={addBrand}>Add Brand</button>
-          <button onClick={() => setShowBrandModal(false)}>Cancel</button>
+          <label>Brand Name</label>
         </div>
-        </Modal>
+          </div>
+          <div className="form-group">
+        <div className="floating-label">
+          <input type="file" name="brandImage" onChange={(e) => setBrandImage(e.target.files[0])} />
+          <label>Brand Image</label>
+        </div>
+          </div>
+          </div>
+          <button className="button" onClick={addBrand}>Add Brand</button>
+          
+        </form>
+</Modal>
       
 
       {/* Add Product Button */}
-      <button onClick={() => setShowProductModal(true)}>Add Product</button>
-
-      <Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
-  
-        <div>
+     
+    
+<Modal isOpen={showProductModal} onClose={() => setShowProductModal(false)}>
+<form className="container">
+<h2>Add Product</h2>
+        <div className="grid">
+        <div className="form-group">
+        <div className="floating-label">
           <select value={selectedBrand} onChange={(e) => setSelectedBrand(e.target.value)}>
             <option value="">Select a brand</option>
             {brands.map((brand) => (
@@ -238,36 +248,77 @@ const [editingProduct, setEditingProduct] = useState(null);
               </option>
             ))}
           </select>
-          <input type="text" name="productName" placeholder="Product Name" value={productName} onChange={(e) => setProductName(e.target.value)} />
-          <input type="number" name="productPrice" placeholder="Product Price" value={productPrice} onChange={(e) => setProductPrice(e.target.value)} />
-          <input type="text" name="productDiscount" placeholder="Discount" value={productDiscount} onChange={(e) => setProductDiscount(e.target.value)} />
-          <input type="number" name="productQuantity" placeholder="Quantity" value={productQuantity} onChange={(e) => setProductQuantity(e.target.value)} />
-          <input type="file" name="productImage" onChange={(e) => setProductImage(e.target.files[0])} />
-          <button onClick={addProduct}>Add Product</button>
-          <button onClick={() => setShowProductModal(false)}>Cancel</button>
+          <label>select a brand</label>
         </div>
-     </Modal>
+          </div>
+          <div className="form-group">
+          <div className="floating-label">
+          <input type="text" name="productName" placeholder="Product Name" value={productName} onChange={(e) => setProductName(e.target.value)} />
+          <label>Product Name</label>
+        </div>
+      </div> 
+      <div className="form-group">
+      <div className="floating-label">
+          <input type="number" name="productPrice" placeholder="Product Price" value={productPrice} onChange={(e) => setProductPrice(e.target.value)} />
+          <label>Price</label>
+        </div>
+      </div> 
+         
+          <div className="form-group">
+          <div className="floating-label">
+          <input type="text" name="productDiscount" placeholder="Discount" value={productDiscount} onChange={(e) => setProductDiscount(e.target.value)} />
+          <label>Discount</label>
+        </div>
+      </div>
+          <div className="form-group">
+          <div className="floating-label">
+          <input type="number" name="productQuantity" placeholder="Quantity" value={productQuantity} onChange={(e) => setProductQuantity(e.target.value)} />
+          <label>Quantity</label>
+        </div>
+      </div>
+          <div className="form-group">
+          <div className="floating-label">
+          <input type="file" name="productImage" onChange={(e) => setProductImage(e.target.files[0])} />
+          <label>Product Image</label>
+        </div>
+      </div>
+
+   </div>
+   
+   <button className="button" onClick={addProduct}>Add Product</button>
+                  </form>  
+</Modal>
 
       {/* Display Brands and Products */}
       <div>
       <div style={{ display: "flex" }}>
         {/* Brands List on the Left */}
-        <div style={{ width: "30%", borderRight: "2px solid #ccc", padding: "10px" }}>
-          <h2>Brands</h2>
-          {loading && <p>Loading...</p>}
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          <ul>
-            {brands.length === 0 ? (
-              <p>No brands added yet.</p>
-            ) : (
-              brands.map((brand) => (
-                <li key={brand._id} style={{ cursor: "pointer", padding: "5px", borderBottom: "1px solid #ddd" }} onClick={() => setSelectedBrand(brand)}>
-                  {brand.name}
-                </li>
-              ))
-            )}
-          </ul>
+        <div className="brand-list">
+      <h2 className="brand-header">Brands</h2>
+
+      {loading ? (
+        <div className="brand-loading">
+          <Loader2 className="loading-icon" size={24} />
+          <span>Loading...</span>
         </div>
+      ) : error ? (
+        <p className="brand-error">{error}</p>
+      ) : brands.length === 0 ? (
+        <p className="brand-empty">No brands added yet.</p>
+      ) : (
+        <ul className="brand-items">
+          {brands.map((brand) => (
+            <li
+              key={brand._id}
+              className="brand-item"
+              onClick={() => setSelectedBrand(brand)}
+            >
+              {brand.name}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
 
         {/* Products on the Right */}
         <div style={{ width: "70%", padding: "10px" }}>
@@ -277,67 +328,113 @@ const [editingProduct, setEditingProduct] = useState(null);
               {selectedBrand.image && (
                 <img src={`http://localhost:5000${selectedBrand.image}`} alt={selectedBrand.name} style={{ width: "100px" }} />
               )}
-              <button onClick={() => setEditingBrand(selectedBrand)}><Edit3 /></button>
-<button onClick={() => deleteBrand(selectedBrand._id)}><Trash2 /></button>
+              <button className="edit-btn" onClick={() => setEditingBrand(selectedBrand)}><Edit3 /></button>
+<button className="delete-btn" onClick={() => deleteBrand(selectedBrand._id)}><Trash2 /></button>
 
-          <table>
-            <thead>
-              <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Discount</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {selectedBrand.products?.map((product) => (
-                <tr key={product._id}>
-                  <td><img src={`http://localhost:5000${product.image}`} alt={product.name} style={{ width: "50px" }} /></td>
-                  <td>{product.name}</td>
-                  <td>Rs. {product.price}</td>
-                  <td>{product.discount}%</td>
-                  <td>{product.quantity}</td>
-                  <td>
-                    <button onClick={() => setEditingProduct(product)}><Edit3 /></button>
-                    <button onClick={() => deleteProduct(product._id)}><Trash2 /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+<div className="table-container">
+      <table className="product-table">
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Discount</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {selectedBrand.products?.map((product) => (
+            <tr key={product._id}>
+              <td>
+                <img
+                  src={`http://localhost:5000${product.image}`}
+                  alt={product.name}
+                  className="product-image"
+                />
+              </td>
+              <td>{product.name}</td>
+              <td>Rs. {product.price}</td>
+              <td>{product.discount}%</td>
+              <td>{product.quantity}</td>
+              <td>
+                <button className="edit-btn" onClick={() => setEditingProduct(product)}>
+                  <Edit3 size={16} />
+                </button>
+                <button className="delete-btn" onClick={() => deleteProduct(product._id)}>
+                  <Trash2 size={16} />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+       
         </div>
       )}
         </div>
       </div>
            {/* Edit Brand Modal */}
-           <Modal isOpen={editingBrand} onClose={() => setEditingBrand(false)}>
+<Modal isOpen={editingBrand} onClose={() => setEditingBrand(false)}>
   
-  
-  <div>
+  <form className= "container">
+  <div className="grid">
     <h3>Edit Brand</h3>
+    <div className="form-group">
+    <div className="floating-label">
       <input type="text" name="editBrandName" value={editingBrand?.name || ""} onChange={(e) => setEditingBrand({ ...editingBrand, name: e.target.value })} />
+      <label>Name</label>
+       </div>
+     </div>
+      <div className="form-group">
+      <div className="floating-label">
       <input type="file" name="editBrandImage" onChange={(e) => setEditingBrand({ ...editingBrand, image: e.target.files[0] })} />
-      <button onClick={editBrand}>Save Changes</button>
-      <button onClick={() => setEditingBrand(null)}>Cancel</button>
- 
+      <label>Image</label>
+       </div>
+     </div>
   </div>
+      <button className="button" onClick={editBrand}>Save Changes</button>
+       
+  </form>
 </Modal>
 <Modal isOpen={editingProduct} onClose={() => setEditingProduct(false)}>
-  
-  <div>
+  <form className= "container">
+  <div className="grid">
     <h3>Edit Product</h3>
+    <div className="form-group">
+    <div className="floating-label">
       <input type="text" name="editProductName" value={editingProduct?.name || ""} onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })} />
+      <label>Description</label>
+       </div>
+     </div>
+      <div className="form-group">
+    <div className="floating-label">
       <input type="number" name="editProductPrice" value={editingProduct?.price || ""} onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })} />
+      <label>Description</label>
+       </div>
+     </div>
+      <div className="form-group">
+    <div className="floating-label">
       <input type="text" name="editProductDiscount" value={editingProduct?.discount || ""} onChange={(e) => setEditingProduct({ ...editingProduct, discount: e.target.value })} />
-      <input type="number" name="editProductQuantity" value={editingProduct?.quantity || ""} onChange={(e) => setEditingProduct({ ...editingProduct, quantity: e.target.value })} />
+      <label>Description</label>
+       </div>
+     </div>
+      <div className="form-group">
+    <div className="floating-label">
+    <input type="number" name="editProductQuantity" value={editingProduct?.quantity || ""} onChange={(e) => setEditingProduct({ ...editingProduct, quantity: e.target.value })} />
+    <label>Description</label>
+       </div>
+     </div>
+    <div className="form-group">
+    <div className="floating-label">
       <input type="file" name="editProductImage" onChange={(e) => setEditingProduct({ ...editingProduct, image: e.target.files[0] })} />
-      <button onClick={editProduct}>Save Changes</button>
-      <button onClick={() => setEditingProduct(null)}>Cancel</button>
-     
-
-  </div>
+      <label>Description</label>
+       </div>
+     </div>
+      <button  className="button" onClick={editProduct}>Save Changes</button>
+       </div>
+  </form>
 </Modal>
 
 

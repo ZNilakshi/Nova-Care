@@ -17,6 +17,7 @@ import DoctorCard from "./pages/DoctorCard";
 import PharmacyList from "./pages/PharmacyList";
 import CartPage from "./pages/CartPage";
 import Admin from "./pages/Admin";
+import AdminDash from "./pages/AdminDash";
 import PAdmin from "./pages/PAdmin";
 import Checkout from "./components/Checkout";
 
@@ -41,6 +42,8 @@ const App = () => {
         <Route path="/cart" element={<CartPage />} />
         <Route path="/buy-medicine" element={<BuyMedicine />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/adminDash" element={<AdminDash />} />
+       
         <Route path="/padmin" element={<PAdmin />} />
         <Route path="/checkout" element={<Checkout />} />
   

@@ -30,12 +30,12 @@ const HomePage = () => {
       </div>
 
       {/* Sections */}
-      <Container className="mt-4">
+      
         <ServicesSection />
         <ClinicalExcellence />
         <Whychooseus />
         <Hospitals />
-      </Container>
+     
 
 
       {/* Styles */}
