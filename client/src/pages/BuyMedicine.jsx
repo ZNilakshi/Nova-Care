@@ -129,6 +129,7 @@ const BuyMedicinePage = () => {
 )}
 
     </div>
+    
   );
 };
 
@@ -155,6 +156,7 @@ const Navbar = ({ navigate }) => {
         justifyContent: "space-between",
       }}
     >
+      
       <div style={{ fontSize: "20px", fontWeight: "bold" }}>
         NOVA CARE Pharmacy
       </div>
@@ -213,7 +215,7 @@ const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
     updateVisibleBrands(); // Run once on mount
     window.addEventListener("resize", updateVisibleBrands); // Listen for screen changes
 
-    return () => window.removeEventListener("resize", updateVisibleBrands); // Cleanup
+  return () => window.removeEventListener("resize", updateVisibleBrands); // Cleanup
   }, []);
 
   const nextSlide = () => {
@@ -408,9 +410,9 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
       <h3 style={{ fontSize: "14px", marginTop: "10px" }}>{product.name}</h3>
       
       <p style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "5px" }}>
-        Rs.{product.price} <span style={{ textDecoration: "line-through", color: "gray", fontSize: "12px" }}>Rs {product.price * 2}</span>
+        Rs.{product.price}  
       </p>
-      <p style={{ color: "#008000", fontSize: "12px", fontWeight: "bold" }}>{product.discount}</p>
+      <p style={{ color: "#008000", fontSize: "12px", fontWeight: "bold" }}>{product.discount}% off</p>
 
       {quantity > 0 ? (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", background: "#f8f9fa", borderRadius: "5px", padding: "5px" }}>

@@ -72,8 +72,8 @@ const HospitalList = () => {
     <div>
       {/* Header */}
       <header className="header">
-        <h1>Hospital Directory</h1>
-        <p>Find the best hospitals in Sri Lanka</p>
+        <h1>HOSPITAL DIRECTORY</h1>
+        <p>Find the Best Hospitals in Sri Lanka</p>
       </header>
       <div className="container">
         {/* Sidebar */}
@@ -151,7 +151,7 @@ const HospitalList = () => {
 
         .sidebar li.active {
           font-weight: bold;
-          color: #007bff;
+          color: white;
         }
 
         .content {

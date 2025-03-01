@@ -67,6 +67,8 @@ const services = [
   { name: "Book Appointment", icon: FaCalendarCheck, route: "/book-appointment", active: false },
   { name: "Find Hospital", icon: FaHospital, route: "/find-hospital", active: false },
   { name: "Buy Medicine", icon: FaPills, route: "/buy-medicine", active: false },
+  { name: "Nearest Pharmacy", icon: FaPills, route: "/pharmacy-list", active: false },
+
 ];
 
 export default ServicesSection;

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 
 const pharmacies = [
-  { name: "Green Cross Pharmacy", address: "123 Main Street, Colombo", lat: 6.9271, lon: 79.8612 },
-  { name: "MediCare Pharmacy", address: "456 Elm Street, Kandy", lat: 7.2906, lon: 80.6337 },
-  { name: "City Meds", address: "789 Oak Avenue, Galle", lat: 6.0325, lon: 80.217 },
-  { name: "Wellness Pharmacy", address: "101 Pine Street, Negombo", lat: 7.209, lon: 79.834 },
-  { name: "Apollo Meds", address: "202 Cedar Road, Jaffna", lat: 9.6615, lon: 80.0255 }
+  { name: "NOVA CARE Colombo Pharmacy", address: "123 Main Street, Colombo", lat: 6.9271, lon: 79.8612},
+  { name: "NOVA CARE Gampaha Pharmacy", address: "456 Main Street, Gampaha", lat: 7.0915, lon: 80.0000 },
+  { name: "NOVA CARE Negombo", address: "789 Main Avenue, Negombo", lat: 7.2095, lon: 79.8356 },
+  { name: "NOVA CARE Galle", address: "101 St Street, Galle", lat: 6.0325, lon: 80.2170 },
+  { name: "NOVA CARE Kalutara", address: "202 Cedar Road, Kalutara", lat: 6.5833, lon: 79.9607 }
 ];
 
 // Haversine formula to calculate distance (in km) between two latitude/longitude points
@@ -58,15 +58,15 @@ const PharmacyList = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h1 style={{ color: "#155724" }}>Pharmacy List</h1>
+    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif",  height: "525px"}}>
+
 
       {/* Error Handling */}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {/* Near to Me Section */}
       {userLocation && sortedPharmacies.length > 0 ? (
-        <div style={{ backgroundColor: "#198754", color: "white", padding: "10px", borderRadius: "5px", marginBottom: "20px" }}>
+        <div style={{ backgroundColor: "#198754", color: "white", padding: "10px", borderRadius: "5px", marginBottom: "20px"  , marginTop: "45px"}}>
           <h2>Near to Me</h2>
           <p>{sortedPharmacies[0].name} - {sortedPharmacies[0].address} ({sortedPharmacies[0].distance.toFixed(2)} km)</p>
         </div>

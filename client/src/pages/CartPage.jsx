@@ -43,7 +43,7 @@ export default function ShoppingCart() {
             <img src={`http://localhost:5000${image}`} alt={name} style={styles.image} />
             <div style={{ flex: 1, marginLeft: "16px" }}>
               <h3 style={styles.productName}>{name}</h3>
-              <p style={styles.price}>₹{price.toFixed(2)}</p>
+              <p style={styles.price}>Rs. {price.toFixed(2)}</p>
               <div style={styles.controls}>
                 <button onClick={() => updateQty(name, -1)} style={styles.controlButton}>
                   <FaMinus size={16} />

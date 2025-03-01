@@ -96,7 +96,7 @@ export default function Checkout() {
           </div>
         ))}
         <hr />
-        <h3 style={styles.total}>Total: ₹{subtotal.toFixed(2)}</h3>
+        <h3 style={styles.total}>Total: Rs. {subtotal.toFixed(2)}</h3>
       </div>
     </div>
   );
