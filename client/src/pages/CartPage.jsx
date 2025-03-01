@@ -74,7 +74,9 @@ export default function ShoppingCart() {
 const styles = {
   container: {
     maxWidth: "600px",
-    margin: " 65px auto",
+    minHeight: "61vh",
+    margin: " 65px auto ",
+    
     padding: "16px",
     backgroundColor: "white",
     borderRadius: "8px",
