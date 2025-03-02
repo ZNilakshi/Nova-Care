@@ -3,6 +3,8 @@ import { useLocation } from "react-router-dom";
 import DoctorCard from "./DoctorCard"; // Remove the local doctors array
 import "./BookAppointment.css";
 
+const API_URL = "https://nova-care-production.up.railway.app";
+
 const BookAppointment = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -23,7 +25,7 @@ const BookAppointment = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/doctors"); // Adjust if needed
+        const response = await fetch(`${API_URL}/api/doctors`); // Adjust if needed
         const data = await response.json();
         setDoctors(data);
       } catch (error) {

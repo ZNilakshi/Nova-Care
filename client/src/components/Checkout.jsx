@@ -4,7 +4,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
 const stripePromise = loadStripe("pk_test_51QtYgJKkJcTRQClqduXmKSglIZ7P4kvBTqtHqWIFTpwjvWwkEqVUGHqod0e0j83NjSv9ox5hD2QDxbZTJ1GbCuGm00QQ62Nn1T");
-
+const API_URL = "https://nova-care-production.up.railway.app";
 
 function PaymentForm({ onSuccess }) {
   const stripe = useStripe();
@@ -59,13 +59,13 @@ export default function Checkout() {
     };
   
     try {
-      await fetch("http://localhost:5000/api/orders/create-order", {
+      await fetch(`${API_URL}/api/orders/create-order`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderDetails),
       });
    // Reduce product quantity in the database
-   await fetch("http://localhost:5000/api/reduce-stock", {
+   await fetch(`${API_URL}/api/reduce-stock` , {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ items: cart }), // Send purchased items

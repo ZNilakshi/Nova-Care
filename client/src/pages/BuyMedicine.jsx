@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
-
+const API_URL = "https://nova-care-production.up.railway.app";
 const BuyMedicinePage = () => {
 
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const BuyMedicinePage = () => {
   useEffect(() => {
     const fetchBrands = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/brands");
+        const response = await fetch(`${API_URL}/api/brands`);
         const data = await response.json();
         setBrands(data);
         setDisplayedProducts(data.flatMap((brand) => brand.products));
@@ -308,7 +308,7 @@ const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
                 boxShadow: "0 3px 6px rgba(0, 0, 0, 0.1)",
               }}
             >
-           <img src={`http://localhost:5000${brand.image}`} alt={brand.name}  style={{ width: "120px", height: "120px", borderRadius: "10px" }}/>
+           <img src={`${API_URL}${brand.image}`} alt={brand.name}  style={{ width: "120px", height: "120px", borderRadius: "10px" }}/>
 
               <p
                 style={{
@@ -403,7 +403,7 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
       }}
     >
       <img 
-        src={`http://localhost:5000${product.image}`} 
+        src={`${API_URL}${product.image}`} 
         alt={product.name}  
         style={{ width: "120px", height: "120px", borderRadius: "10px" }} 
       />

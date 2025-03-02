@@ -4,6 +4,7 @@ import { Elements, useStripe, useElements, CardElement } from "@stripe/react-str
 import { useNavigate } from "react-router-dom";
 
 const stripePromise = loadStripe("pk_test_51QtYgJKkJcTRQClqduXmKSglIZ7P4kvBTqtHqWIFTpwjvWwkEqVUGHqod0e0j83NjSv9ox5hD2QDxbZTJ1GbCuGm00QQ62Nn1T");
+const API_URL = "https://nova-care-production.up.railway.app";
 
 const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess }) => {
     const stripe = useStripe();
@@ -29,7 +30,7 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
           return;
       }
         try {
-            const response = await fetch("http://localhost:5000/create-payment-intent", {
+            const response = await fetch(`${API_URL}/create-payment-intent`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ amount: totalFee }),
@@ -116,7 +117,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
 
         console.log("Sending API Request with:", { sessionLocation, date, time });
 
-        const response = await fetch(`http://localhost:5000/api/doctors/${doctorId}/decrease-slot`, {
+        const response = await fetch(`${API_URL}/api/doctors/${doctorId}/decrease-slot`, {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -140,7 +141,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
         // 📩 Send WhatsApp Confirmation Message
        // 📩 Send WhatsApp Confirmation Message
        console.log("📩 Sending WhatsApp confirmation...");
-       await fetch("http://localhost:5000/api/send-whatsapp-message", {
+       await fetch(`${API_URL}/api/send-whatsapp-message`, {
            method: "POST",
            headers: { "Content-Type": "application/json" },
            body: JSON.stringify({

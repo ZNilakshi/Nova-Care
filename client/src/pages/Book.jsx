@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
+const API_URL = "https://nova-care-production.up.railway.app";
+
 const Book = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ const Book = () => {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/doctors/${id}`);
+        const response = await fetch(`${API_URL}/api/doctors/${id}`);
         if (!response.ok) {
           throw new Error("Doctor not found");
         }

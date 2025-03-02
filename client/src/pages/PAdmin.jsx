@@ -8,6 +8,7 @@ import "./product.css";
 
 
 
+
 export default function AdminAddBrands() {
   const [brands, setBrands] = useState([]);
   const [brandName, setBrandName] = useState("");
@@ -26,7 +27,8 @@ export default function AdminAddBrands() {
 const [editingProduct, setEditingProduct] = useState(null);
 
 
-  const API_URL = "http://localhost:5000/api";
+ 
+  const API_URL = "https://nova-care-production.up.railway.app/api";
 
   // Fetch Brands from Backend
   useEffect(() => {
@@ -326,7 +328,7 @@ const [editingProduct, setEditingProduct] = useState(null);
         <div className="product-list">
           <h2>{selectedBrand.name} - Products</h2>
               {selectedBrand.image && (
-                <img src={`http://localhost:5000${selectedBrand.image}`} alt={selectedBrand.name} style={{ width: "100px" }} />
+                <img src={`https://nova-care-production.up.railway.app${selectedBrand.image}`} alt={selectedBrand.name} style={{ width: "100px" }} />
               )}
               <button className="edit-btn" onClick={() => setEditingBrand(selectedBrand)}><Edit3 /></button>
 <button className="delete-btn" onClick={() => deleteBrand(selectedBrand._id)}><Trash2 /></button>
@@ -348,7 +350,7 @@ const [editingProduct, setEditingProduct] = useState(null);
             <tr key={product._id}>
               <td>
                 <img
-                  src={`http://localhost:5000${product.image}`}
+                  src={`https://nova-care-production.up.railway.app${product.image}`}
                   alt={product.name}
                   className="product-image"
                 />

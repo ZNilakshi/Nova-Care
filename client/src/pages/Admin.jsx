@@ -3,6 +3,8 @@ import "./AdminDashboard.css";
 import { Edit3, Trash2 } from "lucide-react";
 import Modal from "../components/Modal";
 
+const API_URL = "https://nova-care-production.up.railway.app";
+
 const AdminDashboard = () => {
   const [showDoctorForm, setShowDoctorForm] = useState(false);
   const [showAvailabilityForm, setShowAvailabilityForm] = useState(false);
@@ -21,7 +23,7 @@ const AdminDashboard = () => {
  
  // Fetch doctors from API
  const fetchDoctors = useCallback ( () => {
-  fetch("http://localhost:5000/api/doctors")
+  fetch(`${API_URL}/api/doctors`)
     .then((res) => res.json())
     .then((data) => {
       // Format availability dates & times before setting state
@@ -88,7 +90,7 @@ useEffect(() => {
     const formData = new FormData();
     formData.append("photo", file);  // Match backend
 
-    fetch("http://localhost:5000/api/doctors/uploadPhoto", {
+    fetch(`${API_URL}/api/doctors/uploadPhoto`, {
         method: "POST",
         body: formData,
     })
@@ -97,7 +99,7 @@ useEffect(() => {
       console.log("Uploaded file path:", data.filePath);
       setDoctor((prev) => ({
           ...prev,
-          photo: `http://localhost:5000${data.filePath}`, // Ensure the correct URL
+          photo: `${API_URL}${data.filePath}`, // Ensure the correct URL
       }));
   })
   
@@ -113,7 +115,7 @@ useEffect(() => {
       // Updating an existing doctor
       const doctorId = doctors[editingDoctorIndex]._id;
       
-      fetch(`http://localhost:5000/api/doctors/update/${doctorId}`, {
+      fetch(`${API_URL}/api/doctors/update/${doctorId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(doctor),
@@ -129,7 +131,7 @@ useEffect(() => {
       .catch((err) => console.error(err));
     } else {
       // Adding a new doctor
-      fetch("http://localhost:5000/api/doctors/add", {
+      fetch(`${API_URL}/api/doctors/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(doctor),
@@ -175,7 +177,7 @@ useEffect(() => {
   const handleDeleteDoctor = (index) => {
     const doctorId = doctors[index]._id;
 
-    fetch(`http://localhost:5000/api/doctors/delete/${doctorId}`, { method: "DELETE" })
+    fetch(`${API_URL}/api/doctors/delete/${doctorId}`, { method: "DELETE" })
       .then((res) => res.json())
       .then((data) => {
         alert(data.message);
@@ -224,7 +226,7 @@ if (editingAvailabilityIndex !== null) {
   updatedAvailability.push({ ...availability });
 }
  const response = await fetch(
-          `http://localhost:5000/api/doctors/updateAvailability/${doctorId}`,
+          `${API_URL}/api/doctors/updateAvailability/${doctorId}`,
           {
             method: "PUT", // 🔥 Change from POST to PUT
             headers: {

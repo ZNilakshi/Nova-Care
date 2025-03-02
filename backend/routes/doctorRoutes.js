@@ -46,7 +46,7 @@ router.post("/add", upload.single("photo"), async (req, res) => {
       locations,
       description,
       fee,
-      photo: req.file ? `http://localhost:5000/uploads/doctors/${req.file.filename}` : null,
+      photo: req.file ? `https://nova-care-production.up.railway.app/uploads/doctors/${req.file.filename}` : null,
     });
 
     await newDoctor.save();

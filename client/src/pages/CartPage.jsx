@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { FaPlus, FaMinus, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = "https://nova-care-production.up.railway.app";
+
 export default function ShoppingCart() {
   const navigate = useNavigate();
   const [cart, setCart] = useState(() => {
@@ -40,7 +42,7 @@ export default function ShoppingCart() {
       ) : (
         cart.map(({ name, price, image, quantity }) => (
           <div key={name} style={styles.cartItem}>
-            <img src={`http://localhost:5000${image}`} alt={name} style={styles.image} />
+            <img src={`${API_URL}${image}`} alt={name} style={styles.image} />
             <div style={{ flex: 1, marginLeft: "16px" }}>
               <h3 style={styles.productName}>{name}</h3>
               <p style={styles.price}>Rs. {price.toFixed(2)}</p>
