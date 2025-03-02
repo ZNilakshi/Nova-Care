@@ -6,6 +6,7 @@ const doctorRoutes = require("./routes/doctorRoutes");
 const productRoutes = require("./routes/productRoutes");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const orderRoutes = require("./routes/orderRoutes");
+const path = require("path");
 
 const whatsappRoutes = require("./routes/whatsapp");
 
@@ -15,6 +16,7 @@ connectDB();
 const app = express();
 
 // Middleware
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cors());
 app.use(express.json({ limit: "10mb" })); // Increase JSON payload size
 app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increase URL-encoded payload size
