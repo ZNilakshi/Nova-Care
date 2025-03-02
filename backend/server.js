@@ -51,12 +51,16 @@ const PORT = process.env.PORT || 5000;
 const server = app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
-// Handle EADDRINUSE error
+// Handle port conflict error
 server.on("error", (err) => {
     if (err.code === "EADDRINUSE") {
-        console.error(`Port ${PORT} is already in use. Trying a different port...`);
-        server.listen(0); // Let the system assign an available port
+      console.error(`Port ${PORT} is already in use. Trying a different port...`);
+      
+      // Find an available port
+      const newServer = app.listen(0, () => {
+        console.log(`New server running on port ${newServer.address().port}`);
+      });
     } else {
-        console.error(err);
+      console.error(err);
     }
-});
+  });
