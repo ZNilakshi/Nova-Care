@@ -21,7 +21,7 @@ app.use(express.urlencoded({ limit: "10mb", extended: true })); // Increase URL-
 app.use("/uploads", express.static("uploads"));
 
 // Routes
-app.use("/api/doctors", doctorRoutes);
+
 app.use("/api/doctors", require("./routes/doctorRoutes"));
 app.use("/api", require("./routes/productRoutes"));
 // Routes
@@ -50,4 +50,13 @@ app.post("/create-payment-intent", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
+});
+// Handle EADDRINUSE error
+server.on("error", (err) => {
+    if (err.code === "EADDRINUSE") {
+        console.error(`Port ${PORT} is already in use. Trying a different port...`);
+        server.listen(0); // Let the system assign an available port
+    } else {
+        console.error(err);
+    }
 });
