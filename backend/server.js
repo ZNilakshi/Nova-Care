@@ -35,18 +35,21 @@ app.use("/api", whatsappRoutes);
 
 
 app.post("/create-payment-intent", async (req, res) => {
-    const { amount } = req.body;
-    try {
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount * 100,
-            currency: "usd",
-        });
+  try {
+      const { amount } = req.body;
 
-        res.send({ clientSecret: paymentIntent.client_secret });
-    } catch (error) {
-        res.status(500).send({ error: error.message });
-    }
+      const paymentIntent = await stripe.paymentIntents.create({
+          amount: amount * 100, // Convert to cents
+          currency: "usd",
+          payment_method_types: ["card"], // ✅ Allow ONLY card payments
+      });
+
+      res.json({ clientSecret: paymentIntent.client_secret });
+  } catch (error) {
+      res.status(500).json({ error: error.message });
+  }
 });
+
 
 
 const PORT = process.env.PORT || 5000;

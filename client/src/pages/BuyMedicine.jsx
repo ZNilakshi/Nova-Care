@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
+
 const API_URL = "https://nova-care-production.up.railway.app";
 const BuyMedicinePage = () => {
 
@@ -410,7 +411,7 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
       <h3 style={{ fontSize: "14px", marginTop: "10px" }}>{product.name}</h3>
       
       <p style={{ fontSize: "14px", fontWeight: "bold", marginBottom: "5px" }}>
-        Rs.{product.price}  
+        Rs.{product.price}.00  
       </p>
       <p style={{ color: "#008000", fontSize: "12px", fontWeight: "bold" }}>{product.discount}% off</p>
 

@@ -32,7 +32,7 @@ const DoctorCard = ({ doctor, index }) => {
 
       {/* Doctor Details */}
       <div>
-        <h4 style={{ margin: "0", fontSize: "18px", fontWeight: "bold" }}>Dr {doctor.name}</h4>
+        <h4 style={{ margin: "0", fontSize: "18px", fontWeight: "bold" }}>{doctor.name}</h4>
         <span
           style={{
             display: "inline-block",
@@ -98,7 +98,7 @@ const DoctorCard = ({ doctor, index }) => {
 
  {/* Displaying Fee */}
         <p style={{ fontSize: "14px", fontWeight: "bold", color: "#333", marginBottom: "10px" }}>
-          Fee: <span style={{ color: "#FFD700" }}>{doctor.fee}</span>
+          Fee: <span style={{ color: "#FFD700" }}>Rs.{doctor.fee}.00</span>
         </p>
         
         <button

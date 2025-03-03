@@ -48,8 +48,11 @@ const PharmacyList = () => {
           setSortedPharmacies(sorted);
         },
         (error) => {
+          
+          <div>
           console.error("Error fetching location:", error);
           setError("Unable to fetch your location. Please enable location services.");
+          </div>
         }
       );
     } else {
@@ -58,7 +61,7 @@ const PharmacyList = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif",  height: "525px"}}>
+    <div style={{ padding: "20px", marginTop: "40px ", fontFamily: "Arial, sans-serif",  height: "525px"}}>
 
 
       {/* Error Handling */}

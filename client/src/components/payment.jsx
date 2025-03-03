@@ -1,64 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { loadStripe } from "@stripe/stripe-js";
-import { Elements, useStripe, useElements, CardElement } from "@stripe/react-stripe-js";
+import { Elements, useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
 import { useNavigate } from "react-router-dom";
 
 const stripePromise = loadStripe("pk_test_51QtYgJKkJcTRQClqduXmKSglIZ7P4kvBTqtHqWIFTpwjvWwkEqVUGHqod0e0j83NjSv9ox5hD2QDxbZTJ1GbCuGm00QQ62Nn1T");
 const API_URL = "https://nova-care-production.up.railway.app";
 
-const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess }) => {
+const CheckoutForm = ({ clientSecret, appointmentDetails, doctorId, onPaymentSuccess }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const [message, setMessage] = useState("");
 
-    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError(null);
+        setMessage("");
 
         if (!stripe || !elements) {
             setMessage("Stripe is not loaded yet. Please try again.");
             setLoading(false);
             return;
         }
-        if (!appointmentDetails) {
-            setMessage("Appointment details are missing. Please try again.");
-          setLoading(false);
-          return;
-      }
+
         try {
-            const response = await fetch(`${API_URL}/create-payment-intent`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ amount: totalFee }),
-            });
-
-            if (!response.ok) {
-                throw new Error("Failed to fetch payment intent.");
-            }
-
-            const { clientSecret } = await response.json();
-            if (!clientSecret) {
-                throw new Error("No client secret received. Please try again.");
-            }
-
-            const result = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: {
-                    card: elements.getElement(CardElement),
-                },
+            const result = await stripe.confirmPayment({
+                elements,
+                confirmParams: { return_url: window.location.origin },
+                redirect: "if_required",
             });
 
             if (result.error) {
-                setError(result.error.message);
+                setMessage(result.error.message);
             } else if (result.paymentIntent.status === "succeeded") {
-                setMessage("Payment Successful!");
+                setMessage();
                 onPaymentSuccess(appointmentDetails, doctorId);
             }
         } catch (err) {
-            setError(err.message || "Payment failed. Please try again.");
+            setMessage("Payment failed. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -66,18 +45,18 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
 
     return (
         <form onSubmit={handleSubmit} style={{ textAlign: "center", padding: "20px" }}>
-            <CardElement />
-            {message && <p style={{ color: "red" }}>{error}</p>}
-            <button 
-                type="submit" 
-                disabled={loading} 
+            <PaymentElement />
+            {message && <p style={{ color: "red" }}>{message}</p>}
+            <button
+                type="submit"
+                disabled={loading}
                 style={{
                     marginTop: "15px",
                     padding: "10px",
                     background: loading ? "#ccc" : "#0096C7",
                     color: "white",
                     border: "none",
-                    cursor: loading ? "not-allowed" : "pointer"
+                    cursor: loading ? "not-allowed" : "pointer",
                 }}
             >
                 {loading ? "Processing..." : "Pay Now"}
@@ -85,94 +64,101 @@ const CheckoutForm = ({ totalFee, appointmentDetails, doctorId, onPaymentSuccess
         </form>
     );
 };
-
 const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
-   
+    const [clientSecret, setClientSecret] = useState("");
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
-  const handlePaymentSuccess = async (appointmentDetails, doctorId) => {
-    console.log("Received appointment details:", appointmentDetails);
-    console.log("Received doctor ID:", doctorId);
+    useEffect(() => {
+        const createPaymentIntent = async () => {
+            try {
+                const response = await fetch(`${API_URL}/create-payment-intent`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ amount: totalFee }),
+                });
 
+                if (!response.ok) throw new Error("Failed to fetch payment intent.");
+
+                const { clientSecret } = await response.json();
+                setClientSecret(clientSecret);
+            } catch (error) {
+                console.error("Error creating payment intent:", error);
+                setMessage("Error creating payment. Please try again.");
+            }
+        };
+
+        createPaymentIntent();
+    }, [totalFee]);
+
+    // ✅ FIXED: Define handlePaymentSuccess
+    const handlePaymentSuccess = async (appointmentDetails, doctorId) => {
+        try {
+            setMessage("Processing Appointment...");
+
+            if (!appointmentDetails) {
+                setMessage("Appointment details are missing.");
+                return;
+            }
+
+            const { sessionLocation, date, time, patientPhone, doctorName } = appointmentDetails;
+
+            await fetch(`${API_URL}/api/doctors/${doctorId}/decrease-slot`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sessionLocation, date, time }),
+            });
+
+            await fetch(`${API_URL}/api/send-whatsapp-message`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    phone: patientPhone,
+                    message: `Hello, your appointment with Dr. ${doctorName} is confirmed! 📅 Date: ${date}, ⏰ Time: ${time}, 📍 Location: ${sessionLocation}. Thank you!`,
+                }),
+            });
+
+            setMessage("Appointment Confirmed! WhatsApp notification sent.");
+            setTimeout(() => navigate("/"), 3000);
+        } catch (error) {
+            setMessage("Error processing appointment: " + error.message);
+        }
+    };
+
+    const stripeOptions = {
+        clientSecret,
+        appearance: {
+            theme: "stripe",
+        },
+        paymentMethodOrder: ["card"], // Only show Card payment
+        wallets: {
+            applePay: "never",    // Disable Apple Pay
+            googlePay: "never",   // Disable Google Pay
+            amazonPay: "never",   // Disable Amazon Pay
+            cashApp: "never"      // Disable Cash App Pay
+        }
+    };
     
-    try {
-        setMessage("Processing Appointment...");
-
-        console.log("Received appointmentDetails:", appointmentDetails);
-
-        if (!appointmentDetails) {
-            console.error("❌ Appointment details are missing.");
-            setMessage("Appointment details are missing. Please try again.");
-            return;
-        }
-
-        const { sessionLocation, date, time ,patientPhone, doctorName} = appointmentDetails;
-
-        if (!sessionLocation || !date || !time) {
-            console.error("❌ Missing sessionLocation, date, or time in appointmentDetails");
-            setMessage("Missing session location, date, or time. Please check the appointment details.");
-            return;
-        }
-
-        console.log("Sending API Request with:", { sessionLocation, date, time });
-
-        const response = await fetch(`${API_URL}/api/doctors/${doctorId}/decrease-slot`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                sessionLocation,
-                date,
-                time,
-            }),
-        });
-
-        console.log("Response Status:", response.status);
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("❌ Failed to update slot:", errorData.message);
-            setMessage("Failed to update slot: " + errorData.message);
-            return;
-        }
-
-        console.log("✅ Slot updated successfully!");
-
-        // 📩 Send WhatsApp Confirmation Message
-       // 📩 Send WhatsApp Confirmation Message
-       console.log("📩 Sending WhatsApp confirmation...");
-       await fetch(`${API_URL}/api/send-whatsapp-message`, {
-           method: "POST",
-           headers: { "Content-Type": "application/json" },
-           body: JSON.stringify({
-               phone: patientPhone,
-               message: `Hello, your appointment with Dr. ${doctorName} is confirmed! 📅 Date: ${date}, ⏰ Time: ${time}, 📍 Location: ${sessionLocation}. Thank you!`
-           }),
-       });
-
-       setMessage("Appointment Confirmed! WhatsApp notification sent.");
-       setTimeout(() => navigate("/"), 3000);
-   } catch (error) {
-       console.error("❌ Error processing appointment:", error);
-       setMessage("Error processing appointment: " + error.message);
-   }
-};
 
     return (
         <div style={{ textAlign: "center", padding: "20px" }}>
             <p><strong>Total Fee:</strong> Rs{totalFee}.00</p>
             {message && <p style={{ color: message.includes("Confirmed") ? "green" : "blue" }}>{message}</p>}
-         
-            <Elements stripe={stripePromise}>
-                <CheckoutForm 
-                    totalFee={totalFee} 
-                    appointmentDetails={appointmentDetails} 
-                    doctorId={doctorId} 
-                    onPaymentSuccess={handlePaymentSuccess} 
-                />
-            </Elements>
+            {clientSecret && (
+    <Elements stripe={stripePromise} options={stripeOptions}>
+        <CheckoutForm
+            clientSecret={clientSecret}
+            appointmentDetails={appointmentDetails}
+            doctorId={doctorId}
+            onPaymentSuccess={handlePaymentSuccess}
+        />
+    </Elements>
+)}
+
+           
         </div>
     );
 };
+
 
 export default Payment;

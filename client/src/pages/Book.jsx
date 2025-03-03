@@ -95,7 +95,7 @@ const Book = () => {
           <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "20px" }}>
             <img src={doctor.photo} alt={doctor.name} style={{ width: "90px", height: "90px", borderRadius: "50%", objectFit: "cover" }} />
             <div>
-              <h2 style={{ fontSize: "22px", color: "#0096C7", margin: "0" }}>Dr {doctor.name}</h2>
+              <h2 style={{ fontSize: "22px", color: "#0096C7", margin: "0" }}> {doctor.name}</h2>
               <p style={{ fontSize: "16px", color: "#666", margin: "5px 0" }}>
                 {doctor.specialty || doctor.specialization || "Specialty not available"} 
               </p>

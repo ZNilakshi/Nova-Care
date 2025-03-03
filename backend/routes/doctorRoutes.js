@@ -4,6 +4,12 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 
+const fs = require("fs");
+const uploadDir = "uploads/doctors/";
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
 // Multer Storage for Doctor Photos
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -23,20 +29,24 @@ const upload = multer({ storage });
 
 router.post("/add", upload.single("photo"), async (req, res) => {
   try {
-    console.log(req.body); // Text fields
-    console.log(req.file); // Uploaded file
+    console.log("📥 Incoming Request Data:", req.body);
+    console.log("📂 Uploaded File:", req.file);
 
-     const { name, specialty, experience, degrees, languages, locations, description, fee } = req.body;
+    const { name, specialty, experience, degrees, languages, locations, description, fee } = req.body;
 
     if (!name || !specialty || !experience || !degrees || !languages || !locations || !description || !fee) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
-    // Store image 
-    let photo = "";
-        if (req.file) {
-            photo = `/uploads/doctors/${req.file.filename}`;
-        }
+    // Check if doctor already exists
+    const existingDoctor = await Doctor.findOne({ name, specialty });
+    if (existingDoctor) {
+      return res.status(400).json({ success: false, message: "Doctor already exists" });
+    }
+
+    // Store Image URL
+    const photo = req.file ? `https://nova-care-production.up.railway.app/uploads/doctors/${req.file.filename}` : null;
+
     const newDoctor = new Doctor({
       name,
       specialty,
@@ -46,16 +56,20 @@ router.post("/add", upload.single("photo"), async (req, res) => {
       locations,
       description,
       fee,
-      photo: req.file ? `https://nova-care-production.up.railway.app/uploads/doctors/${req.file.filename}` : null,
+      photo,
     });
 
     await newDoctor.save();
+
+    console.log("✅ Doctor Added:", newDoctor);
     res.status(201).json({ success: true, message: "Doctor added successfully!", doctor: newDoctor });
+
   } catch (error) {
-    console.error("Error in /add route:", error);
+    console.error("❌ Error in /add route:", error);
     res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 });
+
 
 
 router.post("/uploadPhoto", upload.single("photo"), (req, res) => {

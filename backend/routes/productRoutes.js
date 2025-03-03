@@ -46,7 +46,7 @@ router.get("/brands", async (req, res) => {
   }
 });
 
-// ✅ Add Product to a Brand
+// Add Product to a Brand
 router.post("/add-product/:brandId", upload.single("image"), async (req, res) => {
   try {
     const { name, price, discount, quantity } = req.body;
@@ -73,7 +73,7 @@ router.post("/add-product/:brandId", upload.single("image"), async (req, res) =>
   }
 });
 
-// ✅ Update Product
+//  Update Product
 router.put("api/update-product/:brandId/:productId", upload.single("image"), async (req, res) => {
   try {
     const { name, price, discount, quantity } = req.body;
@@ -104,7 +104,7 @@ router.put("api/update-product/:brandId/:productId", upload.single("image"), asy
   }
 });
 
-// ✅ Delete Product
+//  Delete Product
 
 
 router.delete("/api/delete-brand/:id", async (req, res) => {

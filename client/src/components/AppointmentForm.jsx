@@ -95,7 +95,7 @@ const AppointmentForm = () => {
       {/* Sidebar with doctor details */}
       <div style={styles.sidebar}>
         <img src={doctorPhoto || "https://via.placeholder.com/100"} alt={doctorName || "Doctor"} style={styles.image} />
-        <h3 style={styles.doctorName}>Dr. {doctorName || "Dr. Not Specified"}</h3>
+        <h3 style={styles.doctorName}> {doctorName || "Dr. Not Specified"}</h3>
         <p><strong>Specialization:</strong> {specialization || "Not specified"}</p>
         <p><strong>Location:</strong> {sessionLocation || "Not specified"}</p>
         <p><strong>Session Date:</strong> {date || "TBD"}</p>
