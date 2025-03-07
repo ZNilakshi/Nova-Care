@@ -28,9 +28,9 @@ const PharmacyList = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [sortedPharmacies, setSortedPharmacies] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
-    // Get user's location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -46,35 +46,36 @@ const PharmacyList = () => {
             .sort((a, b) => a.distance - b.distance);
 
           setSortedPharmacies(sorted);
+          setLoading(false);
         },
         (error) => {
-          
-          <div>
           console.error("Error fetching location:", error);
           setError("Unable to fetch your location. Please enable location services.");
-          </div>
+          setLoading(false);
         }
       );
     } else {
       setError("Geolocation is not supported by your browser.");
+      setLoading(false);
     }
   }, []);
 
   return (
-    <div style={{ padding: "20px", marginTop: "40px ", fontFamily: "Arial, sans-serif",  height: "525px"}}>
-
+    <div style={{ padding: "20px", marginTop: "40px", fontFamily: "Arial, sans-serif", minHeight: "515px" }}>
 
       {/* Error Handling */}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {/* Near to Me Section */}
-      {userLocation && sortedPharmacies.length > 0 ? (
-        <div style={{ backgroundColor: "#198754", color: "white", padding: "10px", borderRadius: "5px", marginBottom: "20px"  , marginTop: "45px"}}>
+      {loading ? (
+        <p style={{ fontStyle: "italic", color: "#555" }}>Determining your location, please wait...</p>
+      ) : userLocation && sortedPharmacies.length > 0 ? (
+        <div style={{ backgroundColor: "#198754", color: "white", padding: "10px", borderRadius: "5px", marginBottom: "20px", marginTop: "45px" }}>
           <h2>Near to Me</h2>
           <p>{sortedPharmacies[0].name} - {sortedPharmacies[0].address} ({sortedPharmacies[0].distance.toFixed(2)} km)</p>
         </div>
       ) : (
-        <p>Fetching location...</p>
+        <p style={{ color: "red" }}></p>
       )}
 
       {/* List of Other Pharmacies */}
@@ -90,5 +91,6 @@ const PharmacyList = () => {
     </div>
   );
 };
+
 
 export default PharmacyList;
