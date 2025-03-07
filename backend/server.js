@@ -8,7 +8,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const orderRoutes = require("./routes/orderRoutes");
 const path = require("path");
 
-
 dotenv.config();
 connectDB();
 

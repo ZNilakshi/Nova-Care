@@ -118,7 +118,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
                 }),
             });
 
-            setMessage("Appointment Confirmed! WhatsApp notification sent.");
+            setMessage("Appointment Confirmed!");
             setTimeout(() => navigate("/"), 3000);
         } catch (error) {
             setMessage("Error processing appointment: " + error.message);
