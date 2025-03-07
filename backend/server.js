@@ -8,7 +8,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const orderRoutes = require("./routes/orderRoutes");
 const path = require("path");
 
-const whatsappRoutes = require("./routes/whatsapp");
 
 dotenv.config();
 connectDB();
@@ -47,6 +46,36 @@ app.post("/create-payment-intent", async (req, res) => {
       res.json({ clientSecret: paymentIntent.client_secret });
   } catch (error) {
       res.status(500).json({ error: error.message });
+  }
+});
+app.post("/api/send-sms", async (req, res) => {
+  const { phone, message } = req.body;
+
+  if (!phone || !message) {
+    return res.status(400).json({ error: "Phone number and message are required." });
+  }
+
+  try {
+    const response = await axios.post("https://app.notify.lk/api/v1/send", null, {
+      params: {
+        user_id: process.env.NOTIFY_USER_ID,
+        api_key: process.env.NOTIFY_API_KEY,
+        sender_id: process.env.NOTIFY_SENDER_ID,
+        to: phone,
+        message: message,
+      },
+    });
+
+    console.log("Notify.lk response:", response.data);
+
+    if (response.data.status === "success") {
+      res.json({ success: true, message: "SMS sent successfully!" });
+    } else {
+      res.status(400).json({ success: false, error: response.data.message });
+    }
+  } catch (error) {
+    console.error("Notify.lk API error:", error.message);
+    res.status(500).json({ success: false, error: "Failed to send SMS." });
   }
 });
 

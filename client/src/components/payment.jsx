@@ -109,7 +109,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
                 body: JSON.stringify({ sessionLocation, date, time }),
             });
 
-            await fetch(`${API_URL}/api/send-whatsapp-message`, {
+            await fetch(`${API_URL}/api/send-sms`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({

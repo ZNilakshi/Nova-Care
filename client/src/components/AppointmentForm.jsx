@@ -47,10 +47,10 @@ const AppointmentForm = () => {
       }
     });
   
-    const phoneRegex = /^[0-9]{10}$/;
+    const phoneRegex = /^(0|94|\+94)?\d{9}$/; // Adjusted regex to accept 0, 94, or +94 formats
     if (formData.phone && !phoneRegex.test(formData.phone)) {
       newErrors.phone = "Invalid phone number";
-    }
+    }  
   
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -94,7 +94,7 @@ const AppointmentForm = () => {
     <div style={styles.container}>
       {/* Sidebar with doctor details */}
       <div style={styles.sidebar}>
-        <img src={doctorPhoto || "https://via.placeholder.com/100"} alt={doctorName || "Doctor"} style={styles.image} />
+        <img src={doctorPhoto || "/card.jpg"} alt={doctorName || "Doctor"} style={styles.image} />
         <h3 style={styles.doctorName}> {doctorName || "Dr. Not Specified"}</h3>
         <p><strong>Specialization:</strong> {specialization || "Not specified"}</p>
         <p><strong>Location:</strong> {sessionLocation || "Not specified"}</p>

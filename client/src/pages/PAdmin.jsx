@@ -5,10 +5,6 @@ import Modal from "../components/Modal";
 
 import "./product.css";
 
-
-
-
-
 export default function AdminAddBrands() {
   const [brands, setBrands] = useState([]);
   const [brandName, setBrandName] = useState("");
@@ -24,10 +20,8 @@ export default function AdminAddBrands() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingBrand, setEditingBrand] = useState(null);
-const [editingProduct, setEditingProduct] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
 
-
- 
   const API_URL = "https://nova-care-production.up.railway.app/api";
 
   // Fetch Brands from Backend
