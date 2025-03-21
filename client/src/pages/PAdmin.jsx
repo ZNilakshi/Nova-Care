@@ -24,7 +24,7 @@ export default function AdminAddBrands() {
 
   const API_URL = "https://nova-care-production.up.railway.app/api";
 
-  // Fetch Brands from Backend
+ 
   useEffect(() => {
     axios
       .get(`${API_URL}/brands`)
@@ -38,7 +38,7 @@ export default function AdminAddBrands() {
       });
   }, []);
 
-  // Add Brand
+  
   const addBrand = async () => {
     if (!brandName || !brandImage) return alert("Please fill all fields!");
 
@@ -60,7 +60,7 @@ export default function AdminAddBrands() {
     }
   };
 
-  // Add Product
+  
   const addProduct = async () => {
     if (!selectedBrand || !productName || !productPrice || !productDiscount || !productImage || !productQuantity) {
       return alert("Please fill all fields!");
@@ -78,7 +78,7 @@ export default function AdminAddBrands() {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      // Update brand list with new product
+     
       setBrands(
         brands.map((brand) =>
           brand._id === selectedBrand
@@ -162,7 +162,7 @@ export default function AdminAddBrands() {
   };
   
   const deleteBrand = async (id) => {
-    console.log("Deleting brand:", id);  // ✅ Log the ID
+    console.log("Deleting brand:", id);  
   
     if (!id) return alert("Invalid brand ID!");
   
@@ -285,10 +285,10 @@ export default function AdminAddBrands() {
                   </form>  
 </Modal>
 
-      {/* Display Brands and Products */}
+      
       <div>
       <div style={{ display: "flex" }}>
-        {/* Brands List on the Left */}
+       
         <div className="brand-list">
       <h2 className="brand-header">Brands</h2>
 
@@ -316,7 +316,7 @@ export default function AdminAddBrands() {
       )}
     </div>
 
-        {/* Products on the Right */}
+      
         <div style={{ width: "70%", padding: "10px" }}>
           {selectedBrand && (
         <div className="product-list">
@@ -371,7 +371,7 @@ export default function AdminAddBrands() {
       )}
         </div>
       </div>
-           {/* Edit Brand Modal */}
+        
 <Modal isOpen={editingBrand} onClose={() => setEditingBrand(false)}>
   
   <form className= "container">

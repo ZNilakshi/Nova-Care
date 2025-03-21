@@ -91,7 +91,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
         createPaymentIntent();
     }, [totalFee]);
 
-    // ✅ FIXED: Define handlePaymentSuccess
+   
     const handlePaymentSuccess = async (appointmentDetails, doctorId) => {
         try {
             setMessage("Processing Appointment...");
@@ -130,7 +130,7 @@ const Payment = ({ totalFee, appointmentDetails, doctorId }) => {
         appearance: {
             theme: "stripe",
         },
-        paymentMethodOrder: ["card"], // Only show Card payment
+        paymentMethodOrder: ["card"], 
         wallets: {
             applePay: "never",    // Disable Apple Pay
             googlePay: "never",   // Disable Google Pay

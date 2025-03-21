@@ -10,7 +10,7 @@ const uploadDir = "uploads/doctors/";
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
-// Multer Storage for Doctor Photos
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
       cb(null, "uploads/doctors/");
@@ -22,10 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/** 
- * @route POST /api/doctors/add
- * @desc Add a new doctor
- */
+
 
 router.post("/add", upload.single("photo"), async (req, res) => {
   try {
@@ -38,13 +35,13 @@ router.post("/add", upload.single("photo"), async (req, res) => {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
 
-    // Check if doctor already exists
+ 
     const existingDoctor = await Doctor.findOne({ name, specialty });
     if (existingDoctor) {
       return res.status(400).json({ success: false, message: "Doctor already exists" });
     }
 
-    // Store Image URL
+
     const photo = req.file ? `https://nova-care-production.up.railway.app/uploads/doctors/${req.file.filename}` : null;
 
     const newDoctor = new Doctor({
@@ -61,11 +58,11 @@ router.post("/add", upload.single("photo"), async (req, res) => {
 
     await newDoctor.save();
 
-    console.log("✅ Doctor Added:", newDoctor);
+    console.log(" Doctor Added:", newDoctor);
     res.status(201).json({ success: true, message: "Doctor added successfully!", doctor: newDoctor });
 
   } catch (error) {
-    console.error("❌ Error in /add route:", error);
+    console.error("Error in /add route:", error);
     res.status(500).json({ success: false, message: "Server error", error: error.message });
   }
 });
@@ -85,10 +82,6 @@ router.post("/uploadPhoto", upload.single("photo"), (req, res) => {
 
 
 
-/**
- * @route GET /api/doctors/:id
- * @desc Get a single doctor by ID
- */
 
 
 router.get("/:id", async (req, res) => {
@@ -105,10 +98,6 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-/**
- * @route GET /api/doctors/
- * @desc Get all doctors
- */
 
 
 router.get("/", async (req, res) => {
@@ -121,11 +110,6 @@ router.get("/", async (req, res) => {
 });
 
 
-/**
- * @route PATCH /api/doctors/:id/decrease-slot
- * @desc Decrease available slots by 1 when an appointment is booked
- */
-
 const moment = require("moment");
 
 router.patch("/:doctorId/decrease-slot", async (req, res) => {
@@ -133,32 +117,32 @@ router.patch("/:doctorId/decrease-slot", async (req, res) => {
     const { doctorId } = req.params;
     let { sessionLocation, date, time } = req.body;
 
-    console.log(`📥 Received request to decrease slot for Doctor ID: ${doctorId}`);
-    console.log("📥 Raw Request Body:", req.body);
+    console.log(` Received request to decrease slot for Doctor ID: ${doctorId}`);
+    console.log("Raw Request Body:", req.body);
 
     if (!doctorId || !sessionLocation || !date || !time) {
-      console.log("❌ Missing required fields.");
+      console.log("Missing required fields.");
       return res.status(400).json({ success: false, message: "Missing required fields." });
     }
 
-    // Convert Date Format
+   
     const formattedDate = moment(date, "ddd, MMM D, YYYY").format("YYYY-MM-DD");
-    console.log("📆 Converted Date:", formattedDate);
+    console.log(" Converted Date:", formattedDate);
 
-    // Convert Time Format
+   
     const formattedTime = moment(time, ["h:mm A", "HH:mm"]).format("HH:mm");
-    console.log("⏰ Converted Time:", formattedTime);
+    console.log("Converted Time:", formattedTime);
 
-    // Fetch doctor availability
+
     const doctor = await Doctor.findById(doctorId);
     if (!doctor) {
-      console.log("❌ Doctor not found.");
+      console.log("Doctor not found.");
       return res.status(404).json({ success: false, message: "Doctor not found." });
     }
 
     console.log("🔍 Doctor's Availability Before Update:", doctor.availability);
 
-    // Find the matching availability slot
+  
     const matchingAvailability = doctor.availability.find(
       (slot) =>
         slot.date === formattedDate &&
@@ -167,22 +151,22 @@ router.patch("/:doctorId/decrease-slot", async (req, res) => {
     );
 
     if (!matchingAvailability) {
-      console.log("❌ No matching availability found.");
+      console.log("No matching availability found.");
       return res.status(400).json({ success: false, message: "No matching availability found." });
     }
 
-    console.log("✅ Found matching slot:", matchingAvailability);
+    console.log(" Found matching slot:", matchingAvailability);
 
     if (matchingAvailability.availableSlots <= 0) {
-      console.log("❌ No available slots left.");
+      console.log(" No available slots left.");
       return res.status(400).json({ success: false, message: "No available slots left." });
     }
 
-    // Add 15 minutes to the appointment time
+
     const newAppointmentTime = moment(formattedTime, "HH:mm").add(15, "minutes").format("HH:mm");
     console.log("⏳ New Appointment Time:", newAppointmentTime);
 
-    // Update slot count and time
+
     const updateResult = await Doctor.updateOne(
       {
         _id: doctorId,
@@ -196,17 +180,17 @@ router.patch("/:doctorId/decrease-slot", async (req, res) => {
       }
     );
 
-    console.log("📌 Update Result:", updateResult);
+    console.log("Update Result:", updateResult);
 
     if (updateResult.modifiedCount === 0) {
-      console.log("❌ Slot not updated. Check session details.");
+      console.log("Slot not updated. Check session details.");
       return res.status(400).json({ success: false, message: "Slot not updated. Check session details." });
     }
 
     res.json({ success: true, message: "Slot updated successfully.", newTime: newAppointmentTime });
 
   } catch (error) {
-    console.error("❌ Error updating slot:", error);
+    console.error("Error updating slot:", error);
     res.status(500).json({ success: false, message: "Server error." });
   }
 });

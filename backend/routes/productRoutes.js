@@ -5,7 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const mongoose = require("mongoose");
 
-// Multer for Image Upload
+
 const storage = multer.diskStorage({
   destination: "uploads/",
   filename: (req, file, cb) => {
@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// ✅ Add Brand Route
+
 router.post("/add-brand", upload.single("image"), async (req, res) => {
   try {
       console.log("Request Body:", req.body);
@@ -36,7 +36,7 @@ router.post("/add-brand", upload.single("image"), async (req, res) => {
 });
 
 
-// ✅ Get All Brands
+
 router.get("/brands", async (req, res) => {
   try {
     const brands = await Brand.find();
@@ -46,23 +46,23 @@ router.get("/brands", async (req, res) => {
   }
 });
 
-// Add Product to a Brand
+
 router.post("/add-product/:brandId", upload.single("image"), async (req, res) => {
   try {
     const { name, price, discount, quantity } = req.body;
 
-    // Check if brand exists
+   
     const brand = await Brand.findById(req.params.brandId);
     if (!brand) return res.status(404).json({ message: "Brand not found" });
 
-    // Debugging logs
+  
     console.log("Received file:", req.file);
     console.log("Received data:", req.body);
 
-    // Ensure image file is uploaded
+  
     const image = req.file ? `/uploads/${req.file.filename}` : null;
 
-    // Add product to brand
+
     brand.products.push({ name, price, discount, image, quantity });
     await brand.save();
 
@@ -73,7 +73,7 @@ router.post("/add-product/:brandId", upload.single("image"), async (req, res) =>
   }
 });
 
-//  Update Product
+
 router.put("api/update-product/:brandId/:productId", upload.single("image"), async (req, res) => {
   try {
     const { name, price, discount, quantity } = req.body;
@@ -87,7 +87,7 @@ router.put("api/update-product/:brandId/:productId", upload.single("image"), asy
 
     const image = req.file ? `/uploads/${req.file.filename}` : brand.products[productIndex].image;
 
-    // ✅ Update product details
+  
     brand.products[productIndex] = {
       ...brand.products[productIndex]._doc, // Keep existing fields
       name,
@@ -104,7 +104,7 @@ router.put("api/update-product/:brandId/:productId", upload.single("image"), asy
   }
 });
 
-//  Delete Product
+
 
 
 router.delete("/api/delete-brand/:id", async (req, res) => {
@@ -164,7 +164,7 @@ router.put("/api/edit-product/:productId", upload.single("image"), async (req, r
     const productIndex = brand.products.findIndex((p) => p._id.toString() === productId);
     if (productIndex === -1) return res.status(404).json({ message: "Product not found" });
 
-    // Update product fields
+  
     if (req.body.name) brand.products[productIndex].name = req.body.name;
     if (req.body.price) brand.products[productIndex].price = req.body.price;
     if (req.body.discount) brand.products[productIndex].discount = req.body.discount;
@@ -213,15 +213,15 @@ router.put("/reduce-stock", async (req, res) => {
     for (const item of items) {
       const brand = await Brand.findOne({ "products._id": item._id });
 
-      if (!brand) continue; // Skip if brand not found
+      if (!brand) continue; 
 
       const productIndex = brand.products.findIndex((p) => p._id.toString() === item._id);
       if (productIndex === -1) continue;
 
-      // Reduce quantity
+    
       brand.products[productIndex].quantity -= item.quantity;
       if (brand.products[productIndex].quantity < 0) {
-        brand.products[productIndex].quantity = 0; // Ensure stock doesn't go negative
+        brand.products[productIndex].quantity = 0; 
       }
 
       await brand.save();

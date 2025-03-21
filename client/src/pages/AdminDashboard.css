@@ -1,5 +1,89 @@
+.floating-label select {
+  width: 100%;
+  padding: 14px 12px; 
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  background: transparent;
+  transition: border-color 0.3s ease;
+  height: 50px; 
+  appearance: none; 
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+}
 
-  /* Form Container */
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px; 
+  border: 1px solid #ccc;
+  border-radius: 6px; 
+  background-color: #f9f9f9;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 13px;
+}
+
+
+.checkbox-label input {
+  margin: 0;
+  appearance: none;
+  width: 14px; 
+  height: 14px; 
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+
+.checkbox-label input:checked {
+  background-color: #122030;
+  border-color: #122030;
+}
+
+
+.checkbox-label input:checked::after {
+  content: "✔";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px; 
+  color: white;
+}
+
+
+.checkbox-label:hover {
+  border-color: #122030;
+  background-color: #e6f0ff;
+}
+
+
+.checkbox-label input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(18, 32, 48, 0.2); /* Smaller focus shadow */
+}
+
+
+.floating-label select:focus {
+  border-color: #007bff;
+}
+ 
   .form-container {
     background: #ffffff;
     padding: 25px;
@@ -11,7 +95,7 @@
     margin: auto;
     }
     
-    /* Grid Layout */
+   
     .form-grid {
     
       display: flex;
@@ -19,12 +103,11 @@
       gap: 10px;
     }
 
-/* Full-width Fields */
 .full-width {
   grid-column: span 2;
 }
 
-/* Floating Label */
+
 .floating-label {
   position: relative;
   width: 100%;
@@ -55,25 +138,25 @@
   pointer-events: none;
 }
 
-/* When user types, label moves up */
+
 .floating-label input:focus + label,
 .floating-label input:valid + label,
 .floating-label textarea:focus + label,
 .floating-label textarea:valid + label,
 .floating-label select:focus + label,
 .floating-label select:valid + label {
-  top: 0;
-  font-size: 12px;
+  top: 2px;
+  font-size: 14px;
   color: #007bff;
 }
 
-/* Textarea */
+
 .floating-label textarea {
-  min-height: 80px;
+  min-height: 90px;
   resize: vertical;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
@@ -85,7 +168,7 @@
   }
 
 
-/* Image Preview */
+
 .doctor-photo-preview {
   width: 80px;
   height: 80px;
@@ -95,7 +178,7 @@
   border: 2px solid #007bff;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
@@ -105,7 +188,7 @@
     grid-column: span 1;
   }
 }
-/* Form Container */
+
 .availability-form {
   background: #ffffff;
   padding: 25px;
@@ -120,7 +203,7 @@
 
 
 
-/* Submit Button */
+
 .submit-btn {
   width: 100%;
   padding: 10px;
@@ -140,7 +223,7 @@
 }
 
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .form-grid {
     grid-template-columns: 1fr;
@@ -151,7 +234,7 @@
   }
 }
 
-  /* Main container for doctors list */
+  
 .doctors-list {
   display: flex;
   flex-direction: column;
@@ -159,7 +242,7 @@
   padding: 20px;
 }
 
-/* Doctor row: each doctor is a row */
+
 .doctor-row {
   display: flex;
   flex-direction: row;
@@ -171,7 +254,7 @@
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Doctor Details Section */
+
 .doctor-details {
   display: flex;
   flex-direction: column;
@@ -187,7 +270,7 @@
   transform: translateY(-5px);
 }
 
-/* Profile Picture and Name */
+
 .doctor-profile {
   display: flex;
   align-items: center;
@@ -221,7 +304,7 @@
   color: #777;
 }
 
-/* Meta Information */
+
 .doctor-meta {
   margin-top: 15px;
 }
@@ -237,7 +320,7 @@
   color: #1843cf;
 }
 
-/* Buttons */
+
 .doctor-actions {
   margin-top: 15px;
   display: flex;
@@ -266,7 +349,7 @@
   color: white;
 }
 
-/* Hover Effects */
+
 .edit-btn:hover {
   background-color: #0056b3;
 }
@@ -275,7 +358,7 @@
   background-color: #c82333;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .doctor-profile {
     flex-direction: column;
@@ -286,9 +369,6 @@
 
 
 
-
-
-/* Right Side - Availability */
 .doctor-availability {
   flex: 1;
   border-left: 1px solid #ddd;
@@ -299,7 +379,7 @@
   margin-top: 10px;
 }
 
-/* Availability slots */
+
 .availability-item {
   background: #f8f9fa;
   padding: 10px;
@@ -310,7 +390,6 @@
   align-items: center;
 }
 
-/* Scrollbar for availability if more than 4 slots */
 .scrollable {
   max-height: 200px;
   overflow-y: auto;
@@ -325,7 +404,7 @@
   border-radius: 5px;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .doctor-row {
     flex-direction: column;

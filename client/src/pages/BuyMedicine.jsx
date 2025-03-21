@@ -15,8 +15,7 @@ const BuyMedicinePage = () => {
   const [displayedProducts, setDisplayedProducts] = useState([]);
   const [popupVisible, setPopupVisible] = useState(false); // State for popup visibility
 
-  // Fetch brands and products from the backend
-  useEffect(() => {
+    useEffect(() => {
     const fetchBrands = async () => {
       try {
         const response = await fetch(`${API_URL}/api/brands`);
@@ -50,18 +49,17 @@ const BuyMedicinePage = () => {
   const addToCart = (product) => {
     let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-    // Check if the product already exists in the cart
-    let existingProduct = cart.find(item => item.name === product.name);
+      let existingProduct = cart.find(item => item.name === product.name);
     
     if (existingProduct) {
-        existingProduct.quantity += 1; // Increase quantity
+        existingProduct.quantity += 1; 
     } else {
-        cart.push({ ...product, quantity: 1 }); // Add new product with quantity
+        cart.push({ ...product, quantity: 1 }); 
     }
 
     localStorage.setItem("cart", JSON.stringify(cart));
 
-    // Show popup for 3 seconds
+    
     setPopupVisible(true);
     setTimeout(() => {
         setPopupVisible(false);
@@ -84,7 +82,7 @@ const BuyMedicinePage = () => {
 
     cart = cart.map(item => 
         item.name === product.name ? { ...item, quantity: item.quantity - 1 } : item
-    ).filter(item => item.quantity > 0); // Remove item if quantity reaches 0
+    ).filter(item => item.quantity > 0); 
 
     localStorage.setItem("cart", JSON.stringify(cart));
 };
@@ -96,7 +94,7 @@ const BuyMedicinePage = () => {
       <Navbar cart={cart} navigate={navigate} />
       <BrandSelection brands={brands} selectedBrand={selectedBrand} handleBrandClick={handleBrandClick} />
       <ProductList displayedProducts={displayedProducts} cart={cart} addToCart={addToCart} increaseQuantity={increaseQuantity} decreaseQuantity={decreaseQuantity} />
-    {/* Popup for "View Cart" message */}
+  
     {popupVisible && (
   <div
     style={{
@@ -137,13 +135,11 @@ const BuyMedicinePage = () => {
 const Navbar = ({ navigate }) => {
   const [cart, setCart] = useState([]);
 
-  // Load cart from localStorage whenever it changes
-  useEffect(() => {
+    useEffect(() => {
     const storedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(storedCart);
   }, []);
 
-  // Calculate total quantity correctly
   const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
@@ -201,22 +197,21 @@ const Navbar = ({ navigate }) => {
 
 const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
   const [index, setIndex] = useState(0);
-  const [visibleBrands, setVisibleBrands] = useState(2); // Default to 2 for mobile
+  const [visibleBrands, setVisibleBrands] = useState(2); 
 
-  // Adjust visible brands based on screen width
-  useEffect(() => {
+   useEffect(() => {
     const updateVisibleBrands = () => {
       const width = window.innerWidth;
-      if (width < 600) setVisibleBrands(2); // Small screens
-      else if (width < 900) setVisibleBrands(4); // Medium screens
-      else if (width < 1200) setVisibleBrands(5); // Large tablets/small desktops
-      else setVisibleBrands(5); // Large desktops
+      if (width < 600) setVisibleBrands(2); 
+      else if (width < 900) setVisibleBrands(4); 
+      else if (width < 1200) setVisibleBrands(5); 
+      else setVisibleBrands(5); 
     };
 
-    updateVisibleBrands(); // Run once on mount
-    window.addEventListener("resize", updateVisibleBrands); // Listen for screen changes
+    updateVisibleBrands(); 
+    window.addEventListener("resize", updateVisibleBrands); 
 
-  return () => window.removeEventListener("resize", updateVisibleBrands); // Cleanup
+  return () => window.removeEventListener("resize", updateVisibleBrands); 
   }, []);
 
   const nextSlide = () => {
@@ -256,7 +251,7 @@ const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
       </h2>
 
       <div style={{ display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-        {/* Left Arrow */}
+       
         {index > 0 && (
           <button
             onClick={prevSlide}
@@ -325,7 +320,7 @@ const BrandSelection = ({ brands, selectedBrand, handleBrandClick }) => {
           ))}
         </div>
 
-        {/* Right Arrow */}
+       
         {index + visibleBrands < brands.length && (
           <button
             onClick={nextSlide}
@@ -386,7 +381,7 @@ const ProductCard = ({ product, cart, addToCart, increaseQuantity, decreaseQuant
   const [quantity, setQuantity] = useState(cart[product.name]?.quantity || 0);
 
   useEffect(() => {
-    // Sync quantity with cart updates
+    
     const updatedCart = JSON.parse(localStorage.getItem("cart")) || [];
     const cartItem = updatedCart.find((item) => item.name === product.name);
     setQuantity(cartItem ? cartItem.quantity : 0);

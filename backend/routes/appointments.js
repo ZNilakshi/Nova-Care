@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Appointment = require("../models/Appointment");
 
-// Save a new appointment
+
 router.post("/", async (req, res) => {
   try {
     const newAppointment = new Appointment(req.body);
@@ -13,7 +13,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// Get all appointments
+
 router.get("/", async (req, res) => {
   try {
     const appointments = await Appointment.find();

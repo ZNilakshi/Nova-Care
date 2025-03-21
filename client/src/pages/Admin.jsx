@@ -21,12 +21,12 @@ const AdminDashboard = () => {
     photo: null,
   });
  
- // Fetch doctors from API
+
  const fetchDoctors = useCallback ( () => {
   fetch(`${API_URL}/api/doctors`)
     .then((res) => res.json())
     .then((data) => {
-      // Format availability dates & times before setting state
+     
       const formattedDoctors = data.map((doc) => ({
         ...doc,
         availability: doc.availability.map((slot) => ({
@@ -56,7 +56,7 @@ useEffect(() => {
   const [editingAvailabilityIndex, setEditingAvailabilityIndex] = useState(null);
 
   
-  // Format Date (YYYY-MM-DD → "Friday, Feb 21, 2025")
+
   const formatDate = (dateString) => {
     const dateObj = new Date(dateString);
     return dateObj.toLocaleDateString("en-US", {
@@ -67,7 +67,7 @@ useEffect(() => {
     });
   };
 
-  // Format Time ("15:30" → "3:30 PM")
+  
   const formatTime = (timeString) => {
     if (!timeString) return "";
     const [hour, minute] = timeString.split(":");
@@ -77,18 +77,18 @@ useEffect(() => {
       hour12: true,
     });
   };
-  // Handle Doctor Input Change
+  
   const handleDoctorChange = (e) => {
     setDoctor({ ...doctor, [e.target.name]: e.target.value });
   };
 
-  // Handle Photo Upload
+
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     const formData = new FormData();
-    formData.append("photo", file);  // Match backend
+    formData.append("photo", file);  
 
     fetch(`${API_URL}/api/doctors/uploadPhoto`, {
         method: "POST",
@@ -99,7 +99,7 @@ useEffect(() => {
       console.log("Uploaded file path:", data.filePath);
       setDoctor((prev) => ({
           ...prev,
-          photo: `${API_URL}${data.filePath}`, // Ensure the correct URL
+          photo: `${API_URL}${data.filePath}`, 
       }));
   })
   
@@ -107,12 +107,12 @@ useEffect(() => {
 };
 
 
-  // Handle Doctor Submission (Add / Update)
+  
   const handleDoctorSubmit = (e) => {
     e.preventDefault();
   
     if (editingDoctorIndex !== null) {
-      // Updating an existing doctor
+     
       const doctorId = doctors[editingDoctorIndex]._id;
       
       fetch(`${API_URL}/api/doctors/update/${doctorId}`, {
@@ -123,14 +123,14 @@ useEffect(() => {
       .then((res) => res.json())
       .then((data) => {
         alert(data.message);
-        fetchDoctors(); // Refresh doctor list
+        fetchDoctors(); 
         resetDoctorForm();
-        setEditingDoctorIndex(null); // Reset editing state
-        setShowDoctorForm(false); // Close modal
+        setEditingDoctorIndex(null); 
+        setShowDoctorForm(false); 
       })
       .catch((err) => console.error(err));
     } else {
-      // Adding a new doctor
+     
       fetch(`${API_URL}/api/doctors/add`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -139,16 +139,16 @@ useEffect(() => {
       .then((res) => res.json())
       .then((data) => {
         alert(data.message);
-        fetchDoctors(); // Refresh list
+        fetchDoctors(); 
         resetDoctorForm();
-        setShowDoctorForm(false); // Close modal
+        setShowDoctorForm(false); 
       })
       .catch((err) => console.error(err));
     }
   };
   
   
-  // Reset Doctor Form
+
   const resetDoctorForm = () => {
     setDoctor({
       name: "",
@@ -164,16 +164,16 @@ useEffect(() => {
   };
   
 
- // Edit Doctor Details (Only allowed fields)
+
  const handleEditDoctor = (index) => {
   const selectedDoctor = doctors[index];
-  setDoctor({ ...selectedDoctor }); // Ensure all fields are populated
+  setDoctor({ ...selectedDoctor }); 
   setEditingDoctorIndex(index);
-  setShowDoctorForm(true); // Open form for editing
+  setShowDoctorForm(true); 
 };
 
 
-  // Delete Doctor
+ 
   const handleDeleteDoctor = (index) => {
     const doctorId = doctors[index]._id;
 
@@ -187,7 +187,7 @@ useEffect(() => {
   };
 
   
-  // Handle Availability Input Change
+  
   const handleAvailabilityChange = (e) => {
     setAvailability({ ...availability, [e.target.name]: e.target.value });
   };
@@ -199,7 +199,7 @@ useEffect(() => {
     if (!isNaN(doctorIndex) && doctorIndex >= 0) {
       const doctorId = doctors[doctorIndex]._id;
   
-      // Update UI immediately for a smoother experience
+     
       setDoctors((prevDoctors) =>
         prevDoctors.map((doctor, index) => {
           if (index === doctorIndex) {
@@ -216,7 +216,7 @@ useEffect(() => {
         })
       );
   
-      // Send full availability array to backend
+      
       try {
         let updatedAvailability = [...doctors[doctorIndex].availability];
 
@@ -228,7 +228,7 @@ if (editingAvailabilityIndex !== null) {
  const response = await fetch(
           `${API_URL}/api/doctors/updateAvailability/${doctorId}`,
           {
-            method: "PUT", // 🔥 Change from POST to PUT
+            method: "PUT", 
             headers: {
               "Content-Type": "application/json",
             },
@@ -243,32 +243,32 @@ if (editingAvailabilityIndex !== null) {
         const data = await response.json();
         console.log("Availability saved successfully:", data);
   
-        fetchDoctors(); // Fetch updated list after saving
+        fetchDoctors(); 
       } catch (error) {
         console.error("Error saving availability:", error);
       }
   
-      // Reset form
+      
       setAvailability({ doctorIndex: "", date: "",  time: "", location: "", availableSlots: "" });
       setEditingAvailabilityIndex(null);
     }
   };
   
-  // Edit Availability
+  
   const handleEditAvailability = (doctorIndex, availIndex) => {
     setAvailability({ 
-      doctorIndex: doctorIndex.toString(),  // Ensure it's a string for dropdown
+      doctorIndex: doctorIndex.toString(),  
       ...doctors[doctorIndex].availability[availIndex] 
     });
     setEditingAvailabilityIndex(availIndex);
-    setShowAvailabilityForm(true); // Open availability form
+    setShowAvailabilityForm(true); 
   };
   
- // Handle Doctor Form Toggle
+
  const openDoctorForm = () => setShowDoctorForm(true);
  const closeDoctorForm = () => setShowDoctorForm(false);
 
- // Handle Availability Form Toggle
+ 
  const openAvailabilityForm = () => setShowAvailabilityForm(true);
  const closeAvailabilityForm = () => setShowAvailabilityForm(false);
 
@@ -276,7 +276,7 @@ if (editingAvailabilityIndex !== null) {
     <div >
    
 
-      {/* Main Content */}
+    
       <main >
 
       <button className="bu"  onClick={openDoctorForm} >
@@ -293,7 +293,7 @@ if (editingAvailabilityIndex !== null) {
    <h2>{editingDoctorIndex !== null ? "Update Doctor" : "Register Doctor"}</h2>
  
    <div className="form-grid">
-     {/* Name */}
+   
      <div className="form-group">
        <div className="floating-label">
          <input type="text" name="name" value={doctor.name} onChange={handleDoctorChange} required />
@@ -301,20 +301,25 @@ if (editingAvailabilityIndex !== null) {
        </div>
      </div>
  
-     {/* Specialty Dropdown */}
+     
      <div className="form-group">
-       <div className="floating-label">
-         <select name="specialty" value={doctor.specialty} onChange={handleDoctorChange} required>
-           <option value="" hidden></option>
-           {["Cardiology", "Neurology", "Oncology", "Gynecology", "Dermatology","Ophthalmology" ,"Endocrinology", "Nephrology"].map((spec) => (
-             <option key={spec} value={spec}>{spec}</option>
-           ))}
-         </select>
-         <label>Specialty</label>
-       </div>
-     </div>
+  <div className="floating-label">
+    <select
+      name="specialty"
+      value={doctor.specialty}
+      onChange={handleDoctorChange}
+      required
+    >
+      <option value="" hidden></option>
+      {["Cardiology", "Neurology", "Oncology", "Gynecology", "Dermatology", "Ophthalmology", "Endocrinology", "Nephrology"].map((spec) => (
+        <option key={spec} value={spec}>{spec}</option>
+      ))}
+    </select>
+    <label>Specialty</label>
+  </div>
+</div>
  
-     {/* Experience */}
+    
      <div className="form-group">
        <div className="floating-label">
          <input type="number" name="experience" value={doctor.experience} onChange={handleDoctorChange} required />
@@ -322,7 +327,7 @@ if (editingAvailabilityIndex !== null) {
        </div>
      </div>
  
-     {/* Degrees */}
+  
      <div className="form-group">
        <div className="floating-label">
          <input name="degrees" value={doctor.degrees} onChange={handleDoctorChange} required />
@@ -330,7 +335,7 @@ if (editingAvailabilityIndex !== null) {
        </div>
      </div>
  
-     {/* Description */}
+    
      <div className="form-group full-width">
        <div className="floating-label">
          <textarea name="description" value={doctor.description} onChange={handleDoctorChange} required />
@@ -359,7 +364,7 @@ if (editingAvailabilityIndex !== null) {
     </div>
   </div>
 
-  {/* Locations */}
+  
   <div className="form-group">
     <label>Locations</label>
     <div className="checkbox-group">
@@ -382,7 +387,7 @@ if (editingAvailabilityIndex !== null) {
     </div>
   </div>
 
-     {/* Fee */}
+    
      <div className="form-group">
        <div className="floating-label">
          <input type="number" name="fee" value={doctor.fee} onChange={handleDoctorChange} required />
@@ -390,7 +395,7 @@ if (editingAvailabilityIndex !== null) {
        </div>
      </div>
  
-     {/* Photo Upload */}
+    
      <div className="form-group">
        <label>Photo</label>
        <input type="file" accept="image/*" onChange={handlePhotoChange} />
@@ -414,7 +419,7 @@ if (editingAvailabilityIndex !== null) {
     <h2>{editingAvailabilityIndex !== null ? "Update Availability" : "Add Availability"}</h2>
 
     <div className="form-grid">
-      {/* Doctor Selection */}
+     
       <div className="form-group">
       <div className="floating-label">
         <select name="doctorIndex" onChange={handleAvailabilityChange} value={availability.doctorIndex} required>
@@ -429,7 +434,7 @@ if (editingAvailabilityIndex !== null) {
         </div>
       </div>
 
-      {/* Date Picker */}
+     
       <div className="form-group">
         <div className="floating-label">
           <input type="date" name="date" onChange={handleAvailabilityChange} value={availability.date} required />
@@ -437,7 +442,7 @@ if (editingAvailabilityIndex !== null) {
         </div>
       </div>
 
-      {/* Time Picker */}
+      
       <div className="form-group">
         <div className="floating-label">
           <input type="time" name="time" onChange={handleAvailabilityChange} value={availability.time} required />
@@ -445,7 +450,7 @@ if (editingAvailabilityIndex !== null) {
         </div>
       </div>
 
-      {/* Location Dropdown */}
+      
       <div className="form-group">
       <div className="floating-label">
        
@@ -461,7 +466,7 @@ if (editingAvailabilityIndex !== null) {
         </div>
       </div>
 
-      {/* Available Slots */}
+      
       <div className="form-group">
         <div className="floating-label">
           <input type="number" name="availableSlots" onChange={handleAvailabilityChange} value={availability.availableSlots} required />
@@ -476,12 +481,12 @@ if (editingAvailabilityIndex !== null) {
   </form>
 </Modal>
 
-        {/* Doctors List */}
+      
    
         <div className="doctors-list">
       {doctors.map((doc, index) => (
         <div key={index} className="doctor-row">
-          {/* Left Side - Doctor Details */}
+         
           <div className="doctor-details">
   <div className="doctor-profile">
     {doc.photo && <img src={doc.photo} alt={doc.name} className="doctor-photo" />}
@@ -508,7 +513,7 @@ if (editingAvailabilityIndex !== null) {
   </div>
 </div>
 
-              {/* Availability Section */}
+             
               <div className="doctor-availability">
             <h4>Availability:</h4>
             {doc.availability.length > 0 ? (

@@ -1,16 +1,14 @@
 import React, { useState } from "react";
 import Admin from "../pages/Admin";
 import ManageProducts from "../pages/PAdmin";
-import "./Admin.css"; // External CSS file for styling
+import "./Admin.css"; 
 
 const AdminDash = () => {
-  // Set "doctors" as the default selected component
-  const [selectedComponent, setSelectedComponent] = useState("doctors");
+   const [selectedComponent, setSelectedComponent] = useState("doctors");
 
   return (
     <div className="admin-container">
-      {/* Sidebar */}
-      <aside className="sidebar">
+           <aside className="sidebar">
         <h2>Admin Dashboard</h2>
         <ul>
           <li 
@@ -28,7 +26,7 @@ const AdminDash = () => {
         </ul>
       </aside>
 
-      {/* Main Content Area */}
+
       <main className="admin-content">
         {selectedComponent === "doctors" && <Admin />}
         {selectedComponent === "products" && <ManageProducts />}

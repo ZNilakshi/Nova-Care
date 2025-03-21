@@ -15,12 +15,11 @@ const FooterBottom = () => {
       
     }}>
       
-      {/* Copyright Text */}
+     
       <p style={{ fontSize: "14px", margin: "5px 0", width: "100%" }}>
         © Copyright 2025, NOVA CARE Hospitals Group. All Rights Reserved.
       </p>
 
-      {/* Social Media Icons */}
       <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap" }}>
         {[FaFacebookF, FaInstagram, FaXTwitter, FaYoutube, FaLinkedin].map((Icon, index) => (
           <div key={index} style={{
@@ -39,7 +38,7 @@ const FooterBottom = () => {
         ))}
       </div>
 
-      {/* Privacy Policy & Disclaimer */}
+     
       <div style={{ fontSize: "14px", cursor: "pointer", display: "flex", gap: "10px", marginTop: "10px", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
         <span>Privacy Policy</span> | <span>Disclaimer</span>
       </div>

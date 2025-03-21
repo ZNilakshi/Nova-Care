@@ -9,7 +9,7 @@ import Hospitals from "../components/Hospitals";
 const HomePage = () => {
   return (
     <div style={{ position: "relative", textAlign: "left" }}>
-      {/* Video Section */}
+      
       <div className="video-container">
         <video autoPlay loop muted className="video-bg">
           <source src="/video.mp4" type="video/mp4" />
@@ -21,7 +21,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Floating Action Buttons */}
+     
       <div className="floating-buttons">
         <Button variant="outline-primary" className="contact-button">
           <FaPhoneAlt /> +94702610614
@@ -29,7 +29,7 @@ const HomePage = () => {
         <Button variant="warning" className="book-button">Book Appointment</Button>
       </div>
 
-      {/* Sections */}
+     
       
         <ServicesSection />
         <ClinicalExcellence />
@@ -37,8 +37,6 @@ const HomePage = () => {
         <Hospitals />
      
 
-
-      {/* Styles */}
       <style>{`
         .video-container {
           position: relative;

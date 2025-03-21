@@ -8,10 +8,10 @@ const pharmacies = [
   { name: "NOVA CARE Kalutara", address: "202 Cedar Road, Kalutara", lat: 6.5833, lon: 79.9607 }
 ];
 
-// Haversine formula to calculate distance (in km) between two latitude/longitude points
+
 const getDistance = (lat1, lon1, lat2, lon2) => {
   const toRad = (value) => (value * Math.PI) / 180;
-  const R = 6371; // Radius of Earth in km
+  const R = 6371; 
 
   const dLat = toRad(lat2 - lat1);
   const dLon = toRad(lon2 - lon1);
@@ -21,7 +21,7 @@ const getDistance = (lat1, lon1, lat2, lon2) => {
     Math.sin(dLon / 2) * Math.sin(dLon / 2);
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // Distance in km
+  return R * c; 
 };
 
 const PharmacyList = () => {
@@ -37,7 +37,7 @@ const PharmacyList = () => {
           const { latitude, longitude } = position.coords;
           setUserLocation({ lat: latitude, lon: longitude });
 
-          // Calculate distances and sort pharmacies
+
           const sorted = pharmacies
             .map(pharmacy => ({
               ...pharmacy,
@@ -61,12 +61,11 @@ const PharmacyList = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px", marginTop: "40px", fontFamily: "Arial, sans-serif", minHeight: "515px" }}>
+    <div style={{ padding: "20px", marginTop: "40px", fontFamily: "Arial, sans-serif", minHeight: "660px" }}>
 
-      {/* Error Handling */}
+     
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      {/* Near to Me Section */}
       {loading ? (
         <p style={{ fontStyle: "italic", color: "#555" }}>Determining your location, please wait...</p>
       ) : userLocation && sortedPharmacies.length > 0 ? (
@@ -78,7 +77,6 @@ const PharmacyList = () => {
         <p style={{ color: "red" }}></p>
       )}
 
-      {/* List of Other Pharmacies */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "20px" }}>
         {sortedPharmacies.slice(1).map((pharmacy, index) => (
           <div key={index} style={{ backgroundColor: "white", padding: "15px", boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)", borderRadius: "5px" }}>

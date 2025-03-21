@@ -73,7 +73,7 @@ const HospitalsInSriLanka = () => {
           gap: "30px",
         }}
       >
-        {/* Mobile Slideshow / Desktop Grid */}
+       
         <div style={{ width: isMobile ? "100%" : "50%" }}>
           {isMobile ? (
             <div style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -174,7 +174,7 @@ const HospitalsInSriLanka = () => {
           )}
         </div>
 
-        {/* Right Side: Selected Hospital Details */}
+        
         <div
           style={{
             width: isMobile ? "100%" : "45%",

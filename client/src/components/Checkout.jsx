@@ -202,7 +202,7 @@ const styles = {
   },
 };
 
-// Inline media query applied directly to the container style
+
 const containerStyle = {
   ...styles.container,
   flexDirection: window.innerWidth <= 568 ? "column" : "row",

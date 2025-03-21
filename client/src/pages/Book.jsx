@@ -20,7 +20,7 @@ const Book = () => {
           throw new Error("Doctor not found");
         }
         const data = await response.json();
-        console.log("Doctor data:", data); // Debugging: Check API response
+        console.log("Doctor data:", data); 
         setDoctor(data);
       } catch (error) {
         console.error("Error fetching doctor:", error);
@@ -52,7 +52,7 @@ const Book = () => {
   return (
     <section style={{ padding: "10px",  background: "#f5f9fc", fontFamily: "'Poppins', sans-serif" ,  minHeight: "50vh",}}>
       <div style={{ maxWidth: "95%", margin: "80px auto", display: "flex", gap: "25px", flexWrap: "wrap" }}>
-        {/* LEFT SIDE: Locations */}
+       
         <div style={{ width: "30%", minWidth: "250px", background: "#fff", padding: "20px", borderRadius: "10px", boxShadow: "0 5px 15px rgba(0,0,0,0.1)" }}>
           <h3 style={{ fontSize: "18px", color: "#0096C7", marginBottom: "15px" }}>📍 Available Locations</h3>
           <ul style={{ listStyle: "none", padding: "0" }}>
@@ -89,9 +89,9 @@ const Book = () => {
           </ul>
         </div>
 
-        {/* RIGHT SIDE: Doctor Details & Sessions */}
+
         <div style={{ flex: "1", background: "#fff", padding: "25px", borderRadius: "10px", boxShadow: "0 5px 15px rgba(0,0,0,0.1)" }}>
-          {/* Doctor Profile */}
+      
           <div style={{ display: "flex", alignItems: "center", gap: "20px", marginBottom: "20px" }}>
             <img src={doctor.photo} alt={doctor.name} style={{ width: "90px", height: "90px", borderRadius: "50%", objectFit: "cover" }} />
             <div>
@@ -109,7 +109,7 @@ const Book = () => {
             </div>
           </div>
 
-          {/* Sessions */}
+       
           <div style={{ borderBottom: "2px solid #ddd", paddingBottom: "15px", marginBottom: "20px" }}>
             <h3 style={{ fontSize: "18px", color: "#0096C7", marginBottom: "12px", cursor: "pointer" }} onClick={() => setShowAllSessions(!showAllSessions)}>
               📅 Available Sessions
@@ -117,7 +117,7 @@ const Book = () => {
 
             {filteredSessions.length > 0 ? (
               filteredSessions.map((session, index) => {
-                // Format date
+       
                 const dateObj = new Date(session.date);
                 const formattedDate = isNaN(dateObj)
                   ? "Invalid Date"
@@ -128,7 +128,7 @@ const Book = () => {
                       year: "numeric",
                     });
 
-                // Format time safely
+               
                 let formattedTime = "Invalid Time";
                 if (session.time) {
                   const timeParts = session.time.split(":");

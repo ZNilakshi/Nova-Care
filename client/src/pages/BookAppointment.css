@@ -35,7 +35,7 @@
     flex-wrap: wrap;
   }
   
-  /* Filters */
+
   .filters {
     flex: 1;
     min-width: 250px;
@@ -51,13 +51,33 @@
     margin-bottom: 15px;
   }
   
-  .filters select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-  }
+
+.filters select {
+  width: 100%;
+  padding: 12px; 
+  margin-bottom: 15px; 
+  border-radius: 8px; 
+  border: 1px solid #ccc;
+  font-size: 14px; 
+  background-color: #fff; 
+  appearance: none; 
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E"); /* Custom arrow */
+  background-repeat: no-repeat;
+  background-position: right 12px center; 
+  background-size: 12px;
+  transition: border-color 0.3s ease; 
+}
+
+
+.filters select:hover {
+  border-color: #007bff; 
+}
+
+.filters select:focus {
+  outline: none; 
+  border-color: #007bff; 
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); 
+}
   
   .clear-filters {
     color: #007bff;
@@ -66,7 +86,7 @@
     margin-top: 10px;
   }
   
-  /* Doctor List */
+
   .doctor-list {
     flex: 3;
     display: flex;
@@ -81,7 +101,7 @@
     margin-top: 20px;
   }
   
-  /* RESPONSIVENESS */
+  
   @media (max-width: 1024px) {
     .appointment-container {
       flex-direction: column;

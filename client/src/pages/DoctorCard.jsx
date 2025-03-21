@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-// Store all doctor details here
+
 export const doctors = [];
 
 const DoctorCard = ({ doctor, index }) => {
@@ -21,7 +21,7 @@ const DoctorCard = ({ doctor, index }) => {
         border: "1px solid #007bff",
       }}
     >
-      {/* Doctor Photo */}
+    
       <div style={{ textAlign: "center" }}>
         <img
           src={doctor.photo}
@@ -30,7 +30,7 @@ const DoctorCard = ({ doctor, index }) => {
         />
       </div>
 
-      {/* Doctor Details */}
+    
       <div>
         <h4 style={{ margin: "0", fontSize: "18px", fontWeight: "bold" }}>{doctor.name}</h4>
         <span
@@ -62,14 +62,13 @@ const DoctorCard = ({ doctor, index }) => {
         <p style={{ marginTop: "10px", fontSize: "14px", color: "#666" }}>{doctor.description}</p>
       </div>
 
-      {/* Appointment Section */}
+ 
       <div style={{ textAlign: "center" }}>
-        {/* Display Availability */}
-{/* Display Availability */}
+    
 {doctor.availability?.length > 0 ? (
   <div>
     {doctor.availability.map((slot, index) => {
-      const date = new Date(slot.date); // Convert string to Date object
+      const date = new Date(slot.date); 
       const formattedDate = date.toLocaleDateString("en-US", {
         weekday: "short",
         month: "short",
@@ -80,7 +79,7 @@ const DoctorCard = ({ doctor, index }) => {
       const formattedTime = new Date(`1970-01-01T${slot.time}`).toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
-        hour12: true, // AM/PM format
+        hour12: true, 
       });
 
       return (
@@ -96,7 +95,7 @@ const DoctorCard = ({ doctor, index }) => {
 
 
 
- {/* Displaying Fee */}
+ 
         <p style={{ fontSize: "14px", fontWeight: "bold", color: "#333", marginBottom: "10px" }}>
           Fee: <span style={{ color: "#FFD700" }}>Rs.{doctor.fee}.00</span>
         </p>

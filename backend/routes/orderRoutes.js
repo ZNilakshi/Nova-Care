@@ -3,7 +3,7 @@ const Order = require("../models/Order");
 
 const router = express.Router();
 
-// Save order to database
+
 router.post("/create-order", async (req, res) => {
   try {
     const { name, email, address, phone, items, totalAmount } = req.body;

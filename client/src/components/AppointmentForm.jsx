@@ -11,7 +11,7 @@ const AppointmentForm = () => {
    const location = useLocation();
   const { doctorId, doctorName, date, time, specialization, doctorPhoto, location: sessionLocation, doctorFee } = location.state || {};
 
-  // Ensure doctorFee is parsed correctly
+  
   const parsedDoctorFee = doctorFee 
     ? (typeof doctorFee === "string" && doctorFee.replace 
         ? parseInt(doctorFee.replace(/\D/g, "")) 
@@ -47,7 +47,7 @@ const AppointmentForm = () => {
       }
     });
   
-    const phoneRegex = /^(0|94|\+94)?\d{9}$/; // Adjusted regex to accept 0, 94, or +94 formats
+    const phoneRegex = /^(0|94|\+94)?\d{9}$/; 
     if (formData.phone && !phoneRegex.test(formData.phone)) {
       newErrors.phone = "Invalid phone number";
     }  
@@ -92,7 +92,7 @@ const AppointmentForm = () => {
 
   return (
     <div style={styles.container}>
-      {/* Sidebar with doctor details */}
+      
       <div style={styles.sidebar}>
         <img src={doctorPhoto || "/card.jpg"} alt={doctorName || "Doctor"} style={styles.image} />
         <h3 style={styles.doctorName}> {doctorName || "Dr. Not Specified"}</h3>
@@ -102,7 +102,7 @@ const AppointmentForm = () => {
         <p><strong>Session Time:</strong> {time || "TBD"}</p>
       </div>
 
-      {/* Appointment Form */}
+     
       {!showPayment ? (
         <form onSubmit={handleSubmit} style={styles.form}>
           <h2 style={styles.formTitle}>📅 Book Your Appointment</h2>
@@ -126,7 +126,7 @@ const AppointmentForm = () => {
           <button type="submit" style={styles.button}>Proceed to Payment</button>
         </form>
       ) : (
-        /* Show entered user details and payment component */
+
         <div style={styles.userDetailsContainer}>
           <h2 style={styles.sectionTitle}> Patient Details</h2>
           <p><strong>Name:</strong> {formData.title} {formData.name}</p>
@@ -137,18 +137,17 @@ const AppointmentForm = () => {
           </div>
       )}
 
-      {/* Payment Details Sidebar */}
+     
       {!showPayment && (
         <div style={styles.sidebar}>
           <h3 style={styles.paymentTitle}>💳 Payment Details</h3>
           <p><strong>Doctor’s Fee:</strong> Rs {doctorFee || "0.00"}</p>
-          <p><strong>eChannelling Fee:</strong> Rs {echannellingFee}</p>
+          <p><strong>Channelling Fee:</strong> Rs {echannellingFee}</p>
           <hr />
           <h4 style={styles.total}>Total: Rs {totalFee}.00</h4>
         </div>
       )}
 
-      {/* Payment Section (Visible after form submission) */}
       {showPayment && (
         <div style={styles.paymentContainer}>
           <h2> Payment Section</h2>
@@ -172,7 +171,7 @@ const AppointmentForm = () => {
   );
 };
 
-// Input styling function
+
 const inputStyle = (error) => ({
   width: "100%",
   padding: "10px",
@@ -181,7 +180,7 @@ const inputStyle = (error) => ({
   marginBottom: "10px",
 });
 
-// Styles
+
 const styles = {
   container: {
     display: "flex",

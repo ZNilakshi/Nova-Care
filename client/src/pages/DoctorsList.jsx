@@ -7,8 +7,8 @@ const DoctorsList = () => {
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
-    // Fetch doctors from the backend
-    fetch(`${API_URL}/api/doctors`)  // Adjust URL based on backend
+    
+    fetch(`${API_URL}/api/doctors`)  
       .then((response) => response.json())
       .then((data) => setDoctors(data))
       .catch((error) => console.error("Error fetching doctors:", error));

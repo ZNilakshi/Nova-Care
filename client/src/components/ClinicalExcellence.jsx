@@ -25,12 +25,12 @@ const ClinicalExcellence = () => {
         </p>
 
         <div style={styles.content}>
-          {/* Left Side - Image */}
+         
           <div style={styles.imageContainer}>
             <img src="/clinical.png" alt="Clinical Excellence" style={styles.image} />
           </div>
 
-          {/* Right Side - Specialties Grid */}
+          
           <div style={styles.grid}>
             {specialties.map((specialty, index) => (
               <div

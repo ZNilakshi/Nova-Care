@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import DoctorCard from "./DoctorCard"; // Remove the local doctors array
+import DoctorCard from "./DoctorCard"; 
 import "./BookAppointment.css";
 
 const API_URL = "https://nova-care-production.up.railway.app";
@@ -13,7 +13,7 @@ const BookAppointment = () => {
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedSpecialty, setSelectedSpecialty] = useState(specialtyFromQuery || "");
   const [selectedLanguage, setSelectedLanguage] = useState("");
-  const [doctors, setDoctors] = useState([]); // Fetch doctors from backend
+  const [doctors, setDoctors] = useState([]); 
 
   useEffect(() => {
     if (location.state?.specialty) {
@@ -21,7 +21,7 @@ const BookAppointment = () => {
     }
   }, [location.state]);
 
-  // Fetch doctors from backend
+  
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -49,7 +49,7 @@ const BookAppointment = () => {
       <h2 className="heading">Best Doctors in Sri Lanka</h2>
 
       <div className="appointment-container">
-        {/* Filters */}
+        
         <aside className="filters">
           <h3 className="filter-heading">Filters</h3>
 
@@ -89,7 +89,7 @@ const BookAppointment = () => {
           </p>
         </aside>
 
-        {/* Display filtered doctors */}
+        
         <div className="doctor-list">
           {filteredDoctors.length > 0 ? filteredDoctors.map((doctor, index) => (
             <DoctorCard key={doctor._id} doctor={doctor} index={index} />

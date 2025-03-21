@@ -28,14 +28,14 @@
     border-radius: 5px;
   }
   
-  /* Default Hover Effect */
+ 
   .sidebar li:hover {
     background: #34495e;
   }
   
-  /* Active Menu Item */
+  
   .sidebar li.active {
-    background: #1a6ebc; /* Highlighted color */
+    background: #1a6ebc; 
     color: white;
     font-weight: bold;
   }

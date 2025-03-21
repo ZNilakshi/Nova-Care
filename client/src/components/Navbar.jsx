@@ -8,7 +8,7 @@ export default function Navbar() {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    handleResize(); // Initialize on mount
+    handleResize(); 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -29,13 +29,13 @@ export default function Navbar() {
         zIndex: 1000,
       }}
     >
-      {/* Logo and Name */}
+   
       <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
         <img src="/NOVA CARE.png" alt="Nova Care" style={{ height: "60px" }} />
         <h2 style={{ margin: 0, fontSize: "24px", fontWeight: "bold" }}>NOVA CARE</h2>
       </div>
 
-      {/* Emergency Contact */}
+      
       {!isMobile && (
         <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
           <div style={{ textAlign: "center" }}>

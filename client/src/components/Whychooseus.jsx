@@ -11,7 +11,7 @@ export default function WhyChooseUs() {
     { number: 1000, suffix: "+", text: "Beds", icon: "🛏️" },
   ];
 
-  // Intersection Observer Hook
+ 
   const { ref, inView } = useInView({ triggerOnce: true });
 
   return (
@@ -28,7 +28,7 @@ export default function WhyChooseUs() {
           textAlign: "center",
         }}
       >
-        {/* Title Section */}
+       
         <h2 style={{ color: "#002147", fontSize: "28px", marginBottom: "15px" }}>Why Choose NOVA CARE?</h2>
         <p style={{ color: "#444", fontSize: "16px", marginBottom: "30px" }}>
           Established in 1983, NOVA CARE has a robust presence across the healthcare ecosystem.
@@ -36,9 +36,9 @@ export default function WhyChooseUs() {
           we have touched more than 200 million lives from over 150 countries.
         </p>
 
-        {/* Responsive Layout */}
+       
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: "20px" }}>
-          {/* Stats Grid */}
+       
           <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "20px", flex: "1 1 500px" }}>
             {stats.map((item, index) => (
               <div
@@ -68,7 +68,7 @@ export default function WhyChooseUs() {
             ))}
           </div>
 
-          {/* Right Image */}
+         
           <div style={{ flex: "1 1 500px", display: "flex", justifyContent: "center" }}>
             <img src="/whychoose.jpg" alt="Doctors discussing" style={{ width: "100%", maxWidth: "500px", borderRadius: "10px", boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }} />
           </div>

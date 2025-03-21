@@ -10,8 +10,7 @@ export default function ShoppingCart() {
     return JSON.parse(localStorage.getItem("cart")) || [];
   });
 
-  // Update localStorage whenever cart changes
-  useEffect(() => {
+   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cart));
   }, [cart]);
 
@@ -30,7 +29,7 @@ export default function ShoppingCart() {
     setCart((prev) => prev.filter((item) => item.name !== productName));
   };
 
-  // Calculate subtotal
+
   const subtotal = cart.reduce((sum, product) => sum + product.price * product.quantity, 0);
 
   return (
