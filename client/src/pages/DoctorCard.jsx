@@ -26,7 +26,7 @@ const DoctorCard = ({ doctor, index }) => {
         <img
           src={doctor.photo}
           alt={doctor.name}
-          style={{ width: "110px", height: "110px", borderRadius: "10%" }}
+          style={{ width: "120px", height: "120px", borderRadius: "10%" }}
         />
       </div>
 
@@ -84,7 +84,7 @@ const DoctorCard = ({ doctor, index }) => {
 
       return (
         <p key={index} style={{ fontSize: "14px", color: "#555", marginBottom: "5px" }}>
-          <strong>{formattedDate}</strong> | {formattedTime} | {slot.location} ({slot.availableSlots} slots remaining)
+          <strong>{formattedDate}</strong> | {formattedTime} | {slot.location}
         </p>
       );
     })}

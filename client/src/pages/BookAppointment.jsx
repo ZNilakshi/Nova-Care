@@ -14,6 +14,7 @@ const BookAppointment = () => {
   const [selectedSpecialty, setSelectedSpecialty] = useState(specialtyFromQuery || "");
   const [selectedLanguage, setSelectedLanguage] = useState("");
   const [doctors, setDoctors] = useState([]); 
+  const [loading, setLoading] = useState(true); 
 
   useEffect(() => {
     if (location.state?.specialty) {
@@ -25,17 +26,18 @@ const BookAppointment = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/doctors`); // Adjust if needed
+        const response = await fetch(`${API_URL}/api/doctors`); 
         const data = await response.json();
         setDoctors(data);
       } catch (error) {
         console.error("Error fetching doctors:", error);
+      } finally {
+        setLoading(false); 
       }
     };
 
     fetchDoctors();
   }, []);
-
   const filteredDoctors = doctors.filter((doctor) => {
     return (
       (selectedCity === "" || doctor.locations.includes(selectedCity)) &&
@@ -91,9 +93,13 @@ const BookAppointment = () => {
 
         
         <div className="doctor-list">
-          {filteredDoctors.length > 0 ? filteredDoctors.map((doctor, index) => (
-            <DoctorCard key={doctor._id} doctor={doctor} index={index} />
-          )) : (
+          {loading ? ( 
+            <p className="loading">Loading doctors...</p>
+          ) : filteredDoctors.length > 0 ? (
+            filteredDoctors.map((doctor, index) => (
+              <DoctorCard key={doctor._id} doctor={doctor} index={index} />
+            ))
+          ) : (
             <p className="no-doctors">No doctors found matching the selected filters.</p>
           )}
         </div>

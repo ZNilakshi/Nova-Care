@@ -2,7 +2,7 @@
     padding: 30px;
     background: #f8f9fa;
     margin-top: 50px;
-    
+    min-height: 80vh;
   }
   
   .breadcrumb {

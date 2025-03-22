@@ -5,8 +5,14 @@ import ServicesSection from "../components/ServiceSection";
 import ClinicalExcellence from "../components/ClinicalExcellence";
 import Whychooseus from "../components/Whychooseus";
 import Hospitals from "../components/Hospitals";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+
+  const handleBookAppointment = () => {
+    navigate("/book-appointment");
+  };
   return (
     <div style={{ position: "relative", textAlign: "left" }}>
       
@@ -26,7 +32,7 @@ const HomePage = () => {
         <Button variant="outline-primary" className="contact-button">
           <FaPhoneAlt /> +94702610614
         </Button>
-        <Button variant="warning" className="book-button">Book Appointment</Button>
+        <Button variant="warning" className="book-button"onClick={handleBookAppointment} >Book Appointment</Button>
       </div>
 
      

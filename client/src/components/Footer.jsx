@@ -12,7 +12,7 @@ const FooterBottom = () => {
       alignItems: "center",
       flexWrap: "wrap",
       textAlign: "center",
-      
+      width: "100%" ,
     }}>
       
      
