@@ -30,7 +30,7 @@ const HomePage = () => {
      
       <div className="floating-buttons">
         <Button variant="outline-primary" className="contact-button">
-          <FaPhoneAlt /> +94702610614
+          <FaPhoneAlt /> 0702610614
         </Button>
         <Button variant="warning" className="book-button"onClick={handleBookAppointment} >Book Appointment</Button>
       </div>
