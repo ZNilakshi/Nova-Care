@@ -94,7 +94,7 @@ const BookAppointment = () => {
         
         <div className="doctor-list">
           {loading ? ( 
-            <p className="loading">Loading doctors...</p>
+            <p className="loading">Loading doctors....</p>
           ) : filteredDoctors.length > 0 ? (
             filteredDoctors.map((doctor, index) => (
               <DoctorCard key={doctor._id} doctor={doctor} index={index} />
