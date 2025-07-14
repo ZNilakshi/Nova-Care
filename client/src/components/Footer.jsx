@@ -40,7 +40,7 @@ const FooterBottom = () => {
 
      
       <div style={{ fontSize: "14px", cursor: "pointer", display: "flex", gap: "10px", marginTop: "10px", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
-        <span>Privacy Policy</span> | <span>Disclaimer</span>
+        <span>Privacy  Policy</span> | <span>Disclaimer</span>
       </div>
 
     </div>
