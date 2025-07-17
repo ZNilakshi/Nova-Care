@@ -16,6 +16,8 @@ const BookAppointment = () => {
   const [doctors, setDoctors] = useState([]); 
   const [loading, setLoading] = useState(true); 
 
+
+  
   useEffect(() => {
     if (location.state?.specialty) {
       setSelectedSpecialty(location.state.specialty);
