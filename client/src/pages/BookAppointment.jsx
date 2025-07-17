@@ -17,12 +17,14 @@ const BookAppointment = () => {
   const [loading, setLoading] = useState(true); 
 
 
-  
+
   useEffect(() => {
     if (location.state?.specialty) {
       setSelectedSpecialty(location.state.specialty);
     }
   }, [location.state]);
+
+  
 
   
   useEffect(() => {
