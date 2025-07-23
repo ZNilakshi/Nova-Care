@@ -31,7 +31,7 @@ const FooterBottom = () => {
             justifyContent: "center",
             cursor: "pointer",
             width: "30px",
-            height: "30px"
+            height: "31px"
           }}>
             <Icon color="white" size={14} />
           </div>
@@ -40,7 +40,7 @@ const FooterBottom = () => {
 
      
       <div style={{ fontSize: "14px", cursor: "pointer", display: "flex", gap: "10px", marginTop: "10px", flexWrap: "wrap", justifyContent: "center", width: "100%" }}>
-        <span>Privacy  Policy</span> | <span>Disclaimer</span>
+        <span>Privacy Policy</span> | <span>Disclaimer</span>
       </div>
 
     </div>
