@@ -1,4 +1,14 @@
 # 🚀 Nova‑Care
+## 📸 Screenshot
+
+![Nova-Care Screenshot](https://raw.githubusercontent.com/ZNilakshi/Nova-Care/main/client/public/NovaCare.png)
+
+---
+
+
+
+
+
 
 **Nova‑Care** is a modern healthcare booking platform built with React, Tailwind.CSS, Mongodb , Express.js and Node.js enabling seamless interactions between doctors and patients via intuitive scheduling, profiles, and secure communication—all hosted on Vercel.
 
