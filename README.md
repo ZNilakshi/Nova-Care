@@ -22,13 +22,7 @@
 - [Getting Started](#getting-started)  
   - [Prerequisites](#prerequisites)  
   - [Installation](#installation)  
-  - [Development](#development)  
-  - [Production](#production)  
-- [Usage](#usage)  
-- [Contributing](#contributing)  
-- [License](#license)  
-- [Contact](#contact)
-
+ 
 ---
 
 ## 🎬 Demo
