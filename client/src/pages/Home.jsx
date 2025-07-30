@@ -25,6 +25,7 @@ const HomePage = () => {
           <h1>Your Happiness Matters</h1>
           <h3>We care for you with excellence</h3>
         </div>
+        
       </div>
 
      
